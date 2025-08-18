@@ -2,17 +2,24 @@ import { Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-white py-8 sm:py-10 lg:py-12">
+    <footer className="bg-hexagons_footer text-white py-8 sm:py-10 lg:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Brand */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-2">
-            <div className="flex items-center space-x-2 mb-3 sm:mb-4">
-              <div className="bg-teal-600 text-white px-2 py-1 rounded text-xs sm:text-sm font-bold">
-                BDS
-              </div>
-              <span className="text-white font-medium text-sm sm:text-base">Balance Desalination Simulator</span>
+           <div className="flex items-center space-x-2 mb-3 sm:mb-4">
+              <a href="/" className="flex items-center">
+                <img
+                  src="/images/logo-balance.png"
+                  alt="Balance Desalination Simulator Logo"
+                  className="h-8 sm:h-10 w-auto object-contain transition-transform duration-150 active:scale-95 cursor-pointer"
+                />
+              </a>
+              <h1 className="text-white font-medium text-sm sm:text-base">
+                Balance Desalination Simulator
+              </h1>
             </div>
+
             <p className="text-gray-400 mb-4 text-sm sm:text-base">
               The most complete solution for analysis & training with thousands of simulated plant elements.
             </p>

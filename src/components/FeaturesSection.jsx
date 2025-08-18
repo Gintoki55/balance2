@@ -1,78 +1,70 @@
 import * as React from 'react';
-import { Building, Zap, Database } from 'lucide-react';
-
-// استبدال دالة cn لو ما عندك وحدة
-const cn = (...classes) => classes.filter(Boolean).join(' ');
-
-// مكونات الكارد كاملة
-const Card = React.forwardRef(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'rounded-lg border bg-card text-card-foreground shadow-sm',
-      className
-    )}
-    {...props}
-  />
-));
-Card.displayName = 'Card';
-
-const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
-));
-CardContent.displayName = 'CardContent';
 
 export default function FeaturesSection() {
   const features = [
     {
-      icon: Building,
+      icon: "/images/cells.png",
       title: 'Custom Design Inputs',
-      description: 'Design your plant with customizable parameters for optimal performance.'
     },
     {
-      icon: Zap,
+      icon: "/images/water-tank.png",
       title: 'Scenario Simulation',
-      description: 'Run advanced simulations to analyze different operational scenarios.'
     },
     {
-      icon: Database,
+      icon: "/images/floppy-disk.png",
       title: 'Save & Export Projects',
-      description: 'Save your work and export detailed reports for further analysis.'
     }
   ];
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 bg-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
-            Powerful Features
-          </h2>
-          <p className="text-lg sm:text-xl text-gray-300">
-            Built for Precision
-          </p>
-          <p className="text-sm sm:text-base text-gray-400 mt-2 max-w-2xl mx-auto px-4">
-            Discover precise engineering solutions that enable seamless modeling, 
-            scenario testing, and comprehensive analysis with unmatched technical precision.
-          </p>
-        </div>
+    <section className="relative py-8 bg-cover bg-center" style={{
+      backgroundImage: 'url("/images/img1.jpg")' ,
+    }}>
+      <div className="absolute inset-0 bg-black/50 z-20"></div>
+      <div className="relative max-w-8xl mx-auto px-4 sm:px-6 sm:py-4 lg:px-8 z-30">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {features.map((feature, index) => (
-            <Card key={index} className="bg-slate-700 border-slate-600 hover:bg-slate-600 transition-colors duration-300 card-hover">
-              <CardContent className="p-4 sm:p-6 text-center">
-                <div className="bg-teal-600 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+        <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+
+          {/* Left Section (Text) */}
+          <div className="flex-1 lg:max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Powerful Features Built for Precision
+            </h2>
+            <p className="text-base sm:text-lg text-white">
+              Discover precise engineering solutions that enable seamless modeling, 
+              scenario testing, and comprehensive analysis with unmatched technical precision.
+            </p>
+          </div>
+
+          {/* Right Section (Features) */}
+          <div className="flex-1 flex justify-around flex-wrap gap-4">
+
+            {features.map((feature, index) => (
+              <div 
+                key={index} 
+                className="flex flex-col items-center flex-1 min-w-[120px] max-w-[160px]"
+              >
+                <div className="w-20 sm:w-24 md:w-28 lg:w-32 h-20 sm:h-24 md:h-28 lg:h-32 
+                                flex items-center justify-center rounded-xl 
+                               bg-[#2E5C52] mb-4 overflow-hidden transition-all duration-300 ease-in-out 
+                                hover:bg-[#367268] group shadow-md hover:shadow-lg">
+                  <img 
+                    src={feature.icon} 
+                    alt={feature.title} 
+                    
+                    className="w-10 sm:w-12 md:w-14 lg:w-16 h-10 sm:h-12 md:h-14 lg:h-16 
+                               object-contain z-30 transition-transform duration-300 ease-in-out 
+                               group-hover:scale-110 invert"
+                  />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">
+                <h3 className="text-center text-white font-semibold text-sm sm:text-base">
                   {feature.title}
                 </h3>
-                <p className="text-sm sm:text-base text-gray-300">
-                  {feature.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            ))}
+
+          </div>
+
         </div>
       </div>
     </section>
