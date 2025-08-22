@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-
+import Link from "next/link";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -28,9 +28,11 @@ export default function Header() {
         <div className="flex items-center gap-3">
           
           {/* Dashboard button */}
-          <button className="bg-sky-300 text-white px-3 py-1 rounded text-sm sm:text-base hover:bg-sky-400 active:scale-95 transition-transform duration-150">
+          <Link href="/dashboard">
+          <button className="bg-sky-300 text-white px-3 py-1 rounded text-sm sm:text-base hover:bg-sky-400 active:scale-95 transition-transform duration-150 cursor-pointer">
             Dashboard
           </button>
+          </Link>
 
           {/* Mobile menu icon */}
           <button

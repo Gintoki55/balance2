@@ -23,11 +23,17 @@ export default function Footer() {
             <p className="text-gray-400 mb-4 text-sm sm:text-base">
               The most complete solution for analysis & training with thousands of simulated plant elements.
             </p>
+            <p className="text-gray-400 mb-4 text-sm sm:text-base">
+             PO box 775, PC 215, Salalah, Oman
+            </p>
+            <p className="text-[rgb(66,153,136)] mb-4 text-sm sm:text-base">
+             Dr. Ahmed Issa Qutan
+            </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Quick Links</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-[rgb(66,153,136)]">Quick Links</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
               <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
               <li><a href="#" className="hover:text-white transition-colors">About</a></li>
@@ -38,11 +44,11 @@ export default function Footer() {
 
           {/* Start Desalination */}
           <div>
-            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Start Desalination</h4>
+            <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-[rgb(66,153,136)]">Start Desalination</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">MED</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">MSF</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">RO</a></li>
+              <li><a href="/medpage" className="hover:text-white transition-colors">MED</a></li>
+              <li><a href="/msfpage" className="hover:text-white transition-colors">MSF</a></li>
+              <li><a href="/ropage" className="hover:text-white transition-colors">RO</a></li>
             </ul>
           </div>
         </div>
@@ -50,7 +56,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-slate-700 mt-6 sm:mt-8 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-gray-400 text-xs sm:text-sm mb-4 sm:mb-0 text-center sm:text-left">
-            © 2025 Balance Desalination Simulator. All rights reserved.
+           © 2025 Balance Desalination Simulator. All rights reserved.
           </p>
           <div className="flex space-x-4">
             <Facebook className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />

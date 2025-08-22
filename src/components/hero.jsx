@@ -41,10 +41,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-          >
-            Explore, design, and analyze advanced desalination systems — from Multi-Stage 
-            Flash to Reverse Osmosis — using our immersive platform built for innovation and 
-            education.
+          >Simulate, design, and analyze advanced desalination systems — from Multi-Stage Flash to Reverse Osmosis — using an interactive platform built for innovation and education.
           </motion.p>
         </div>
       </div>

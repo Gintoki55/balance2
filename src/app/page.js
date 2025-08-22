@@ -2,7 +2,6 @@ import Header from '../components/Header';
 import Hero from '../components/hero';
 import TechnologySections from '../components/TechnologySections';
 import FeaturesSection from '../components/FeaturesSection';
-import Footer from '../components/Footer';
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
       <Hero />
       <TechnologySections />
       <FeaturesSection />
-      <Footer />
     </div>
   );
 }
