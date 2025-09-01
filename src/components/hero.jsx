@@ -9,6 +9,7 @@ export default function Hero() {
       {/* الخلفية المتحركة */}
       <motion.div 
         className="absolute inset-0 bg-cover bg-top"
+        loading="lazy"
         style={{ backgroundImage: "url('/images/img1.jpg')" }}
         initial={{ scale: 1.2, opacity: 1 }}
         animate={{ scale: 1, opacity: 1 }}

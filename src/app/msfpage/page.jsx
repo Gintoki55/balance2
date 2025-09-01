@@ -5,7 +5,7 @@ import { Play } from "lucide-react";
 
 export default function MsfPage() {
   return (
-    <div className="bg-[#F9FAFB] min-h-screen bg-hexagons">
+    <div className="bg-[#F9FAFB] min-h-screen bg-hexagons text-black">
       
       {/* الهيدر الجديد */}
       <StationHeader title="MSF Simulator" />
@@ -18,7 +18,7 @@ export default function MsfPage() {
           <Image
             src="/images/msf.png"
             alt="MSF Simulation"
-            width={800}
+            width={1200}
             height={400}
             className="rounded-xl shadow-lg border border-gray-200"
           />

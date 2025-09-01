@@ -16,9 +16,9 @@ export default function RoPage() {
         {/* صورة المحاكاة */}
         <div className="flex justify-center mt-6">
           <Image
-            src="/images/ro.png"
+            src="/images/roa.png"
             alt="RO Simulation"
-            width={800}
+            width={1200}
             height={400}
             className="rounded-xl shadow-lg border border-gray-200"
           />

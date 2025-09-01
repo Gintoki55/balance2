@@ -5,76 +5,93 @@ import Link from "next/link";
 export default function MediaPage() {
   const faqItems = [
     {
-      question: "ما هو هذا النظام؟",
-      answer: "هذا النظام هو محاكاة تعليمية تهدف لتوضيح كيفية عمل محاكاة التناضح العكسي."
+      question: "What is this system?",
+      answer:
+        "This system is an educational simulation designed to explain how reverse osmosis simulation works.",
     },
     {
-      question: "كيف يمكن استخدام الفيديوهات؟",
-      answer: "يمكنك مشاهدة الفيديو الرئيسي لفهم الأساسيات، ثم متابعة الفيديوهات الفرعية لمزيد من التفاصيل."
+      question: "How can I use the videos?",
+      answer:
+        "You can watch the main video to understand the basics, then explore the additional videos for more details.",
     },
     {
-      question: "هل هذه المحاكاة تفاعلية؟",
-      answer: "نعم، بعض الفيديوهات توضح كيفية التفاعل مع المحاكاة خطوة بخطوة."
+      question: "Is this simulation interactive?",
+      answer:
+        "Yes, some videos demonstrate how to interact with the simulation step by step.",
     },
   ];
 
   return (
     <div className="bg-[#F9FAFB] min-h-screen">
-      {/* الهيدر */}
+      {/* Header */}
       <StationHeader title="Media & Tutorials" />
 
-      <div className="p-4 sm:p-6 space-y-12 max-w-6xl mx-auto">
+      <div className="p-4 sm:p-6 space-y-16 max-w-6xl mx-auto">
 
-        {/* العنوان والفيديو التعريفي */}
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">تعرف على نظام المحاكاة</h1>
-          <p className="text-gray-600 text-lg">
-            شاهد الفيديو التعريفي لفهم كيفية عمل المحاكاة واستخدامها بالشكل الأمثل.
+        {/* Title and Intro Video */}
+        <div className="text-center space-y-6">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+            Learn About the Simulation System
+          </h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Watch the introduction video to understand how the simulation works
+            and how to use it effectively.
           </p>
-          <div className="aspect-w-16 aspect-h-9 mt-4 rounded-xl shadow-lg overflow-hidden">
+          <div className="w-full max-w-4xl mx-auto rounded-xl shadow-xl overflow-hidden">
             <iframe
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
               title="Intro Tutorial"
+              loading="lazy"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              className="w-full h-full"
+              className="w-full aspect-video"
             ></iframe>
           </div>
         </div>
 
-        {/* نصوص تعريفية وأنواعه */}
-        <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">ما هو النظام وأنواعه؟</h2>
+        {/* System Overview and Types */}
+        <div className="space-y-6 text-center sm:text-left">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            What is the system and its types?
+          </h2>
           <p className="text-gray-600">
-            هذا النظام يوفر محاكاة تعليمية لأنواع مختلفة من العمليات مثل التناضح العكسي، التقطير متعدد التأثيرات، وغيرها. الهدف هو تعليم المستخدمين كيفية التعامل مع هذه الأنظمة بشكل آمن وفعال.
+            This system provides educational simulations for different processes
+            such as reverse osmosis, multi-effect distillation, and more. The
+            goal is to teach users how to safely and effectively work with these
+            systems.
           </p>
           <ul className="list-disc list-inside text-gray-600 space-y-2">
-            <li>محاكاة التناضح العكسي (RO Simulation)</li>
-            <li>محاكاة التقطير متعدد التأثيرات (MED Simulation)</li>
-            <li>محاكاة العمليات المتقدمة في المياه والصرف</li>
+            <li>Reverse Osmosis Simulation (RO Simulation)</li>
+            <li>Multi-Effect Distillation Simulation (MED Simulation)</li>
+            <li>Advanced Water & Wastewater Process Simulations</li>
           </ul>
         </div>
 
-        {/* الأسئلة الشائعة */}
+        {/* FAQ Section */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">الأسئلة الشائعة</h2>
-          <div className="space-y-4">
+          <h2 className="text-2xl font-semibold text-gray-800">Frequently Asked Questions</h2>
+          <div className="grid sm:grid-cols-2 gap-6">
             {faqItems.map((item, index) => (
-              <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+              <div
+                key={index}
+                className="bg-white p-6 rounded-lg shadow-md text-center sm:text-left"
+              >
                 <h3 className="font-semibold text-gray-800">{item.question}</h3>
-                <p className="text-gray-600 mt-1">{item.answer}</p>
+                <p className="text-gray-600 mt-2">{item.answer}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* زر التواصل */}
-        <div className="text-center mt-8">
+        {/* Contact Button */}
+        <div className="text-center">
           <Link href="/contact">
-            <button className="bg-[#429988] text-white px-6 py-3 rounded-lg shadow-lg text-lg 
-                               hover:bg-[#367c6e] transition active:scale-95">
-              تواصل معنا
+            <button
+              className="bg-[#429988] text-white px-8 py-3 rounded-lg shadow-lg text-lg 
+                         hover:bg-[#367c6e] transition active:scale-95"
+            >
+              Contact Us
             </button>
           </Link>
         </div>

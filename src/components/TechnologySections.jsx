@@ -96,6 +96,7 @@ export default function TechnologySections() {
               className="w-full max-w-[500px] h-auto object-contain rounded-xl shadow-md"
               src={section.image} 
               alt={section.title} 
+              loading='lazy'
             />
           </div>
         </section>

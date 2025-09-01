@@ -1,74 +1,44 @@
 "use client";
-import StationHeader from "@/components/stationheader";
+import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
+import Link from "next/link";
 
-export default function MediaPage() {
-  // مثال لمقاطع الفيديو
-  const mainVideo = {
-    title: "Main Tutorial Video",
-    description: "شرح شامل حول استخدام المحاكاة.",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-  };
-
-  const subVideos = [
-    {
-      id: 1,
-      title: "Video 1",
-      videoUrl: "https://www.youtube.com/embed/3JZ_D3ELwOQ",
-    },
-    {
-      id: 2,
-      title: "Video 2",
-      videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY",
-    },
-    {
-      id: 3,
-      title: "Video 3",
-      videoUrl: "https://www.youtube.com/embed/L_jWHffIx5E",
-    },
-  ];
-
+export default function StationHeader({ title }) {
   return (
-    <div className="bg-[#F9FAFB] min-h-screen">
-      {/* الهيدر الجديد */}
-      <StationHeader title="Media" />
+    <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-8 sticky top-0 bg-white z-50 px-4 py-3 shadow-sm">
+      {/* زر الرجوع + العنوان */}
+      <div className="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
+                     hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
+        <h1 className="ml-3 text-xl sm:text-2xl font-bold text-gray-800 truncate">
+          {title}
+        </h1>
+      </div>
 
-      <div className="p-4 sm:p-6 space-y-12">
+      {/* أزرار إضافية */}
+      <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto justify-center">
+        <Link href="/mediapage">
+        <button className="flex items-center gap-2 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
+                           hover:bg-blue-700 active:scale-95 transition cursor-pointer">
+          <Play className="w-4 h-4" /> Media
+        </button>
+        </Link>
 
-        {/* الفيديو الكبير في الوسط */}
-        <div className="max-w-4xl mx-auto">
-          <div className="aspect-w-16 aspect-h-9">
-            <iframe
-              src={mainVideo.videoUrl}
-              title={mainVideo.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full rounded-xl shadow-lg"
-            ></iframe>
-          </div>
-          <h2 className="mt-4 text-xl font-semibold text-gray-800">{mainVideo.title}</h2>
-          <p className="text-gray-600 mt-1">{mainVideo.description}</p>
-        </div>
+        <button className="flex items-center gap-2 bg-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
+                           hover:bg-purple-700 active:scale-95 transition cursor-pointer">
+          <Bot className="w-4 h-4" /> AI Helper
+        </button>
 
-        {/* الفيديوهات الثلاثة تحت */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {subVideos.map((item) => (
-            <div key={item.id} className="flex flex-col items-center">
-              <div className="aspect-w-16 aspect-h-9 w-full">
-                <iframe
-                  src={item.videoUrl}
-                  title={item.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full rounded-lg shadow-md"
-                ></iframe>
-              </div>
-              <h3 className="mt-2 text-lg font-semibold text-gray-800">{item.title}</h3>
-            </div>
-          ))}
-        </div>
-
+        <Link href="/calculator">
+          <button className="flex items-center gap-2 bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
+                             hover:bg-green-700 active:scale-95 transition cursor-pointer">
+            <Calculator className="w-4 h-4" /> Calculator
+          </button>
+        </Link>
       </div>
     </div>
   );

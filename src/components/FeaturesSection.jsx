@@ -50,6 +50,7 @@ export default function FeaturesSection() {
                   <img
                     src={feature.icon}
                     alt={feature.title}
+                    loading='lazy'
                     className="w-10 sm:w-12 md:w-14 lg:w-16 h-10 sm:h-12 md:h-14 lg:h-16 
                                object-contain z-30 transition-transform duration-300 ease-in-out 
                                group-hover:scale-110 invert"

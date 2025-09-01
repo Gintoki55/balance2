@@ -1,32 +1,7 @@
 "use client";
 import React from "react";
-import { ArrowLeft } from "lucide-react"; // أيقونة الرجوع
-// fake data for one device (D1)
-const deviceData = {
-  deviceId: "D1",
-  metrics: [
-    { label: "Ka", value: 1.0, extra: "Aa", num: 2153.75, delta: 5.0, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "Kb", value: 1.0, extra: "Ab", num: 3030.44, delta: 2.0, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "Kc", value: 1.0, extra: "Ac", num: 4056.03, delta: 2.0, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "cg", value: 0.99, extra: "S0", num: 40.0, delta: null, color: "text-green-700 bg-green-100 px-2 rounded" },
-  ],
-  rightMetrics: [
-    { label: "Jb", value: 10.0 },
-    { label: "Jc", value: 10.0 },
-    { label: "Md", value: 1000.0, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "Ts", value: 120.0 },
-    { label: "Th", value: 115.0, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "T0", value: 30.0, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "M0", value: 5628.41 },
-    { label: "Mm", value: 2814.21 },
-    { label: "WR", value: 17.77 },
-    { label: "Ms", value: 119.84 },
-    { label: "GOR", value: 8.34 },
-    { label: "SEC", value: 62.4 },
-    { label: "m", value: 0.5, color: "text-orange-700 bg-orange-100 px-2 rounded" },
-    { label: "sA", value: 73.02 },
-  ],
-};
+import { ArrowLeft } from "lucide-react";
+import { medData, msfData, rogData } from "../../components/designs"; // استدعاء البيانات
 
 function DeviceTable({ device }) {
   return (
@@ -38,10 +13,9 @@ function DeviceTable({ device }) {
         <table className="w-full text-sm border border-gray-200 rounded-lg">
           <thead>
             <tr className="bg-gray-50 text-gray-700">
-              <th className="px-2 py-1 text-left">MSF Design</th>
-              <th className="px-2 py-1 text-left">Extra</th>
+              <th className="px-2 py-1 text-left">Label</th>
               <th className="px-2 py-1 text-left">Value</th>
-              <th className="px-2 py-1 text-left">Δ</th>
+              <th className="px-2 py-1 text-left">Extra</th>
               <th className="px-2 py-1 text-left">More</th>
             </tr>
           </thead>
@@ -49,9 +23,10 @@ function DeviceTable({ device }) {
             {device.metrics.map((row, i) => (
               <tr key={i} className="border-t hover:bg-gray-50 transition">
                 <td className="px-2 py-1 font-semibold text-gray-800">{row.label}</td>
+                <td className={`px-2 py-1 font-medium ${row.color || "text-gray-800"}`}>
+                  {row.value}
+                </td>
                 <td className="px-2 py-1 text-gray-600">{row.extra}</td>
-                <td className={`px-2 py-1 font-medium ${row.color || "text-gray-800"}`}>{row.value}</td>
-                <td className="px-2 py-1 text-blue-700">{row.delta ?? ""}</td>
                 <td className="px-2 py-1 text-gray-700">{row.num}</td>
               </tr>
             ))}
@@ -68,7 +43,6 @@ function DeviceTable({ device }) {
               <span className={`font-semibold ${row.color || "text-gray-800"}`}>{row.value}</span>
             </div>
             <div className="text-xs text-gray-600">Extra: {row.extra}</div>
-            {row.delta && <div className="text-xs text-blue-600">Δ {row.delta}</div>}
             <div className="text-xs text-gray-700">More: {row.num}</div>
           </div>
         ))}
@@ -91,11 +65,12 @@ function DeviceTable({ device }) {
 }
 
 export default function DashboardPage() {
+  const devices = [medData, msfData, rogData]; // مصفوفة الأجهزة
+
   return (
-    <div className="p-4 sm:p-6 bg-gray-100 min-h-[500px]">
-      
+    <div className="min-h-[500px] bg-hexagons">
       {/* الهيدر مع زر الرجوع */}
-      <div className="flex items-center mb-6">
+      <div className="flex items-center mb-4 bg-gray-100  sticky top-0 z-50 px-6 py-4 shadow-sm">
         <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 bg-[rgb(66,153,136)] text-white px-3 py-2 rounded-lg shadow hover:bg-gray-50 hover:text-[rgb(66,153,136)] active:scale-95 transition cursor-pointer"
@@ -105,7 +80,18 @@ export default function DashboardPage() {
         <h1 className="ml-4 text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
       </div>
 
-      <DeviceTable device={deviceData} />
+      <div className="p-4 sm:p-6">
+      {/* مربعات الأجهزة D1, D2, D3 */}
+          <div className="grid grid-cols-1 gap-4">
+            {devices.map((device, idx) => (
+              <div key={idx} className="bg-white  rounded-xl shadow p-4">
+                <h2 className="text-lg font-bold mb-2 text-gray-900">D{idx + 1}</h2>
+                <DeviceTable device={device} />
+              </div>
+            ))}
+          </div>
+      </div>
+    
     </div>
   );
 }
