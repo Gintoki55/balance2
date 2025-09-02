@@ -48,7 +48,7 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400 text-sm">
               <li><a href="/medpage" className="hover:text-white transition-colors">MED</a></li>
               <li><a href="/msfpage" className="hover:text-white transition-colors">MSF</a></li>
-              <li><a href="/ropage" className="hover:text-white transition-colors">RO</a></li>
+              <li><a href="/ropage" className="hover:text-white transition-colors">ROA</a></li>
             </ul>
           </div>
         </div>

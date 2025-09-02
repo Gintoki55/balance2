@@ -3,6 +3,8 @@ import { useState } from "react";
 import StationHeader from "@/components/stationheader";
 import Image from "next/image";
 import { Play } from "lucide-react";
+import Lottie from "lottie-react";
+import animationData from "../../../public/animation/med.json";
 
 export default function MsfPage() {
   const [medFile, setMedFile] = useState("");
@@ -24,13 +26,7 @@ export default function MsfPage() {
 
         {/* صورة المحاكاة */}
         <div className="flex justify-center mt-6">
-          <Image
-            src="/images/med.png"
-            alt="MSF Simulation"
-            width={1200}
-            height={400}
-            className="rounded-xl shadow-lg border border-gray-200"
-          />
+           <Lottie animationData={animationData} loop={true} />
         </div>
 
         {/* المستطيل الأبيض الذي يحتوي الخيارات */}
@@ -63,7 +59,7 @@ export default function MsfPage() {
                 value={stage1}
                 onChange={(e) => setStage1(e.target.value)}
                 disabled={isDisabled}
-                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 cursor-not-allowed"
+                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="">1</option>
                 <option value="2">2</option>
@@ -73,7 +69,7 @@ export default function MsfPage() {
                 value={stage2}
                 onChange={(e) => setStage2(e.target.value)}
                 disabled={isDisabled}
-                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 cursor-not-allowed"
+                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="">1</option>
                 <option value="2">2</option>
@@ -89,7 +85,7 @@ export default function MsfPage() {
               value={scenario}
               onChange={(e) => setScenario(e.target.value)}
               disabled={isDisabled}
-              className="px-3 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black disabled:opacity-50 cursor-not-allowed"
+              className="px-3 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">Design</option>
               <option value="Optimization">Optimization</option>
@@ -105,7 +101,7 @@ export default function MsfPage() {
                 value={runs}
                 onChange={(e) => setRuns(e.target.value)}
                 disabled={isDisabled}
-                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 cursor-not-allowed"
+                className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="">1</option>
                 <option value="55">55</option>

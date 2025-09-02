@@ -37,7 +37,7 @@ export default function FeaturesSection() {
           </div>
 
           {/* Right Section (Features) */}
-          <div className="flex-1 flex justify-around flex-wrap gap-4">
+          <div className="flex-1 flex justify-around flex-wrap gap-4 sm:flex-row">
             {features.map((feature, index) => (
               <div
                 key={index}

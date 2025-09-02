@@ -7,13 +7,14 @@ export default function StationHeader({ title }) {
     <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-8 sticky top-0 bg-white z-50 px-4 py-3 shadow-sm">
       {/* زر الرجوع + العنوان */}
       <div className="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
-        <button
-          onClick={() => window.history.back()}
-          className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
-                     hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
-        >
-          <ArrowLeft className="w-4 h-4" />
-        </button>
+        <Link href="/">
+          <button
+            className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
+                      hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+        </Link>
         <h1 className="ml-3 text-xl sm:text-2xl font-bold text-gray-800 truncate">
           {title}
         </h1>
