@@ -5,10 +5,11 @@ import Image from "next/image";
 import { Play } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/roa.json";
+
+import { runData, scenarioDataRoa, elements, ROAFile } from "@/data/allData";
 export default function RoPage() {
       const [roaFile, setRoaFile] = useState("");
-      const [stage1, setStage1] = useState("");
-      const [stage2, setStage2] = useState("");
+      const [element, setElement] = useState("");
       const [scenario, setScenario] = useState("");
       const [runs, setRuns] = useState("");
     
@@ -33,7 +34,7 @@ export default function RoPage() {
           
         <div className="mt-10 bg-white rounded-xl shadow-lg p-6 grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
                   
-                  {/* MED File */}
+                  {/* ROA File */}
                   <div className="flex flex-col items-center">
                     <label className="text-sm font-semibold text-gray-700 mb-2">ROA File</label>
                     <select
@@ -41,81 +42,73 @@ export default function RoPage() {
                       onChange={(e) => setRoaFile(e.target.value)}
                       className="px-3 py-2 border border-[#429988] rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#429988] bg-white text-black"
                     >
-                      <option value="">Select Project</option>
-                      <option value="project1">Project 1</option>
-                      <option value="project2">Project 2</option>
-                      <option value="project3">Project 3</option>
-                      <option value="project4">Project 4</option>
-                      <option value="project5">Project 5</option>
-                      <option value="project6">Project 6</option>
-                      <option value="project7">Project 7</option>
+                      <option value="">--Select a File--</option>
+                      {ROAFile.map((ROA, index) => (
+                          <option key={index} value={ROA}>
+                            {ROA}
+                          </option>
+                        ))}
                     </select>
                   </div>
 
-                  {/* Stages */}
+                  {/* Elements */}
                   <div className="flex flex-col items-center">
-                    <label className="text-sm font-semibold text-gray-700 mb-2">Stages</label>
-                    <div className="flex gap-2">
-                      <select
-                        value={stage1}
-                        onChange={(e) => setStage1(e.target.value)}
-                        disabled={isDisabled}
-                        className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <option value="">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
-                      <select
-                        value={stage2}
-                        onChange={(e) => setStage2(e.target.value)}
-                        disabled={isDisabled}
-                        className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <option value="">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Scenario */}
-                  <div className="flex flex-col items-center">
-                    <label className="text-sm font-semibold text-gray-700 mb-2">Scenario</label>
+                    <label className="text-sm font-semibold text-gray-700 mb-2">Elements</label>
                     <select
-                      value={scenario}
-                      onChange={(e) => setScenario(e.target.value)}
+                      value={element}
+                      onChange={(e) => setElement(e.target.value)}
                       disabled={isDisabled}
-                      className="px-3 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-                      blue-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <option value="">Design</option>
-                      <option value="Optimization">Optimization</option>
-                      <option value="Simulation">Simulation</option>
+                       {elements.map((element, index) => (
+                          <option key={index} value={element}>
+                            {element}
+                          </option>
+                        ))}
                     </select>
                   </div>
+
+                 {/* Scenario */}
+                <div className="flex flex-col items-center">
+                  <label className="text-sm font-semibold text-gray-700 mb-2">Scenario</label>
+                  <select
+                    value={scenario}
+                    onChange={(e) => setScenario(e.target.value)}
+                    disabled={isDisabled}
+                    className="px-3 py-2 border border-blue-500 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {scenarioDataRoa.map((scenario, index) => (
+                        <option key={index} value={scenario}>
+                          {scenario}
+                        </option>
+                    ))}
+                  </select>
+                </div>
 
                   {/* Runs */}
-                  <div className="flex flex-col items-center">
-                    <label className="text-sm font-semibold text-gray-700 mb-2">Runs</label>
-                    <div className="flex items-center gap-2">
-                      <select
-                        value={runs}
-                        onChange={(e) => setRuns(e.target.value)}
-                        disabled={isDisabled}
-                        className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <option value="">1</option>
-                        <option value="55">55</option>
-                        <option value="999">999</option>
-                      </select>
-                      <button
-                        disabled={isDisabled}
-                        className="flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <Play className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
+                   <div className="flex flex-col items-center">
+          <label className="text-sm font-semibold text-gray-700 mb-2">Runs</label>
+          <div className="flex items-center gap-2">
+            <select
+              value={runs}
+              onChange={(e) => setRuns(e.target.value)}
+              disabled={isDisabled}
+              className="px-3 py-2 border border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white text-black disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {runData.map((run, index) => (
+                <option key={index} value={run}>
+                  {run}
+                </option>
+              ))}
+            </select>
+            <button
+              disabled={isDisabled}
+              className="flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Play className="w-4 h-4" />
+            </button>
+          </div>
+    </div>
 
         </div>
       </div>

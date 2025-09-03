@@ -23,19 +23,19 @@ export default function StationHeader({ title }) {
       {/* أزرار إضافية */}
       <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto justify-center">
         <Link href="/mediapage">
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
-                           hover:bg-blue-700 active:scale-95 transition cursor-pointer">
+        <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988] px-3 sm:px-4 py-2 rounded-lg shadow-md 
+                           hover:bg-[#367c6e] active:scale-95 transition cursor-pointer">
           <Play className="w-4 h-4" /> Media
         </button>
         </Link>
 
-        <button className="flex items-center gap-2 bg-purple-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
-                           hover:bg-purple-700 active:scale-95 transition cursor-pointer">
+        <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988]  px-3 sm:px-4 py-2 rounded-lg shadow-md 
+                          hover:bg-[#367c6e] active:scale-95 transition cursor-pointer">
           <Bot className="w-4 h-4" /> AI Helper
         </button>
 
         <Link href="/calculator">
-          <button className="flex items-center gap-2 bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg shadow-md 
+          <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988]  px-3 sm:px-4 py-2 rounded-lg shadow-md 
                              hover:bg-green-700 active:scale-95 transition cursor-pointer">
             <Calculator className="w-4 h-4" /> Calculator
           </button>
