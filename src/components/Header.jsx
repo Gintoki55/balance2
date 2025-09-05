@@ -19,7 +19,7 @@ export default function Header() {
               className="h-10 w-auto object-contain transition-transform duration-150 active:scale-95 cursor-pointer"
             />
           </a>
-          <h1 className="hidden lg:block text-lg xl:text-2xl font-sans text-gray-900">
+          <h1 className="hidden lg:block text-lg xl:text-2xl text-gray-700 font-bold">
             Balance Desalination Simulator
           </h1>
         </div>

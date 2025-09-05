@@ -19,7 +19,7 @@ export default function FeaturesSection() {
   return (
     <section
       className="relative py-8 bg-cover bg-center"
-      style={{ backgroundImage: 'url("/images/img1.jpg")' }}
+      style={{ backgroundImage: 'url("/images/hero1.jpg")' }}
     >
       <div className="absolute inset-0 bg-black/50 z-20"></div>
       <div className="relative max-w-8xl mx-auto px-4 sm:px-6 sm:py-4 lg:px-8 z-30">
@@ -32,7 +32,7 @@ export default function FeaturesSection() {
               Powerful Features Built for Precision
             </h2>
             <p className="text-base sm:text-lg text-white">
-             Whether you're designing a complex MSF system or exploring RO membrane behavior, this simulator provides the tools you need — from input customization to performance analysis.
+             Whether you're designing a complex MSF system or exploring RO membrane behavior, this simulator provides the tools you need from input customization to performance analysis.
             </p>
           </div>
 

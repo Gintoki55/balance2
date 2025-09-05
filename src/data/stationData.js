@@ -6,56 +6,57 @@ export const mainStationLinkData = {
 
 export const sections = [
   {
+    title: "ROA - Reverse Osmosis",
+    description:
+      "A membrane-based technique that pushes seawater through semipermeable membranes to remove salt and impurities — compact for stand alone plants.",
+    badges: ["roa", "rob", "roc", "rod", "roe", "rof", "rog"],
+    image: "/images/b3.png",
+    link: "/ropage",
+    paidLink: "premium",
+    key: "ROs",
+  },
+
+  {
+    title: "MSF - Multi-Stage Flash",
+    description:
+      "A high-temperature process where heated seawater rapidly flashes’ into steam across multiple low-pressure chambers — ideal for integration of power and water production.",
+    badges: ["MSF", "MSFR", "MSFX", "MSFX-Ab", "MSH","MSH-Ab"],
+    image: "/images/b2.png",
+    link: "/msfpage",
+    paidLink: "premium",
+    key: "MSFs",
+  },
+    {
     title: "MED – Multi-Effect Distillation",
     description:
       "A thermal desalination method that uses multiple stages of evaporation, where each effect reuses the energy from the previous one — efficient for low heat source.",
-    badges: ["med", "medb", "medf", "medm", "medr", "medr-ab", "mvc"],
+    badges: ["MED", "MED-Ab", "MED-VC", "MEDB", "MEDF", "MEDM", "MEDX","MEDX-Ab","MVC"],
     image: "/images/bb1.png",
     link: "/medpage",
     paidLink: "premium",
     key: "MEDs",
   },
-  {
-    title: "MSF - Multi-Stage Flash",
-    description:
-      "A high-temperature process where heated seawater rapidly flashes’ into steam across multiple low-pressure chambers — ideal for integration of power and water production.",
-    badges: ["msf", "msfr", "msfx", "msh", "msh-ab"],
-    image: "/images/b3.png",
-    link: "/msfpage",
-    paidLink: "premium",
-    key: "MSFs",
-  },
-  {
-    title: "ROA - Reverse Osmosis",
-    description:
-      "A membrane-based technique that pushes seawater through semipermeable membranes to remove salt and impurities — compact for stand alone plants.",
-    badges: ["roa", "rob", "roc", "rod", "roe", "rof", "rog"],
-    image: "/images/b2.png",
-    link: "/ropage",
-    paidLink: "premium",
-    key: "ROs",
-  },
 ];
 
 export const stationLinksData = {
   MEDs: [
-    { title: "med", info: "MED process (parallel feed flow)" },
-    { title: "medb", info: "MED process (backward feed flow)" },
-    { title: "medf", info: "MED process (forward feed flow)" },
-    { title: "medm", info: "MED process (mixed feed flow)" },
-    { title: "medr", info: "MED process (mixed feed recirculating)" },
-    { title: "medr-ab", info: "MED process (mixed vapor absorption)" },
-    {
-      title: "mvc",
-      info: "Mechanical vapour compression process (single effect)",
-    },
+    { title: "MED", info: "Parallel feed MED process" },
+    { title: "MED-Ab", info: "Vapor absorption MED process" },
+    { title: "MED-VC", info: "Middle vapor compression MED process" },
+    { title: "MEDB", info: "Backward feed MED process " },
+    { title: "MEDF", info: "Forward feed MED process" },
+    { title: "MEDM", info: "Mixed feed MED process (parallel and back feed)" },
+    { title: "MEDX", info: "Excess feed MED process" },
+    { title: "MEDX-Ab", info: "Excess feed MED process (with vapor absorption)" },
+    { title: "MVC", info: "Mechanical Vapours Compression process" },
   ],
   MSFs: [
-    { title: "msf", info: "MSF process (once through)" },
-    { title: "msfr", info: "MSF process (brine recycle)" },
-    { title: "msfx", info: "MSF process (excess cooling water mixing)" },
-    { title: "msh", info: "Multi-stage hybrid process (MSFR + MED)" },
-    { title: "msh-ab", info: "MSH process with vapor absorption" },
+    { title: "MSF", info: "once through Multi-Stage Flash process" },
+    { title: "MSFR", info: "Recirculating brine Multi-Stage Flash process" },
+    { title: "MSFX", info: "Excess feed Multi-Stage Flash process" },
+    { title: "MSFX-Ab", info: "Excess feed Multi-Stage Flash process (with vapor absorption)" },
+    { title: "MSH", info: "Multi-Stage Hybrid process (MSFR + MED)" },
+    { title: "MSH-Ab", info: "Multi-Stage Hybrid process  (with vapor absorption)" },
   ],
   ROs: [
     { title: "roa", info: "RO process (contains stage a)" },
@@ -70,4 +71,3 @@ export const stationLinksData = {
     },
   ],
 };
-

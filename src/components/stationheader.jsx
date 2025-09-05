@@ -1,45 +1,45 @@
 "use client";
-import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function StationHeader({ title }) {
+export default function StationHeader({ title, buttons = [] }) {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isActive = (path) => pathname === path;
+
   return (
-    <div className="flex flex-col sm:flex-row items-center sm:justify-between mb-8 sticky top-0 bg-white z-50 px-4 py-3 shadow-sm">
+    <div className="flex flex-col sm:flex-row items-center sm:justify-between sticky top-0 bg-white z-50 px-4 py-3 shadow-sm">
       {/* زر الرجوع + العنوان */}
       <div className="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
-        <Link href="/">
-          <button
-            className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
-                      hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-        </Link>
+        <button
+          onClick={() => router.back()}
+          className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
+                    hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
         <h1 className="ml-3 text-xl sm:text-2xl font-bold text-gray-800 truncate">
           {title}
         </h1>
       </div>
 
-      {/* أزرار إضافية */}
+      {/* الأزرار الخاصة بالصفحة */}
       <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto justify-center">
-        <Link href="/mediapage">
-        <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988] px-3 sm:px-4 py-2 rounded-lg shadow-md 
-                           hover:bg-[#367c6e] active:scale-95 transition cursor-pointer">
-          <Play className="w-4 h-4" /> Media
-        </button>
-        </Link>
-
-        <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988]  px-3 sm:px-4 py-2 rounded-lg shadow-md 
-                          hover:bg-[#367c6e] active:scale-95 transition cursor-pointer">
-          <Bot className="w-4 h-4" /> AI Helper
-        </button>
-
-        <Link href="/calculator">
-          <button className="flex items-center gap-2 bg-[#ffffff] text-[#429988] hover:text-white border-2 border-[#429988]  px-3 sm:px-4 py-2 rounded-lg shadow-md 
-                             hover:bg-green-700 active:scale-95 transition cursor-pointer">
-            <Calculator className="w-4 h-4" /> Calculator
+        {buttons.map((btn, idx) => (
+          <button
+            key={idx}
+            onClick={() => router.push(btn.href)}
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 ${
+              isActive(btn.href)
+                ? "bg-[#429988] text-white border-[#429988]"
+                : "bg-white text-[#429988] border-[#429988] hover:bg-[#367c6e] hover:text-white"
+            }`}
+          >
+            {btn.icon && <btn.icon className="w-4 h-4" />}
+            {btn.label}
           </button>
-        </Link>
+        ))}
       </div>
     </div>
   );

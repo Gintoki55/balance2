@@ -1,37 +1,42 @@
 "use client";
 import { useState } from "react";
 import StationHeader from "@/components/stationheader";
-import Image from "next/image";
-import { Play } from "lucide-react";
+import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/med.json";
 
-import { runData, effectsData, scenarioData,MEDFile} from "@/data/allData";
+import { runData, effectsData, scenarioData, MEDFile } from "@/data/allData";
 
-export default function MsfPage() {
+export default function MEDPage() {
   const [medFile, setMedFile] = useState("");
   const [effects, setEffects] = useState("");
   const [scenario, setScenario] = useState("");
   const [runs, setRuns] = useState("");
 
   const isDisabled = !medFile; // تعطيل باقي الحقول إذا لم يتم اختيار MED File
+  // أزرار خاصة بهذه الصفحة فقط
+  const medButtons = [
+    { href: "/medpage/media", label: "Media", icon: Play },
+    { href: "/medpage/helper", label: "Helper", icon: Bot },
+    { href: "/medpage/calculator", label: "Calculator", icon: Calculator },
+  ];
 
   return (
     <div className="bg-[#F9FAFB] min-h-screen bg-hexagons">
 
       {/* الهيدر مع زر الرجوع */}
-      <StationHeader title="MED Simulator" />
+      <StationHeader title="MED Simulator" buttons={medButtons} />
 
       {/* المحتوى الرئيسي */}
-      <div className="p-4 sm:p-6">
+      <div className="">
 
         {/* صورة المحاكاة */}
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center">
            <Lottie animationData={animationData} loop={true} />
         </div>
 
         {/* المستطيل الأبيض الذي يحتوي الخيارات */}
-        <div className="mt-10 bg-white rounded-xl shadow-lg p-6 grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
+        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
           
           {/* MED File */}
           <div className="flex flex-col items-center">

@@ -10,7 +10,7 @@ export default function Hero() {
       <motion.div 
         className="absolute inset-0 bg-cover bg-top"
         loading="lazy"
-        style={{ backgroundImage: "url('/images/img1.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero1.jpg')" }}
         initial={{ scale: 1.2, opacity: 1 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{
@@ -42,7 +42,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-          >Simulate, design, and analyze advanced desalination systems — from Multi-Stage Flash to Reverse Osmosis — using an interactive platform built for innovation and education.
+          >Simulate, design, and analyze advanced desalination systems from Multi-Stage Flash to Reverse Osmosis using an interactive platform built for innovation and education.
           </motion.p>
         </div>
       </div>

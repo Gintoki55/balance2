@@ -2,7 +2,7 @@
 import { useState } from "react";
 import StationHeader from "@/components/stationheader";
 import Image from "next/image";
-import { Play } from "lucide-react";
+import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/msf.json";
 
@@ -13,26 +13,32 @@ export default function MsfPage() {
     const [stage2, setStage2] = useState("");
     const [scenario, setScenario] = useState("");
     const [runs, setRuns] = useState("");
+
+    const msfButtons = [
+    { href: "/msfpage/media", label: "Media", icon: Play },
+    { href: "/msfpage/helper", label: "Helper", icon: Bot },
+    { href: "/msfpage/calculator", label: "Calculator", icon: Calculator },
+  ];
   
     const isDisabled = !msfFile; // تعطيل باقي الحقول إذا لم يتم اختيار MED File
   return (
     <div className="bg-[#F9FAFB] min-h-screen bg-hexagons text-black">
       
       {/* الهيدر الجديد */}
-      <StationHeader title="MSF Simulator" />
+      <StationHeader title="MSF Simulator" buttons={msfButtons}/>
 
       {/* المحتوى الرئيسي */}
-      <div className="p-4 sm:p-6">
+      <div className="">
 
         {/* صورة المحاكاة */}
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center">
           <Lottie animationData={animationData} loop={true} />
         </div>
 
         {/* الخيارات تحت الصورة */}
 
           
-        <div className="mt-10 bg-white rounded-xl shadow-lg p-6 grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
+        <div className="bg-white rounded-xl shadow-lg p-6 grid grid-cols-2 sm:grid-cols-4 gap-6 justify-items-center">
                   
                   {/* MSF File */}
                   <div className="flex flex-col items-center">
