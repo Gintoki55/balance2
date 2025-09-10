@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.16",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.537.0",

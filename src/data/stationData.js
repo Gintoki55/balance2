@@ -6,12 +6,12 @@ export const mainStationLinkData = {
 
 export const sections = [
   {
-    title: "ROA - Reverse Osmosis",
+    title: "RO - Reverse Osmosis",
     description:
-      "A membrane-based technique that pushes seawater through semipermeable membranes to remove salt and impurities — compact for stand alone plants.",
+      "A membrane-based technique that pushes seawater through semipermeable membranes to remove salt and impurities compact for stand alone plants.",
     badges: ["roa", "rob", "roc", "rod", "roe", "rof", "rog"],
     image: "/images/b3.png",
-    link: "/ropage",
+    link: "/roapage",
     paidLink: "premium",
     key: "ROs",
   },
@@ -19,7 +19,7 @@ export const sections = [
   {
     title: "MSF - Multi-Stage Flash",
     description:
-      "A high-temperature process where heated seawater rapidly flashes’ into steam across multiple low-pressure chambers — ideal for integration of power and water production.",
+      "A high-temperature process where heated seawater rapidly flashes’ into steam across multiple low-pressure chambers ideal for integration of power and water production.",
     badges: ["MSF", "MSFR", "MSFX", "MSFX-Ab", "MSH","MSH-Ab"],
     image: "/images/b2.png",
     link: "/msfpage",
@@ -27,9 +27,9 @@ export const sections = [
     key: "MSFs",
   },
     {
-    title: "MED – Multi-Effect Distillation",
+    title: "MED - Multi Effect Distillation",
     description:
-      "A thermal desalination method that uses multiple stages of evaporation, where each effect reuses the energy from the previous one — efficient for low heat source.",
+      "A thermal desalination method that uses multiple stages of evaporation, where each effect reuses the energy from the previous one efficient for low heat source.",
     badges: ["MED", "MED-Ab", "MED-VC", "MEDB", "MEDF", "MEDM", "MEDX","MEDX-Ab","MVC"],
     image: "/images/bb1.png",
     link: "/medpage",

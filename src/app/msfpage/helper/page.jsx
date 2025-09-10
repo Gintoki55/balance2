@@ -7,7 +7,7 @@ export default function HeplerPage() {
   return (
     <div className="bg-[#F9FAFB] min-h-screen flex flex-col">
       {/* الهيدر */}
-      <StationHeader title="Hepler" />
+      <StationHeader title="Hepler" isPopup/>
 
       {/* محتوى الصفحة المؤقت */}
       <main className="flex-grow flex items-center justify-center">

@@ -1,39 +1,35 @@
-// designs.jsx
-"use client";
-import React from "react";
 
 // بيانات MED
 export const medData = {
   deviceId: "MED Design",
   metrics: [
-    { label: "Ka", value: 1.0, extra: "Aa", num: 19741.73, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "Kb", value: 1.0, extra: "Ab", num: 207.79, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "Kc", value: 1.0, extra: "Ac", num: 4792.76, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "ER", value: 0.70, extra: "CR", num: 3.39, color: "text-orange-700 bg-orange-100 px-2 rounded" },
-  ],
-  rightMetrics: [
-    { label: "Sh", value: 65.00, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "cg", value: 0.99, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "δb", value: 2.00, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "δc", value: 2.00, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "Ve", value: 378.85 },
-    { label: "Ts", value: 65.00, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "Td", value: 40.00, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "T0", value: 30.00, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "S0", value: 40.00, color: "text-green-700 bg-green-100 px-2 rounded" },
-    { label: "WR", value: 19.34 },
-    { label: "M0", value: 5171.91 },
-    { label: "Mf", value: 2897.56 },
-    { label: "Mx", value: 2274.34 },
-    { label: "Ml", value: 413.94 },
-    { label: "sA", value: 146.73 },
-    { label: "Md", value: 1000.0, color: "text-blue-700 bg-blue-100 px-2 rounded" },
-    { label: "Ms", value: 161.89 },
-    { label: "Me", value: 66.66 },
-    { label: "GOR", value: 10.50 },
-    { label: "SEC", value: 51.97 },
+    { label: "Ka", value: 1.0, extra: "Aa", num: 19741.73, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about Ka" },
+    { label: "Kb", value: 1.0, extra: "Ab", num: 207.79, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about Kb" },
+    { label: "Kc", value: 1.0, extra: "Ac", num: 4792.76, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about Kc" },
+    { label: "ER", value: 0.70, extra: "CR", num: 3.39, color: "text-orange-700 bg-orange-100 px-2 rounded", info: "Additional info about ER" },
+    { label: "Sh", value: 65.00, color: "text-blue-700 bg-blue-100 px-2 rounded", info: "Additional info about Sh" },
+    { label: "cg", value: 0.99, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about cg" },
+    { label: "δb", value: 2.00, color: "text-blue-700 bg-blue-100 px-2 rounded", info: "Additional info about δb" },
+    { label: "δc", value: 2.00, color: "text-blue-700 bg-blue-100 px-2 rounded", info: "Additional info about δc" },
+    { label: "Ve", value: 378.85, info: "Additional info about Ve" },
+    { label: "Ts", value: 65.00, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about Ts" },
+    { label: "Td", value: 40.00, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about Td" },
+    { label: "T0", value: 30.00, color: "text-blue-700 bg-blue-100 px-2 rounded", info: "Additional info about T0" },
+    { label: "S0", value: 40.00, color: "text-green-700 bg-green-100 px-2 rounded", info: "Additional info about S0" },
+    { label: "WR", value: 19.34, info: "Additional info about WR" },
+    { label: "M0", value: 5171.91, info: "Additional info about M0" },
+    { label: "Mf", value: 2897.56, info: "Additional info about Mf" },
+    { label: "Mx", value: 2274.34, info: "Additional info about Mx" },
+    { label: "Ml", value: 413.94, info: "Additional info about Ml" },
+    { label: "sA", value: 146.73, info: "Additional info about sA" },
+    { label: "Md", value: 1000.0, color: "text-blue-700 bg-blue-100 px-2 rounded", info: "Additional info about Md" },
+    { label: "Ms", value: 161.89, info: "Additional info about Ms" },
+    { label: "Me", value: 66.66, info: "Additional info about Me" },
+    { label: "GOR", value: 10.50, info: "Additional info about GOR" },
+    { label: "SEC", value: 51.97, info: "Additional info about SEC" },
   ],
 };
+
 
 // بيانات MSF
 export const msfData = {

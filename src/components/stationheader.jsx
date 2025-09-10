@@ -2,18 +2,26 @@
 import { ArrowLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-export default function StationHeader({ title, buttons = [] }) {
+export default function StationHeader({ title, buttons = [], isPopup = false }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const isActive = (path) => pathname === path;
+
+  const handleBack = () => {
+    if (isPopup) {
+      router.back(); // يرجع للوراء
+    } else {
+      router.push("/"); // يروح للصفحة الرئيسية
+    }
+  };
 
   return (
     <div className="flex flex-col sm:flex-row items-center sm:justify-between sticky top-0 bg-white z-50 px-4 py-3 shadow-sm">
       {/* زر الرجوع + العنوان */}
       <div className="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
         <button
-          onClick={() => router.back()}
+          onClick={handleBack}
           className="flex items-center justify-center gap-2 bg-[#429988] text-white px-3 py-2 rounded-lg shadow-md 
                     hover:bg-[#367c6e] active:scale-95 transition cursor-pointer"
         >
