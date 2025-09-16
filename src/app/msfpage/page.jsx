@@ -1,19 +1,16 @@
 "use client";
 import { useState } from "react";
 import StationHeader from "@/components/stationheader";
-import Image from "next/image";
-import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
+import { Play, Bot, Calculator } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/msf.json";
+import TableComponent from "@/components/TableComponent";
 
-import { runData, stageData1,stageData2, scenarioData,MSFFile } from "@/data/allData";
 import TopOptions from "@/components/TopOptions";
+import { StationValueData } from "@/data/infoData";
+import DataTable from "@/components/stationValues";
 export default function MsfPage() {
-    const [msfFile, setMsfFile] = useState("");
-    const [stage1, setStage1] = useState("");
-    const [stage2, setStage2] = useState("");
-    const [scenario, setScenario] = useState("");
-    const [runs, setRuns] = useState("");
+    const [rowsCount, setRowsCount] = useState(1);
 
     const msfButtons = [
     { href: "/msfpage/media", label: "Media", icon: Play },
@@ -21,9 +18,8 @@ export default function MsfPage() {
     { href: "/msfpage/calculator", label: "Calculator", icon: Calculator },
   ];
   
-    const isDisabled = !msfFile; // تعطيل باقي الحقول إذا لم يتم اختيار MED File
   return (
-    <div className="bg-[#F9FAFB] min-h-screen bg-hexagons text-black">
+    <div className="bg-white min-h-screen">
       
       {/* الهيدر الجديد */}
       <StationHeader title="MSF Simulator" buttons={msfButtons}/>
@@ -40,6 +36,8 @@ export default function MsfPage() {
 
           
          <TopOptions station="MSF" />
+         <DataTable stationName="MSF Design" stationData={StationValueData} onJaChange={setRowsCount}/>
+          <TableComponent rowsCount={rowsCount}/>
         </div>
       </div>
   );

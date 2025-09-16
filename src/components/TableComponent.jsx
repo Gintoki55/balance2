@@ -1,45 +1,84 @@
 import React from "react";
 
-const TableComponent = () => {
-  // بيانات الجدول (ممكن تجيبها من API أو ملف خارجي)
-  const tableData = [
-    { j: 0, Pvj: 0.4780, ΔTj: 2.00, Tbj: 0.00, Tvj: 0.00, Tdj: 80.00, Tcj: 0.00, Mbj: 0.00, mj: 104.56, Mdj: 0.00, Sbj: 65.00, Balance: 1.0000 },
-    { j: 1, Pvj: 0.4147, ΔTj: 2.12, Tbj: 77.88, Tvj: 76.64, Tdj: 76.53, Tcj: 74.53, Mbj: 164.54, mj: 101.81, Mdj: 101.81, Sbj: 65.00, Balance: 1.0000 },
-    { j: 2, Pvj: 0.3587, ΔTj: 2.10, Tbj: 74.43, Tvj: 73.19, Tdj: 73.07, Tcj: 70.97, Mbj: 332.55, mj: 98.37, Mdj: 200.17, Sbj: 64.32, Balance: 1.0000 },
-    // 🔽 تكمل باقي الصفوف بنفس الشكل ...
-    { j: 12, Pvj: 0.0744, ΔTj: 1.54, Tbj: 41.67, Tvj: 40.42, Tdj: 40.00, Tcj: 38.00, Mbj: 2198.37, mj: 67.94, Mdj: 1000.00, Sbj: 58.38, Balance: 1.0000 },
-  ];
+const headers = [
+  "j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj",
+  "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance",
+];
 
-  const headers = ["j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj", "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance"];
+const defaultRow = [
+  "1", "1.0000", "0.50", "1.00", "1.00",
+  "1.00", "50.00", "1.00", "1.00", "1.00", "40.00", "1.0000",
+];
+
+// هنا نحدد الأطوال (px) لكل عمود بالترتيب
+const colWidths = [
+  "min-w-[100px]", // j
+  "min-w-[130px]", // Pvj
+  "min-w-[100px]",  // ΔTj
+  "min-w-[130px]", // Tbj
+  "min-w-[100px]",  // Tvj
+  "min-w-[130px]", // Tdj
+  "min-w-[100px]", // Tcj
+  "min-w-[130px]", // Mbj
+  "min-w-[100px]",  // mj
+  "min-w-[130px]", // Mdj
+  "min-w-[100px]", // Sbj
+  "min-w-[130px]", // Balance
+];
+
+const DataTable = ({ rowsCount }) => {
+  const tableData = Array.from({ length: rowsCount }, (_, i) => {
+    return [String(i + 1), ...defaultRow.slice(1)];
+  });
 
   return (
-    <div className="flex justify-center items-center p-4 bg-white">
-      <div className="overflow-x-auto w-full">
-        <table className="table-auto border border-gray-300 rounded-lg shadow-md w-full text-sm">
-          <thead className="bg-gray-100">
-            <tr>
-              {headers.map((head, index) => (
-                <th key={index} className="px-3 py-2 border text-center font-semibold">
-                  {head}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-t text-center">
-                {headers.map((col, colIndex) => (
-                  <td key={colIndex} className="px-3 py-2 border">
-                    {row[col]}
-                  </td>
-                ))}
-              </tr>
+    <div className="w-full overflow-hidden flex justify-center">
+      {/* الحاوية الخارجية اللي نطبق عليها التصغير */}
+      <div
+       className="
+          origin-top transform inline-block
+          2xl:scale-100   /* ≥1536px */
+          xl:scale-100    /* ≥1280px */
+          lg:scale-80     /* ≥1024px */
+          md:scale-60     /* ≥768px */
+          sm:scale-50     /* ≥640px */
+          max-sm:scale-40 /* <640px */
+        "
+      >
+        {/* الجدول */}
+        <div className="min-w-max">
+          {/* Header */}
+          <div className="flex bg-gray-100 font-semibold text-center">
+            {headers.map((head, idx) => (
+              <div
+                key={idx}
+                className={`px-2 py-2 border-gray-300  ${colWidths[idx]}`}
+              >
+                {head}
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+
+          {/* Rows */}
+          {tableData.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="flex border-gray-300 text-center"
+            >
+              {row.map((cell, cellIndex) => (
+                <div
+                  key={cellIndex}
+                  className={`px-2 py-2 border-gray-200 ${colWidths[cellIndex]}`}
+                >
+                  {cell}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default TableComponent;
+export default DataTable;

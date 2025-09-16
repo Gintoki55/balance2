@@ -3,24 +3,20 @@ import { useState } from "react";
 import StationHeader from "@/components/stationheader";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/roa.json";
-import { ArrowLeft, Play, Bot, Calculator } from "lucide-react";
-import { runData, scenarioDataRoa, elements, ROAFile } from "@/data/allData";
+import {Play, Bot, Calculator } from "lucide-react";
 import TopOptions from "@/components/TopOptions";
+import { StationValueData } from "@/data/infoData";
+import DataTable from "@/components/stationValues";
+import TableComponent from "@/components/TableComponent";
 export default function RoPage() {
-      const [roaFile, setRoaFile] = useState("");
-      const [element, setElement] = useState("");
-      const [scenario, setScenario] = useState("");
-      const [runs, setRuns] = useState("");
-    
-      const isDisabled = !roaFile; // تعطيل باقي الحقول إذا لم يتم اختيار roa File
-
+    const [rowsCount, setRowsCount] = useState(1);
        const roaButtons = [
           { href: "/roapage/media", label: "Media", icon: Play },
           { href: "/roapage/helper", label: "Helper", icon: Bot },
           { href: "/roapage/calculator", label: "Calculator", icon: Calculator },
         ];
   return (
-    <div className="bg-[#F9FAFB] min-h-screen bg-hexagons">
+    <div className="bg-white min-h-screen">
       
       {/* الهيدر الجديد */}
       <StationHeader title="ROA Simulator" buttons={roaButtons}/>
@@ -38,6 +34,8 @@ export default function RoPage() {
 
           
         <TopOptions station="ROA"/>
+         <DataTable stationName="ROA Design" stationData={StationValueData} onJaChange={setRowsCount}/>
+          <TableComponent rowsCount={rowsCount}/>
       </div>
     </div>
   );

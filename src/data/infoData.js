@@ -1,7 +1,7 @@
 export const StationValueData =([
     [
       { key: "MED Design", value: "", editable: false, info: "NUll" },
-      { key: "Ja", value: "12", editable: true, info: "Number of effects Ja" },
+      { key: "Ja", value: "1", editable: true, info: "Number of effects Ja" },
       { key: "Sh", value: "65.00", editable: true, info: "Brine salinity at the highes temperature, Sh; g/l Recommended range: 60~ 90" },
       { key: "Ts", value: "80.00", editable: false, info: "Heating steam temperature, Ts; ⁰C Recommended range: 60 ~ 120" },
       { key: "M0", value: "5525.74", editable: false, info: "Raw water, M0; t/h" },

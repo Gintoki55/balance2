@@ -33,8 +33,7 @@ export default function Tooltip({ children, text }) {
           ref={refs.setFloating}
           style={floatingStyles}
           className="bg-gray-600 text-white text-sm px-3 py-1.5 rounded-lg shadow-lg 
-                     whitespace-normal break-words break-all max-w-[90vw] z-10"
-        >
+             whitespace-normal break-words overflow-wrap-anywhere max-w-[20vw] z-10">
           {text}
         </div>
       )}
