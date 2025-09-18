@@ -1,9 +1,6 @@
 "use client";
 import StationHeader from "@/components/stationheader";
-import Link from "next/link";
-
 export default function MediaPage() {
-
   return (
     <div className="bg-[#F9FAFB] min-h-screen flex flex-col">
       {/* الهيدر */}

@@ -33,11 +33,18 @@ export default function MsfPage() {
         </div>
 
         {/* الخيارات تحت الصورة */}
-
-          
          <TopOptions station="MSF" />
+          <div className="flex flex-col gap-2 justify-center items-center 
+                transform 
+                sm:scale-75 
+                md:scale-85 
+                lg:scale-90 
+                xl:scale-95 
+                2xl:scale-100 
+                px-4">
          <DataTable stationName="MSF Design" stationData={StationValueData} onJaChange={setRowsCount}/>
           <TableComponent rowsCount={rowsCount}/>
+          </div>
         </div>
       </div>
   );
