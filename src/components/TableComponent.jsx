@@ -1,68 +1,84 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React from "react";
+import Tooltip from "@/components/Tooltip";
 
-const headers = [
-  "j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj",
-  "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance",
-];
+const TableComponent = ({ stationName, stationData, onJaChange }) => {
+  const handleChange = (rowIndex, cellIndex, newValue) => {
+    const updatedRows = [...stationData];
+    updatedRows[rowIndex][cellIndex].value = newValue;
 
-const defaultRow = [
-  "1", "1.0000", "0.50", "1.00", "1.00",
-  "1.00", "50.00", "1.00", "1.00", "1.00", "40.00", "1.0000",
-];
-
-const DataTable = ({ rowsCount }) => {
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => setIsSmallScreen(window.innerWidth < 640); // أقل من sm
-    handleResize(); // التحقق عند التحميل
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const tableData = Array.from({ length: rowsCount }, (_, i) => {
-    return [String(i + 1), ...defaultRow.slice(1)];
-  });
-
-  // دالة لتقليص القيم إلى 4 أرقام إذا الشاشة صغيرة
-  const formatCell = (value) => {
-    if (!isSmallScreen) return value;
-    const num = Number(value);
-    if (isNaN(num)) return value;
-    return num.toFixed(4); // 4 digits
+    if (updatedRows[rowIndex][cellIndex].key === "Ja" && onJaChange) {
+      onJaChange(Number(newValue));
+    }
   };
 
-  return (
-    <div className="w-full overflow-x-auto px-2">
-      <div className="inline-block origin-top transform min-w-max mx-auto lg:mx-0">
-        {/* Header */}
-        <div className="flex bg-gray-100 font-semibold text-center">
-          {headers.map((head, idx) => (
-            <div
-              key={idx}
-              className="px-2 sm:px-4 py-1 sm:py-2 min-w-[90px] sm:min-w-[116px] text-[10px] sm:text-sm md:text-base"
-            >
-              {head}
-            </div>
-          ))}
-        </div>
+  const toEnglishDigits = (str) =>
+    String(str).replace(/[٠-٩]/g, (d) => String.fromCharCode(d.charCodeAt(0) - 0x0660));
 
-        {/* Rows */}
-        {tableData.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex text-center">
-            {row.map((cell, cellIndex) => (
-              <div
+  const formatValue = (value) => toEnglishDigits(value);
+
+  return (
+    <>
+      {stationData.map((row, rowIndex) => (
+        <tr key={rowIndex}>
+          {row.map((cell, cellIndex) =>
+            cell.key === "MED Design" ? (
+              <td
                 key={cellIndex}
-                className="px-2 sm:px-4 py-1 sm:py-2 min-w-[90px] sm:min-w-[116px] text-[10px] sm:text-sm md:text-base"
+                colSpan={2}
+                className="px-4 py-3 font-bold text-gray-800 bg-gray-200 text-center text-lg"
               >
-                {formatCell(cell)}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
+                {stationName}
+              </td>
+            ) : (
+              <React.Fragment key={cellIndex}>
+                <td className="px-2 py-2 font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[7ch]">
+                  {cell.key}
+                </td>
+                <td className="px-2 py-2 text-center text-sm sm:text-base min-w-[7ch] max-w-[12ch]">
+                  <Tooltip text={cell.info}>
+                    {cell.key === "Ja" ? (
+                      <select
+                        value={cell.value}
+                        onChange={(e) =>
+                          handleChange(rowIndex, cellIndex, e.target.value)
+                        }
+                        className="block w-full px-2 py-2 outline-none rounded-md text-base appearance-auto min-w-[5ch]"
+                      >
+                        {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => (
+                          <option key={num} value={num}>{num}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type="text"
+                        value={formatValue(cell.value)}
+                        onChange={(e) =>
+                          handleChange(rowIndex, cellIndex, toEnglishDigits(e.target.value))
+                        }
+                        disabled={!cell.editable}
+                        inputMode="decimal"
+                        className={`block w-full px-2 py-2 text-center outline-none rounded-md text-base ${
+                          cell.editable
+                            ? "text-green-600 focus:bg-green-100"
+                            : "text-gray-500 cursor-not-allowed"
+                        } min-w-[5ch]`}
+                        style={{
+                          MozAppearance: "textfield",
+                          WebkitAppearance: "none",
+                          margin: 0,
+                        }}
+                      />
+                    )}
+                  </Tooltip>
+                </td>
+              </React.Fragment>
+            )
+          )}
+        </tr>
+      ))}
+    </>
   );
 };
 
-export default DataTable;
+export default TableComponent;

@@ -10,9 +10,9 @@ export default function StationHeader({ title, buttons = [], isPopup = false }) 
 
   const handleBack = () => {
     if (isPopup) {
-      router.back(); // يرجع للوراء
+      router.back();
     } else {
-      router.push("/"); // يروح للصفحة الرئيسية
+      router.push("/");
     }
   };
 
@@ -33,16 +33,16 @@ export default function StationHeader({ title, buttons = [], isPopup = false }) 
       </div>
 
       {/* الأزرار الخاصة بالصفحة */}
-      <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto justify-center">
+      <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
         {buttons.map((btn, idx) => (
           <button
             key={idx}
             onClick={() => router.push(btn.href)}
-            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 text-sm sm:text-base ${
               isActive(btn.href)
                 ? "bg-[#429988] text-white border-[#429988]"
                 : "bg-white text-[#429988] border-[#429988] hover:bg-[#367c6e] hover:text-white"
-            }`}
+            } w-full sm:w-auto`}
           >
             {btn.icon && <btn.icon className="w-4 h-4" />}
             {btn.label}

@@ -1,13 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StationHeader from "@/components/stationheader";
 import { Play, Bot, Calculator } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/med.json";
 import TopOptions from "@/components/TopOptions";
-import DataTable from "@/components/stationValues";
 import { StationValueData } from "@/data/infoData";
-import TableComponent from "@/components/TableComponent";
+import CombinedTables from "@/components/CombinedTables";
 
 export default function MEDPage() {
   const medButtons = [
@@ -16,40 +15,42 @@ export default function MEDPage() {
     { href: "/medpage/calculator", label: "Calculator", icon: Calculator },
   ];
 
-  const [rowsCount, setRowsCount] = useState(1);
+  const [rowsCount, setRowsCount] = useState({});
+  const [stationData, setStationData] = useState([]);
+
+  useEffect(() => {
+    const clone = JSON.parse(JSON.stringify(StationValueData));
+    setStationData(clone);
+  }, []);
+
+  const handleJaChange = (stationName, value) => {
+    setRowsCount((prev) => ({
+      ...prev,
+      [stationName]: value,
+    }));
+  };
 
   return (
     <div className="bg-white min-h-screen">
-
       {/* الهيدر مع زر الرجوع */}
       <StationHeader title="MED Simulator" buttons={medButtons} />
 
       {/* المحتوى الرئيسي */}
-      <div className="">
-
-        {/* صورة المحاكاة */}
-        <div className="flex justify-center">
-           <Lottie animationData={animationData} loop={true} />
-        </div>
-
+      <div className="flex justify-center">
+        <Lottie animationData={animationData} loop={true} />
       </div>
-        <TopOptions station="MED"  />
-        <div className="flex flex-col gap-2 justify-center items-center 
-                transform 
-                sm:scale-75 
-                md:scale-85 
-                lg:scale-90 
-                xl:scale-95 
-                2xl:scale-100 
-                px-4">
-  <DataTable
-    stationName="MED Design"
-    stationData={StationValueData}
-    onJaChange={setRowsCount}
-  />
-  <TableComponent rowsCount={rowsCount} />
-</div>
 
+      <TopOptions station="MED" />
+
+      {/* الجدولين مع تمكين scroll أفقي */}
+      <div className="flex flex-col gap-4 justify-center items-center w-full overflow-x-auto">
+        <CombinedTables
+          stationName="MED Design"
+          stationData={stationData}
+          onJaChange={(value) => handleJaChange("MED", value)}
+          secondTableRows={rowsCount["MED"] || 1}
+        />
+      </div>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export default function Tooltip({ children, text }) {
         <div
           ref={refs.setFloating}
           style={floatingStyles}
-          className="bg-gray-600 text-white text-xs sm:text-sm md:text-base lg:text-lg 
+          className="bg-gray-600 text-white text-xs sm:text-sm md:text-base lg:text-sm 
                      px-3 py-1.5 rounded-lg shadow-lg
                      max-w-[200px] sm:max-w-[250px] md:max-w-[300px] 
                      whitespace-normal break-words z-10"
