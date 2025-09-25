@@ -55,7 +55,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-900 mt-6 sm:mt-8 2xl:mt-10 pt-6 sm:pt-8 2xl:pt-10 flex flex-col sm:flex-row justify-between items-center">
+        <div className="border-t border-gray-300 mt-6 sm:mt-8 2xl:mt-10 pt-6 sm:pt-8 2xl:pt-10 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-black text-xs sm:text-sm 2xl:text-base mb-4 sm:mb-0 text-center sm:text-left">
             © 2025 Balance Desalination Simulator. All rights reserved.
           </p>

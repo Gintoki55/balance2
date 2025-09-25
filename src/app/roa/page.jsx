@@ -34,7 +34,7 @@ export default function RoPage() {
   return (
     <div className="bg-white min-h-screen">
       {/* الهيدر الجديد */}
-      <StationHeader title="ROA Simulator" buttons={roaButtons} />
+      <StationHeader title="RO Simulator" buttons={roaButtons} />
 
       {/* المحتوى الرئيسي */}
       <div>

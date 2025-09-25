@@ -59,11 +59,12 @@
 // const elements = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const runData = [999, 500, 100, 10, 1];
-const scenarioData = ["Select", "Design", "Demand", "Energy", "Rating"];
+const scenarioData = ["Design", "Demand", "Energy", "Rating"];
 
 
 
 const MEDFile = [ 
+    "select",
     "New Plant",
     "Plant 1",
     "Plant 2",

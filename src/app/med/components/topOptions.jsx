@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Play, ExternalLink } from "lucide-react";
-import { runData, scenarioData, MEDFile, MSFFile, ROAFile } from "../data/allData";
+import { runData, scenarioData, MEDFile} from "../data/allData";
+import { useJaStore } from "../store/jaStore";
 
-const plantFiles = { MED: MEDFile, MSF: MSFFile, ROA: ROAFile };
+const plantFiles = MEDFile
 
-const TopOptions = ({ station = "MSF", onOptionsChange }) => {
-  const [selectedFile, setSelectedFile] = useState(plantFiles[station][0]);
+const TopOptions = ({ station = "MED", onOptionsChange }) => {
+  const [selectedFile, setSelectedFile] = useState(plantFiles);
   const [selectedScenario, setSelectedScenario] = useState("");
   const [selectedRun, setSelectedRun] = useState("");
-
+  const initStation = useJaStore((s) => s.initStation);
   // التحكم في حالات التفعيل
   const isFileDisabled = !selectedFile || selectedFile === "select"; // لو ما فيه ملف صالح
   const isScenarioDisabled = isFileDisabled;                        // يعتمد على الملف
@@ -17,13 +18,11 @@ const TopOptions = ({ station = "MSF", onOptionsChange }) => {
   useEffect(() => {
     if (onOptionsChange) {
       onOptionsChange({
-        file: selectedFile,
         scenario: selectedScenario,
-        run: selectedRun,
         disabled: isFileDisabled,
       });
     }
-  }, [selectedFile, selectedScenario, selectedRun, isFileDisabled, onOptionsChange]);
+  }, [selectedScenario, isFileDisabled, onOptionsChange]);
 
   return (
     <div className="bg-white p-4 flex flex-col sm:flex-row sm:items-center sm:justify-around gap-4 sm:gap-6 w-full">
@@ -40,7 +39,7 @@ const TopOptions = ({ station = "MSF", onOptionsChange }) => {
           }}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
         >
-          {plantFiles[station].map((file, idx) => (
+          {plantFiles.map((file, idx) => (
             <option key={idx} value={file}>{file}</option>
           ))}
         </select>

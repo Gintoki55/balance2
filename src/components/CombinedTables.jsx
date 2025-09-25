@@ -5,19 +5,31 @@ import TableComponent from "./TableComponent";
 const CombinedTables = ({ stationName, stationData, onJaChange, secondTableRows }) => {
   const [StationValue, setStationValue] = useState([]);
 
-  useEffect(() => {
-    if (stationData) {
+useEffect(() => {
+  if (stationData) {
+    setStationValue((prev) => {
       const clone = JSON.parse(JSON.stringify(stationData));
-      clone.forEach((row) => {
-        row.forEach((cell) => {
-          if (cell.key === "Ja" && (cell.value === undefined || cell.value === 5)) {
-            cell.value = 1;
+
+      // نحافظ على قيمة Ja السابقة إذا كانت موجودة
+      clone.forEach((row, rowIndex) => {
+        row.forEach((cell, cellIndex) => {
+          if (cell.key === "Ja") {
+            const prevJa =
+              prev[rowIndex]?.find((c) => c.key === "Ja")?.value;
+            if (prevJa !== undefined) {
+              cell.value = prevJa;
+            } else if (cell.value === undefined || cell.value === 5) {
+              cell.value = 1;
+            }
           }
         });
       });
-      setStationValue(clone);
-    }
-  }, [stationData]);
+
+      return clone;
+    });
+  }
+}, [stationData]);
+
 
   const headersSecond = [
     "j","Pvj","ΔTj","Tbj","Tvj","Tdj",
@@ -47,7 +59,7 @@ const CombinedTables = ({ stationName, stationData, onJaChange, secondTableRows 
 
             {/* خط فاصل داخلي */}
             <tr>
-              <td colSpan={StationValue[0]?.length * 2 || 12} className="border-t border-gray-400 py-2"></td>
+              <td colSpan={StationValue[0]?.length * 2 || 12} className="border-t border-gray-400 bg-gray-200 py-1"></td>
             </tr>
 
             {/* الجدول الثاني */}
@@ -55,7 +67,7 @@ const CombinedTables = ({ stationName, stationData, onJaChange, secondTableRows 
               {headersSecond.map((header, idx) => (
                 <td
                   key={idx}
-                  className="px-2 sm:px-4 py-1 sm:py-2 font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+                  className="px-2 sm:px-4 py-0  font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
                 >
                   {header}
                 </td>
@@ -67,7 +79,7 @@ const CombinedTables = ({ stationName, stationData, onJaChange, secondTableRows 
                 {row.map((cell, cellIndex) => (
                   <td
                     key={cellIndex}
-                    className="px-2 sm:px-4 py-1 sm:py-2 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+                    className="px-2 sm:px-4 py-0  text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
                   >
                     {cell}
                   </td>

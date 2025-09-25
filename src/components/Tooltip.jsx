@@ -34,10 +34,20 @@ export default function Tooltip({ children, text }) {
           style={floatingStyles}
           className="bg-gray-600 text-white text-xs sm:text-sm md:text-base lg:text-sm 
                      px-3 py-1.5 rounded-lg shadow-lg
-                     max-w-[200px] sm:max-w-[250px] md:max-w-[300px] 
-                     whitespace-normal break-words z-10"
+                    sm:min-w-[150px] md:min-w-[200px] 
+                     whitespace-pre-wrap break-keep z-10"
         >
-          {text}
+          <pre className="whitespace-pre-wrap font-mono">
+            {String(text)
+              .split(",")
+              .map((part, idx, arr) => (
+                <span key={idx}>
+                  {part.trim()}
+                  {idx < arr.length - 1 && ","}
+                  {"\n"}
+                </span>
+              ))}
+          </pre>
         </div>
       )}
     </div>
