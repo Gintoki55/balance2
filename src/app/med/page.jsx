@@ -4,7 +4,7 @@ import StationHeader from "@/components/stationheader";
 import { Play, Bot, Calculator } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "../../../public/animation/med.json";
-import TopOptions from "@/components/TopOptions";
+import TopOptions from "./components/topOptions";
 import { StationValueData } from "./medData";
 import CombinedTables from "./components/CombinedTables";
 
@@ -47,11 +47,11 @@ export default function MEDPage() {
       {/* الجدولين مع تمكين scroll أفقي */}
        {!isDisabled && selectedScenario && selectedScenario !== "select" &&(
         <div className="flex flex-col gap-4 justify-center items-center w-full overflow-x-auto">
-                <CombinedTables
-                  stationName={selectedScenario}
-                  stationData={stationData[selectedScenario]}
-                />
-              </div>
+          <CombinedTables
+            stationName={selectedScenario}
+            stationData={stationData[selectedScenario]}
+          />
+        </div>
        )}
     </div>
   );

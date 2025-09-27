@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Play, ExternalLink } from "lucide-react";
-import { runData, scenarioData, MEDFile} from "../../../data/allData";
+import { runData, scenarioData, MSFFile} from "@/data/allData";
 
-const plantFiles = MEDFile
+const plantFiles = MSFFile
 
-const TopOptions = ({ station = "MED", onOptionsChange }) => {
+const TopOptions = ({ station = "MSF", onOptionsChange }) => {
   const [selectedFile, setSelectedFile] = useState(plantFiles[0] || "");
   const [selectedScenario, setSelectedScenario] = useState("");
   const [selectedRun, setSelectedRun] = useState("");
