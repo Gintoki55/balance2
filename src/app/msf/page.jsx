@@ -9,8 +9,8 @@ import { StationValueData } from "./msfData";
 import CombinedTables from "./components/CombinedTables";
 
 
-export default function MEDPage() {
-  const medButtons = [
+export default function MSFpage() {
+  const msfButtons = [
     { href: "/msf/media", label: "Media", icon: Play },
     { href: "/msf/helper", label: "Helper", icon: Bot },
     { href: "/msf/calculator", label: "Calculator", icon: Calculator },  
@@ -35,7 +35,7 @@ export default function MEDPage() {
   return (
     <div className="bg-white min-h-full">
       {/* الهيدر مع زر الرجوع */}
-      <StationHeader title="MSF Simulator" buttons={medButtons} />
+      <StationHeader title="MSF Simulator" buttons={msfButtons} />
 
       {/* المحتوى الرئيسي */}
       <div className="flex justify-center">
