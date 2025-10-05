@@ -36,7 +36,7 @@ const SecondTable = ({ jaValue }) => {
       </tr>
 
       {/* ✅ j=0 أحمر */}
-      <tr className="bg-red-700 text-white">
+      <tr className="text-amber-900">
         {firstRow[0].map((cell, cellIndex) => (
           <td
             key={cellIndex}
