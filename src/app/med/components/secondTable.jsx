@@ -53,7 +53,7 @@ const SecondTable = ({ jaValue }) => {
         return (
           <tr
             key={rowIndex}
-            className={isLast ? "bg-red-700 text-white" : ""}
+            className={isLast ? "text-amber-900" : ""}
           >
             {row.map((cell, cellIndex) => (
               <td

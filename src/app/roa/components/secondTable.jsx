@@ -36,7 +36,7 @@ const SecondTableRows = ({ jValue }) => {
       </tr>
 
       {/* ✅ j=0 أحمر */}
-      <tr className="bg-red-700 text-white">
+      <tr className="text-amber-900">
         {firstRow[0].map((cell, cellIndex) => (
           <td
             key={cellIndex}
@@ -53,7 +53,7 @@ const SecondTableRows = ({ jValue }) => {
         return (
           <tr
             key={rowIndex}
-            className={isLast ? "bg-red-700 text-white" : ""}
+            className={isLast ? "text-amber-900" : ""}
           >
             {row.map((cell, cellIndex) => (
               <td

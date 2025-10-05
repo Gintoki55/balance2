@@ -37,7 +37,7 @@ const SecondTableRows = ({ JbValue, JcValue }) => {
       const isLastJc = isJc && rowIndex === rows.length - 1; // آخر Jc
 
       const rowClass =
-        isFirst || isLastJb || isLastJc ? "bg-red-700 text-white" : "";
+        isFirst || isLastJb || isLastJc ? "text-amber-900" : "";
 
       return (
         <tr key={rowIndex} className={rowClass}>
