@@ -1,77 +1,80 @@
 "use client";
 import React from "react";
-import { useJbStore } from "../store/jbStore";
-import { useJcStore } from "../store/jcStore";
 
-const SecondTableRows = ({ stationName }) => {
+const SecondTableRows = ({ JbValue, JcValue }) => {
   const headersSecond = [
     "j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj",
     "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance"
   ];
 
   const defaultRow = [
-    "1", "1.0000", "0.50", "1.00", "1.00",
+    "0", "1.0000", "0.50", "1.00", "1.00",
     "1.00", "50.00", "1.00", "1.00", "1.00", "40.00", "1.0000"
   ];
 
-  // Jb
-  const Jb = useJbStore((s) => s.jb[stationName] ?? 1);
-  const tableDataSecondJb = Array.from({ length: Jb }, (_, i) => [
-    String(i + 1),
+  // 🔹 الصف الأول (j = 0 أحمر)
+  const firstRow = [[
+    "0",
+    ...defaultRow.slice(1),
+  ]];
+
+  // 🔹 جدول Jb يبدأ من 1
+  const tableDataSecondJb = Array.from({ length: JbValue }, (_, i) => [
+    String(i + 1), // يبدأ من 1
     ...defaultRow.slice(1),
   ]);
 
-  // Jc
-  const Jc = useJcStore((s) => s.jc[stationName] ?? 1);
-  const tableDataSecondJc = Array.from({ length: Jc }, (_, i) => [
-    String(i + 1),
+  // 🔹 جدول Jc يكمل بعد Jb
+  const tableDataSecondJc = Array.from({ length: JcValue }, (_, i) => [
+    String(JbValue + 1 + i), // يكمل العد بعد Jb
     ...defaultRow.slice(1),
   ]);
 
-  const renderTableRows = (tableData) =>
-    tableData.map((row, rowIndex) => (
-      <tr key={rowIndex}>
-        {row.map((cell, cellIndex) => (
-          <td
-            key={cellIndex}
-            className="px-2 sm:px-4 py-0 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
-          >
-            {cell}
-          </td>
-        ))}
-      </tr>
-    ));
+  const renderTableRows = (rows, isJb = false, isJc = false) =>
+    rows.map((row, rowIndex) => {
+      const isFirst = isJb === false && isJc === false && rowIndex === 0; // الصف 0
+      const isLastJb = isJb && rowIndex === rows.length - 1; // آخر Jb
+      const isLastJc = isJc && rowIndex === rows.length - 1; // آخر Jc
 
-  const renderHeader = () => (
-    <tr>
-      {headersSecond.map((header, idx) => (
-        <td
-          key={idx}
-          className="px-2 sm:px-4 py-0 font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
-        >
-          {header}
-        </td>
-      ))}
-    </tr>
-  );
+      const rowClass =
+        isFirst || isLastJb || isLastJc ? "bg-red-700 text-white" : "";
+
+      return (
+        <tr key={rowIndex} className={rowClass}>
+          {row.map((cell, cellIndex) => (
+            <td
+              key={cellIndex}
+              className="px-2 sm:px-4 py-0 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+            >
+              {cell}
+            </td>
+          ))}
+        </tr>
+      );
+    });
 
   return (
     <>
-      {/* Header + صفوف Jb */}
-      {renderHeader()}
-      {renderTableRows(tableDataSecondJb)}
-
-      {/* فاصل بين الجدولين */}
+      {/* Header مشترك */}
       <tr>
-        <td
-          colSpan={headersSecond.length}
-          className="border-t border-gray-400 bg-gray-200 py-1"
-        />
+        {headersSecond.map((header, idx) => (
+          <td
+            key={idx}
+            className="px-2 sm:px-4 py-0 font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+          >
+            {header}
+          </td>
+        ))}
       </tr>
 
-      {/* Header + صفوف Jc */}
-      {renderHeader()}
-      {renderTableRows(tableDataSecondJc)}
+      {/* أول صف j=0 (أحمر) */}
+      {renderTableRows(firstRow)}
+
+      {/* Jb (آخر سطر أحمر) */}
+      {renderTableRows(tableDataSecondJb, true)}
+
+      {/* Jc (آخر سطر أحمر) */}
+      {renderTableRows(tableDataSecondJc, false, true)}
     </>
   );
 };

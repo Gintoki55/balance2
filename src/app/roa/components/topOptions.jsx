@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { Play, ExternalLink } from "lucide-react";
 import { runData, scenarioData, ROAFile} from "@/data/allData";
-
+import { useJStore } from "../store/jStore";
 const plantFiles = ROAFile;
 
 const TopOptions = ({ station = "ROA", onOptionsChange }) => {
+  const jStore = useJStore();
   const [selectedFile, setSelectedFile] = useState(plantFiles[0] || "");
-  const [selectedScenario, setSelectedScenario] = useState("");
+  const [selectedScenario, setSelectedScenario] = useState(
+      jStore.getLastScenario(plantFiles[0])
+    );
   const [selectedRun, setSelectedRun] = useState("");
   // التحكم في حالات التفعيل
   const isFileDisabled = !selectedFile || selectedFile === "select"; // لو ما فيه ملف صالح
   const isScenarioDisabled = isFileDisabled;                        // يعتمد على الملف
   const isRunsDisabled = isScenarioDisabled || !selectedScenario;    // يعتمد على السيناريو
+
+  const handleScenarioChange = (scenario) => {
+    setSelectedScenario(scenario);
+    if (selectedFile && scenario !== "select") {
+      jStore.setLastScenario(selectedFile, scenario);
+    }
+  };
+
 
   useEffect(() => {
     if (onOptionsChange) {
@@ -31,8 +42,9 @@ const TopOptions = ({ station = "ROA", onOptionsChange }) => {
         <select
           value={selectedFile}
           onChange={(e) => {
-            setSelectedFile(e.target.value);
-            setSelectedScenario(""); // إعادة تعيين عند تغيير الملف
+            const file = e.target.value;
+            setSelectedFile(file);
+            setSelectedScenario(jStore.getLastScenario(file));
             setSelectedRun("");
           }}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
@@ -48,7 +60,7 @@ const TopOptions = ({ station = "ROA", onOptionsChange }) => {
         <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">Scenario</span>
         <select
           value={selectedScenario}
-          onChange={(e) => setSelectedScenario(e.target.value)}
+          onChange={(e) => handleScenarioChange(e.target.value)}
           disabled={isScenarioDisabled}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition disabled:opacity-50 w-full sm:w-auto"
         >

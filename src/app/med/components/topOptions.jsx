@@ -1,17 +1,30 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Play, ExternalLink } from "lucide-react";
-import { runData, scenarioData, MEDFile} from "../../../data/allData";
+import { runData, scenarioData, MEDFile } from "../../../data/allData";
+import { useJaStore } from "../store/jaStore";
 
-const plantFiles = MEDFile
+const plantFiles = MEDFile;
 
 const TopOptions = ({ station = "MED", onOptionsChange }) => {
+  const jaStore = useJaStore();
+
   const [selectedFile, setSelectedFile] = useState(plantFiles[0] || "");
-  const [selectedScenario, setSelectedScenario] = useState("");
+  const [selectedScenario, setSelectedScenario] = useState(
+    jaStore.getLastScenario(plantFiles[0])
+  );
   const [selectedRun, setSelectedRun] = useState("");
-  // التحكم في حالات التفعيل
-  const isFileDisabled = !selectedFile || selectedFile === "select"; // لو ما فيه ملف صالح
-  const isScenarioDisabled = isFileDisabled;                        // يعتمد على الملف
-  const isRunsDisabled = isScenarioDisabled || !selectedScenario;    // يعتمد على السيناريو
+
+  const isFileDisabled = !selectedFile || selectedFile === "select";
+  const isScenarioDisabled = isFileDisabled;
+  const isRunsDisabled = isScenarioDisabled || !selectedScenario;
+
+  const handleScenarioChange = (scenario) => {
+    setSelectedScenario(scenario);
+    if (selectedFile && scenario !== "select") {
+      jaStore.setLastScenario(selectedFile, scenario);
+    }
+  };
 
   useEffect(() => {
     if (onOptionsChange) {
@@ -31,8 +44,9 @@ const TopOptions = ({ station = "MED", onOptionsChange }) => {
         <select
           value={selectedFile}
           onChange={(e) => {
-            setSelectedFile(e.target.value);
-            setSelectedScenario(""); // إعادة تعيين عند تغيير الملف
+            const file = e.target.value;
+            setSelectedFile(file);
+            setSelectedScenario(jaStore.getLastScenario(file));
             setSelectedRun("");
           }}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
@@ -48,7 +62,7 @@ const TopOptions = ({ station = "MED", onOptionsChange }) => {
         <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">Scenario</span>
         <select
           value={selectedScenario}
-          onChange={(e) => setSelectedScenario(e.target.value)}
+          onChange={(e) => handleScenarioChange(e.target.value)}
           disabled={isScenarioDisabled}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition disabled:opacity-50 w-full sm:w-auto"
         >

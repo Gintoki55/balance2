@@ -1,18 +1,19 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Tooltip from "@/components/Tooltip";
-import { FaArrowsUpDown } from "react-icons/fa6";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
-const TableComponent = ({ stationName, stationData, JValue, onJChange, NValue, onNChange }) => {
+const TableComponent = ({ stationName, stationData, jValue, onJChange, nValue, onNChange }) => {
   const toEnglishDigits = (str) =>
     String(str).replace(/[٠-٩]/g, (d) =>
       String.fromCharCode(d.charCodeAt(0) - 0x0660)
     );
 
-  // 🔹 إذا مافيه قيمة نعرض "-"
   const formatValue = (value) => (value ? toEnglishDigits(value) : "-");
-
   const maxRows = Math.max(...stationData.map((col) => col.length));
+
+  const [nState, SetnState] = useState("1");
+
 
   return (
     <>
@@ -22,7 +23,6 @@ const TableComponent = ({ stationName, stationData, JValue, onJChange, NValue, o
             const cell = col[rowIndex];
             if (!cell) return null;
 
-            // 🔹 العنوان الرئيسي
             if (cell.key === "ROA Design") {
               return (
                 <td
@@ -36,31 +36,39 @@ const TableComponent = ({ stationName, stationData, JValue, onJChange, NValue, o
             }
 
             // 🔹 المحتوى (select أو input)
-            const content =
-              cell.key === "N" || cell.key === "J" ? (
+            let content;
+            if (cell.key === "J") {
+              content = (
                 <div className="relative w-full">
                   <select
-                    value={
-                      cell.key === "N"
-                        ? NValue ?? cell.value ?? 1
-                        : JValue ?? cell.value ?? 1
-                    }
-                    onChange={(e) =>
-                      cell.key === "N"
-                        ? onNChange(Number(e.target.value))
-                        : onJChange(Number(e.target.value))
-                    }
+                    value={jValue ?? cell.value ?? 1}
+                    onChange={(e) => onJChange(Number(e.target.value))}
                     className="block w-full px-2 py-1 pr-8 outline-none text-base appearance-none min-w-[5ch] cursor-pointer text-green-600"
                   >
                     {Array.from({ length: 30 }, (_, i) => i + 1).map((num) => (
-                      <option key={num} value={num}>
-                        {num}
-                      </option>
+                      <option key={num} value={num}>{num}</option>
                     ))}
                   </select>
-                  <FaArrowsUpDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
-              ) : (
+              );
+            } else if (cell.key === "N") {
+              content = (
+                <div className="relative w-full">
+                  <select
+                    value={nState}
+                    onChange={(e) => SetnState(Number(e.target.value))}
+                    className="block w-full px-2 py-1 pr-8 outline-none text-base appearance-none min-w-[5ch] cursor-pointer text-blue-600"
+                  >
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                  <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                </div>
+              );
+            } else {
+              content = (
                 <input
                   type="text"
                   value={formatValue(cell.value)}
@@ -74,15 +82,13 @@ const TableComponent = ({ stationName, stationData, JValue, onJChange, NValue, o
                   }`}
                 />
               );
+            }
 
             return (
               <React.Fragment key={colIndex}>
-                {/* اسم المتغير */}
-                <td className="px-2 py-0 font-semibold bg-gray-100 text-center text-xs sm:text-sm min-w-[6ch]">
+                <td className="px-2 py-0 font-semibold bg-gray-100 text-center text-sm sm:text-base min-w-[6ch]">
                   {cell.key || <span className="text-gray-400">-</span>}
                 </td>
-
-                {/* القيمة */}
                 <td className="px-2 py-0 text-center text-sm sm:text-base min-w-[7ch] max-w-[12ch]">
                   {cell.info ? (
                     <Tooltip text={cell.info}>{content}</Tooltip>

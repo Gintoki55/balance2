@@ -1,27 +1,29 @@
 "use client";
 import React from "react";
-import { useJaStore } from "../store/jaStore";
 
-const SecondTable = ({stationName }) => {
+const SecondTable = ({ jaValue }) => {
   const headersSecond = [
     "j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj",
     "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance"
   ];
 
   const defaultRow = [
-    "1", "1.0000", "0.50", "1.00", "1.00",
+    "0", "1.0000", "0.50", "1.00", "1.00",
     "1.00", "50.00", "1.00", "1.00", "1.00", "40.00", "1.0000"
   ];
-  const ja = useJaStore((s) => s.ja[stationName] ?? 1);
-  const rowsCount = ja;
 
-  const tableDataSecond = Array.from({ length: rowsCount }, (_, i) => {
-    return [String(i + 1), ...defaultRow.slice(1)];
-  });
-  
+  // ✅ صف ثابت j=0 (أحمر)
+  const firstRow = [["0", ...defaultRow.slice(1)]];
+
+  // ✅ باقي الصفوف تبدأ من 1
+  const tableDataSecond = Array.from({ length: jaValue }, (_, i) => [
+    String(i + 1),
+    ...defaultRow.slice(1),
+  ]);
+
   return (
     <>
-      {/* عناوين الأعمدة */}
+      {/* Header */}
       <tr>
         {headersSecond.map((header, idx) => (
           <td
@@ -33,19 +35,37 @@ const SecondTable = ({stationName }) => {
         ))}
       </tr>
 
-      {/* البيانات */}
-      {tableDataSecond.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          {row.map((cell, cellIndex) => (
-            <td
-              key={cellIndex}
-              className="px-2 sm:px-4 py-0 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
-            >
-              {cell}
-            </td>
-          ))}
-        </tr>
-      ))}
+      {/* ✅ j=0 أحمر */}
+      <tr className="bg-red-700 text-white">
+        {firstRow[0].map((cell, cellIndex) => (
+          <td
+            key={cellIndex}
+            className="px-2 sm:px-4 py-0 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+          >
+            {cell}
+          </td>
+        ))}
+      </tr>
+
+      {/* ✅ باقي الصفوف (1 → jaValue) */}
+      {tableDataSecond.map((row, rowIndex) => {
+        const isLast = rowIndex === tableDataSecond.length - 1 && jaValue > 1;
+        return (
+          <tr
+            key={rowIndex}
+            className={isLast ? "bg-red-700 text-white" : ""}
+          >
+            {row.map((cell, cellIndex) => (
+              <td
+                key={cellIndex}
+                className="px-2 sm:px-4 py-0 text-center text-sm sm:text-base min-w-[90px] sm:min-w-[120px]"
+              >
+                {cell}
+              </td>
+            ))}
+          </tr>
+        );
+      })}
     </>
   );
 };

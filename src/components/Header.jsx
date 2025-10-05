@@ -27,7 +27,6 @@ export default function Header() {
         
         {/* Left side: Menu + Dashboard */}
         <div className="flex items-center gap-3 2xl:gap-6">
-          
           {/* Dashboard button */}
           <Link href="/dashboard">
             <button className="bg-sky-300 text-white px-3 sm:px-4 2xl:px-6 py-1 sm:py-2 2xl:py-3 rounded text-sm sm:text-base 2xl:text-lg hover:bg-sky-400 active:scale-95 transition-transform duration-150 cursor-pointer">
@@ -42,7 +41,6 @@ export default function Header() {
           >
             {menuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
-
         </div>
 
         {/* Desktop: Login + Register */}
@@ -56,7 +54,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu dropdown */}
+      {/* ✅ Mobile menu dropdown */}
       {menuOpen && (
         <div className="sm:hidden bg-white border-t shadow-md">
           <div className="flex flex-col p-4 gap-3">
@@ -65,6 +63,15 @@ export default function Header() {
             </a>
             <a href="#" className="bg-[rgb(66,153,136)] text-white px-3 py-2 rounded hover:bg-[rgb(54,124,110)] transition">
               Register Now
+            </a>
+
+            {/* ✅ فقط للجوال */}
+            <hr className="my-2 border-gray-200" />
+            <a href="about" className="text-gray-700 font-medium hover:text-[rgb(66,153,136)] transition">
+              About
+            </a>
+            <a href="contact" className="text-gray-700 font-medium hover:text-[rgb(66,153,136)] transition">
+              Contact
             </a>
           </div>
         </div>

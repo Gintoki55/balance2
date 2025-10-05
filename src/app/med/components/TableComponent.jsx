@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 import Tooltip from "@/components/Tooltip";
-import { FaArrowsUpDown } from "react-icons/fa6";
-
+import { MdKeyboardArrowDown } from "react-icons/md";
 const TableComponent = ({ stationName, stationData, jaValue, onJaChange }) => {
   const toEnglishDigits = (str) =>
     String(str).replace(/[٠-٩]/g, (d) =>
@@ -49,7 +48,7 @@ const TableComponent = ({ stationName, stationData, jaValue, onJaChange }) => {
                       </option>
                     ))}
                   </select>
-                  <FaArrowsUpDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                  <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
               ) : (
                 <input

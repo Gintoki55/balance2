@@ -1,34 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
-import { useNStore } from "../store/NStore";
 import { useJStore } from "../store/jStore";
 
-const CombinedTables = ({ stationName, stationData }) => {
+const CombinedTables = ({ stationName, stationData, fileName}) => {
 
-   ///// N ////////
-    const N = useNStore((s) => s.n[stationName] ?? 1); 
-    const setN = useNStore((s) => s.setN);
-    const resetN = useNStore((s) => s.resetN);
-
-     useEffect(() => {
-      if (stationData) {
-        resetN(stationName);
-      }
-     }, [stationData, stationName, resetN]);
-
-
-  ///// J ////////
-    const J = useJStore((s) => s.j[stationName] ?? 1); 
-    const setJ = useJStore((s) => s.setJ);
-    const resetJ = useJStore((s) => s.resetJ);
-
-     useEffect(() => {
-      if (stationData) {
-        resetJ(stationName);
-      }
-     }, [stationData, stationName, resetJ]);
+  const jValue = useJStore((s) => s.data[fileName]?.[stationName]?.j ?? 1);
+  const setJ = useJStore((s) => s.setJ);
 
 
   return (
@@ -44,12 +22,8 @@ const CombinedTables = ({ stationName, stationData }) => {
             <TableComponent
               stationName={stationName}
               stationData={stationData}
-              ///N///
-              NValue={N}
-              onNChange={(newN) => setN(stationName, newN)}
-              ////J///
-              JValue={J}
-              onJChange={(newJ) => setJ(stationName, newJ)}
+              jValue={jValue}
+              onJChange={(newJ) => setJ(fileName, stationName, newJ)}
             />
 
             <tr>
@@ -59,7 +33,7 @@ const CombinedTables = ({ stationName, stationData }) => {
               ></td>
             </tr>
 
-            <SecondTable stationName={stationName} />
+            <SecondTable jValue={jValue} />
           </tbody>
         </table>
 

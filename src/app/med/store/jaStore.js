@@ -1,22 +1,37 @@
-// store/jaStore.js
 import { create } from "zustand";
 
-export const useJaStore = create((set) => ({
-  ja: {},
+export const useJaStore = create((set, get) => ({
+  data: {},
 
-  setJa: (stationName, value) =>
+  // تحديث ja لقيمة معينة
+  setJa: (file, scenario, value) =>
     set((state) => ({
-      ja: { ...state.ja, [stationName]: Number(value) },
+      data: {
+        ...state.data,
+        [file]: {
+          ...(state.data[file] || {}),
+          [scenario]: {
+            ...(state.data[file]?.[scenario] || {}),
+            ja: Number(value),
+          },
+        },
+      },
     })),
 
-  resetJa: (stationName) =>
+  // تحديث آخر سيناريو لكل ملف
+  setLastScenario: (file, scenario) =>
     set((state) => ({
-      ja: { ...state.ja, [stationName]: 1 },
+      data: {
+        ...state.data,
+        [file]: {
+          ...(state.data[file] || {}),
+          lastScenario: scenario,
+        },
+      },
     })),
 
-  // 🔥 عند اختيار محطة جديدة، مباشرة نخليها 1
-  initStation: (stationName) =>
-    set((state) => ({
-      ja: { ...state.ja, [stationName]: 1 },
-    })),
+  // getters: قيم مباشرة بدل دوال
+  getJa: (file, scenario) => get().data[file]?.[scenario]?.ja ?? 1,
+
+  getLastScenario: (file) => get().data[file]?.lastScenario ?? "select",
 }));

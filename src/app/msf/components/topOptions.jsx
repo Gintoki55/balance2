@@ -1,18 +1,33 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { Play, ExternalLink } from "lucide-react";
-import { runData, scenarioData, MSFFile} from "@/data/allData";
-
-const plantFiles = MSFFile
+import { runData, scenarioData, MSFFile } from "@/data/allData";
+import { useStationStore } from "../store/jStore";
 
 const TopOptions = ({ station = "MSF", onOptionsChange }) => {
-  const [selectedFile, setSelectedFile] = useState(plantFiles[0] || "");
-  const [selectedScenario, setSelectedScenario] = useState("");
-  const [selectedRun, setSelectedRun] = useState("");
-  // التحكم في حالات التفعيل
-  const isFileDisabled = !selectedFile || selectedFile === "select"; // لو ما فيه ملف صالح
-  const isScenarioDisabled = isFileDisabled;                        // يعتمد على الملف
-  const isRunsDisabled = isScenarioDisabled || !selectedScenario;    // يعتمد على السيناريو
+  const store = useStationStore();
 
+  const [selectedFile, setSelectedFile] = useState(MSFFile[0] || "");
+  const [selectedScenario, setSelectedScenario] = useState(
+    store.getLastScenario(MSFFile[0]) || "select"
+  );
+  const [selectedRun, setSelectedRun] = useState("");
+
+  const isFileDisabled = !selectedFile || selectedFile === "select";
+  const isScenarioDisabled = isFileDisabled;
+  const isRunsDisabled = isScenarioDisabled || !selectedScenario;
+
+  const handleScenarioChange = (scenario) => {
+    setSelectedScenario(scenario);
+    setSelectedRun(""); // إعادة تعيين runs عند تغيير السيناريو
+
+    // 🔹 تحديث آخر سيناريو في الـ store
+    if (selectedFile && scenario !== "select") {
+      store.setLastScenario(selectedFile, scenario);
+    }
+  };
+
+  // تحديث parent component عند تغيير scenario
   useEffect(() => {
     if (onOptionsChange) {
       onOptionsChange({
@@ -31,13 +46,15 @@ const TopOptions = ({ station = "MSF", onOptionsChange }) => {
         <select
           value={selectedFile}
           onChange={(e) => {
-            setSelectedFile(e.target.value);
-            setSelectedScenario(""); // إعادة تعيين عند تغيير الملف
+            const file = e.target.value;
+            setSelectedFile(file);
+            // تحديث السيناريو المخزن في store للملف الجديد
+            setSelectedScenario(store.getLastScenario(file) || "select");
             setSelectedRun("");
           }}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
         >
-          {plantFiles.map((file, idx) => (
+          {MSFFile.map((file, idx) => (
             <option key={idx} value={file}>{file}</option>
           ))}
         </select>
@@ -48,7 +65,7 @@ const TopOptions = ({ station = "MSF", onOptionsChange }) => {
         <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">Scenario</span>
         <select
           value={selectedScenario}
-          onChange={(e) => setSelectedScenario(e.target.value)}
+          onChange={(e) => handleScenarioChange(e.target.value)}
           disabled={isScenarioDisabled}
           className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition disabled:opacity-50 w-full sm:w-auto"
         >
@@ -95,7 +112,6 @@ const TopOptions = ({ station = "MSF", onOptionsChange }) => {
           </button>
         </div>
       </div>
-
     </div>
   );
 };

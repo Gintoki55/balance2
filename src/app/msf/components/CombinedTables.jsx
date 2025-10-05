@@ -1,34 +1,18 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
-import { useJbStore } from "../store/jbStore";
-import { useJcStore } from "../store/jcStore";
+import { useStationStore } from "../store/jStore";
 
-const CombinedTables = ({ stationName, stationData }) => {
+const CombinedTables = ({ stationName, stationData, fileName }) => {
 
-   ///// Jb ////////
-    const Jb = useJbStore((s) => s.jb[stationName] ?? 1); 
-    const setJb = useJbStore((s) => s.setJb);
-    const resetJb = useJbStore((s) => s.resetJb);
+  const jbValue = useStationStore((s) => s.data[fileName]?.[stationName]?.jb ?? 2);
+  const setJb = useStationStore((s) => s.setJb);
 
-     useEffect(() => {
-      if (stationData) {
-        resetJb(stationName);
-      }
-     }, [stationData, stationName, resetJb]);
+  const jcValue = useStationStore((s) => s.data[fileName]?.[stationName]?.jc ?? 2);
+  const setJc = useStationStore((s) => s.setJc);
 
-
-  ///// JC ////////
-    const Jc = useJcStore((s) => s.jc[stationName] ?? 1); 
-    const setJc = useJcStore((s) => s.setJc);
-    const resetJc = useJcStore((s) => s.resetJc);
-
-     useEffect(() => {
-      if (stationData) {
-        resetJc(stationName);
-      }
-     }, [stationData, stationName, resetJc]);
+  // ✅ عند تغيير المحطة، نعيد Jb و Jc ونحفظ آخر سيناريو
 
 
   return (
@@ -41,28 +25,25 @@ const CombinedTables = ({ stationName, stationData }) => {
             ))}
           </colgroup>
           <tbody>
+            {/* الجدول الأول */}
             <TableComponent
               stationName={stationName}
               stationData={stationData}
-              ///Jb///
-              JbValue={Jb}
-              onJbChange={(newJb) => setJb(stationName, newJb)}
-              ////Jc///
-              JcValue={Jc}
-              onJcChange={(newJc) => setJc(stationName, newJc)}
+              JbValue={jbValue}
+              onJbChange={(newJb) => setJb(fileName, stationName, newJb)}
+              JcValue={jcValue}
+              onJcChange={(newJc) => setJc(fileName, stationName, newJc)}
             />
 
+            {/* فاصل */}
             <tr>
-              <td
-                colSpan={12}
-                className="border-t border-gray-400 bg-gray-200 py-1"
-              ></td>
+              <td colSpan={12} className="border-t border-gray-400 bg-gray-200 py-1"></td>
             </tr>
 
-            <SecondTable stationName={stationName} />
+            {/* الجدول الثاني */}
+            <SecondTable JbValue={jbValue} JcValue={jcValue}/>
           </tbody>
         </table>
-
       </div>
     </div>
   );

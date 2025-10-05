@@ -15,20 +15,16 @@ export default function RoPage() {
     { href: "/ro/helper", label: "Helper", icon: Bot },
     { href: "/ro/calculator", label: "Calculator", icon: Calculator },  
   ];
-  const [isDisabled, setIsDisabled] = useState(true);
+  
+  const [selectedFile, setSelectedFile] = useState("");
   const [selectedScenario, setSelectedScenario] = useState("");
-
-  // هنا نستقبل القيم من TopOptions
-  const handleOptionsChange = ({ scenario, disabled }) => {
-    setSelectedScenario(scenario);
-    setIsDisabled(disabled);
-  };
-
+  const [isDisabled, setIsDisabled] = useState(true);
   const [stationData, setStationData] = useState([]);
 
+
   useEffect(() => {
-    const clone = JSON.parse(JSON.stringify(StationValueData));
-    setStationData(clone);
+    // نسخ البيانات لتجنب تعديل الأصل
+    setStationData(JSON.parse(JSON.stringify(StationValueData)));
   }, []);
 
 
@@ -42,13 +38,20 @@ export default function RoPage() {
         <Lottie animationData={animationData} loop={true} />
       </div>
 
-      <TopOptions station="ROA" onOptionsChange={handleOptionsChange} />
+      <TopOptions station="ROA" 
+        onOptionsChange={({ file, scenario, disabled }) => {
+          setSelectedFile(file);
+          setSelectedScenario(scenario);
+          setIsDisabled(disabled);
+        }}
+      />
 
       {/* الجدولين مع تمكين scroll أفقي */}
-       {!isDisabled && selectedScenario && selectedScenario !== "select" &&(
+      {selectedScenario && !isDisabled && selectedScenario !== "select" && (
         <div className="flex flex-col gap-4 justify-center items-center w-full overflow-x-auto">
           <CombinedTables
             stationName={selectedScenario}
+            fileName={selectedFile}
             stationData={stationData[selectedScenario]}
           />
         </div>

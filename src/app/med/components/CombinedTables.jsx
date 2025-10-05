@@ -1,20 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
 import { useJaStore } from "../store/jaStore";
 
-const CombinedTables = ({ stationName, stationData }) => {
-    const ja = useJaStore((s) => s.ja[stationName] ?? 1); 
-    const setJa = useJaStore((s) => s.setJa);
-    const resetJa = useJaStore((s) => s.resetJa);
-
-     useEffect(() => {
-      if (stationData) {
-        resetJa(stationName);
-      }
-     }, [stationData, stationName, resetJa]);
-
+const CombinedTables = ({ stationName, stationData, fileName }) => {
+  const jaValue = useJaStore((s) => s.data[fileName]?.[stationName]?.ja ?? 2);
+  const setJa = useJaStore((s) => s.setJa);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -25,20 +17,22 @@ const CombinedTables = ({ stationName, stationData }) => {
             <TableComponent
               stationName={stationName}
               stationData={stationData}
-              jaValue={ja}
-              onJaChange={(newJa) => setJa(stationName, newJa)}
+              jaValue={jaValue}
+              onJaChange={(newJa) => setJa(fileName, stationName, newJa)}
             />
 
             {/* خط فاصل داخلي */}
             <tr>
               <td
-                colSpan={stationData[0]?.length * 2 || 12}
+                colSpan={stationData[0]?.length * 2.5 || 12}
                 className="border-t border-gray-400 bg-gray-200 py-1"
-              ></td>
+              />
             </tr>
 
-            {/* الجدول الثاني (كمبوننت منفصل) */}
-             <SecondTable stationName={stationName}/>
+            {/* الجدول الثاني */}
+            <SecondTable
+              jaValue={jaValue} // مرر نفس القيمة من الـ store
+            />
           </tbody>
         </table>
       </div>
