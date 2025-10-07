@@ -5,7 +5,7 @@ import SecondTable from "./secondTable";
 import { useJaStore } from "../store/jaStore";
 
 const CombinedTables = ({ stationName, stationData, fileName }) => {
-  const jaValue = useJaStore((s) => s.data[fileName]?.[stationName]?.ja ?? 2);
+  const jaValue = useJaStore((s) => s.data[fileName]?.[stationName]?.ja ?? 1);
   const setJa = useJaStore((s) => s.setJa);
 
   return (
