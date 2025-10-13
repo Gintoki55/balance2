@@ -1,0 +1,58 @@
+
+ // async function handleSaveDashboard() {
+  //   // نفس handleSaveProject ولكن بدون تغيير اسم الملف
+  //   try {
+  //     const res = await fetch("/api/saveData", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         file: selectedFile,
+  //         scenario: selectedScenario,
+  //         j: jValue,
+  //       }),
+  //     });
+  //     const data = await res.json();
+  //     if (data.success) alert("✅ Saved to Dashboard");
+  //     else alert("❌ Save failed");
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("❌ Save failed");
+  //   }
+  // }
+
+
+{/* السطر الثاني */}
+<div className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-around gap-4 sm:gap-6 w-full">
+  {/* Save to Dashboard */}
+  <button
+    onClick={handleSaveDashboard}
+    className="flex items-center gap-2 text-blue-600 hover:underline cursor-pointer disabled:opacity-50"
+  >
+    <ExternalLink className="w-4 h-4 text-blue-600" />
+    Save to Dashboard
+  </button>
+
+  {/* Export Excel */}
+  <button
+    className="flex items-center gap-2 text-blue-600 hover:underline cursor-pointer"
+  >
+    <FileText className="w-4 h-4 text-blue-600" />
+    Export Excel
+  </button>
+
+  {/* Export PDF */}
+  <button
+    className="flex items-center gap-2 text-blue-600 hover:underline cursor-pointer"
+  >
+    <Download className="w-4 h-4 text-blue-600" />
+    Export PDF
+  </button>
+
+  {/* Admin */}
+  <button
+    className="flex items-center gap-2 text-blue-600 hover:underline cursor-pointer"
+  >
+    <Settings className="w-4 h-4 text-blue-600" />
+    Admin
+  </button>
+</div>
