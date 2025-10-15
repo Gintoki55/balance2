@@ -1,15 +1,41 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Tooltip from "@/components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 
-const TableComponent = ({ stationName, stationData, jValue, onJChange }) => {
-  const toEnglishDigits = (str) =>
-    String(str).replace(/[٠-٩]/g, (d) =>
-      String.fromCharCode(d.charCodeAt(0) - 0x0660)
-    );
+function AnimatedNumber({ value }) {
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
 
-  const formatValue = (value) => (value ? toEnglishDigits(value) : "-");
-  const maxRows = Math.max(...stationData.map((col) => col.length));
+  useEffect(() => {
+    const controls = animate(motionValue, value, {
+      duration: 1.5,
+      ease: "easeOut",
+    });
+    return controls.stop;
+  }, [value]);
+
+  return <motion.span>{rounded}</motion.span>;
+}
+
+// تعريف الحقول القابلة للتعديل حسب السيناريو (stationName)
+const editableFieldsByScenario = {
+  Design: ["N", "A", "FF", "J", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md", "WR"],
+  Demand: ["A", "FF", "PV", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md"],
+  Energy: ["A", "FF", "PV", "T0", "l", "w", "x", "Pf", "Pp", "S0", "Sd"],
+  Rating: ["N", "A", "FF", "J", "PV", "T0", "l", "w", "x", "Pf", "Pp", "M0", "S0"],
+};
+
+// دالة تساعدنا نعرف هل الخلية قابلة للتعديل بناءً على اسم المحطة (السيناريو)
+const isEditable = (stationName, key) => {
+  const editableKeys = editableFieldsByScenario[stationName] || [];
+  return editableKeys.includes(key);
+};
+
+const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueChange }) => {
+  const maxRows = stationData?.length
+  ? Math.max(...stationData.map(col => col.length))
+  : 0;
   const [nState, setNState] = useState("1");
 
   return (
@@ -20,7 +46,7 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange }) => {
             const cell = col[rowIndex];
             if (!cell) return null;
 
-            if (cell.key === "ROA Design") {
+            if (cell.key && cell.key.startsWith("ROA")) {
               return (
                 <td
                   key={colIndex}
@@ -64,20 +90,28 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange }) => {
                 </div>
               );
             } else {
-              content = (
-                <input
-                  type="text"
-                  value={formatValue(cell.value)}
-                  onChange={() => {}}
-                  disabled={!cell.editable}
-                  inputMode="decimal"
-                  className={`block w-full px-2 py-1 text-center outline-none rounded-md text-base ${
-                    cell.editable
-                      ? "text-green-600 focus:bg-green-100"
-                      : "text-gray-500 cursor-not-allowed"
-                  }`}
-                />
-              );
+              const editable = isEditable(stationName, cell.key);
+              const formatNumber = (num) => 
+                typeof num === "number" ? new Intl.NumberFormat().format(num) : num;
+              if (editable) {
+                  content = (
+                    <input
+                      type="text"
+                      value={formatNumber(cell.value)}
+                      onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
+                      disabled={!editable}
+                      inputMode="decimal"
+                      className={`block w-full px-2 py-1 text-center outline-none rounded-md text-base text-green-600 focus:bg-green-100`}
+                    />
+                  );
+                } else {
+                  content = (
+                    <div className="text-gray-700 font-medium">
+                      <AnimatedNumber value={cell.value} />
+                    </div>
+                  );
+                }
+
             }
 
             return (

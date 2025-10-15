@@ -11,7 +11,7 @@ export default function RoPage() {
   const dispatch = useDispatch();
   const { selectedFile, selectedScenario, jValue, stationData } = useSelector((state) => state.station);
 
-  const isDisabled = !selectedScenario || selectedScenario === "select";
+   const isDisabled = !selectedFile || selectedFile === "select";
 
   const buttons = [
       { href: "/roa/media", label: "Media", icon: Play },

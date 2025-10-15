@@ -1,6 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedFile, setSelectedScenario, setJValue } from "../../(data)/store/stationSlice";
+import { setSelectedFile, setSelectedScenario, setJValue,resetStation, setStationData } from "../../(data)/store/stationSlice";
 import { runData, scenarioData } from "@/data/allData";
 import { Play } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -8,7 +8,7 @@ import { Toaster, toast } from "react-hot-toast";
 
 export default function TopOptions({ station }) {
   const dispatch = useDispatch();
-  const { selectedFile, selectedScenario, jValue } = useSelector((state) => state.station);
+  const { selectedFile, selectedScenario, jValue ,stationData} = useSelector((state) => state.station);
 
   const [selectedRun, setSelectedRun] = useState("");
   const [savedFiles, setSavedFiles] = useState([]);
@@ -18,6 +18,27 @@ export default function TopOptions({ station }) {
   const isFileDisabled = false;
   const isScenarioDisabled = !selectedFile || selectedFile === "select";
   const isRunsDisabled = isScenarioDisabled || !selectedScenario;
+  
+ function runCalculation() {
+  if (!stationData) return;
+
+  // نعمل نسخة من بيانات Redux المحدثة
+  const newData = stationData.map((row) =>
+    row.map((cell) => {
+      // نزيد فقط القيم الرقمية
+      if (typeof cell.value === "number" && !isNaN(cell.value)) {
+        return { ...cell, value: cell.value + 10 };
+      }
+      return cell;
+    })
+  );
+
+  // نرسل النتيجة إلى Redux
+  dispatch(setStationData(newData));
+
+  toast.success("Calculation updated!");
+}
+
 
   // 🔹 جلب الملفات المحفوظة من الـ API عند التحميل
 useEffect(() => {
@@ -101,19 +122,27 @@ useEffect(() => {
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 font-medium">{station} File</span>
           <select
-  value={selectedFile}
-  onChange={(e) => dispatch(setSelectedFile(e.target.value))}
-  className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
->
-  <option value="select">Select</option>
-  <option value="New Plant">New Plant</option>
+              value={selectedFile}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "New Plant") {
+                  dispatch(resetStation()); // 👈 هنا يعمل reset للقيم
+                  dispatch(setSelectedFile("New Plant"));
+                } else {
+                  dispatch(setSelectedFile(value));
+                }
+              }}
+              className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
+            >
+              <option value="select">Select</option>
+              <option value="New Plant">New Plant</option>
 
-  {loadingFiles && <option disabled>Loading...</option>} {/* يظهر أثناء التحميل */}
+              {loadingFiles && <option disabled>Loading...</option>} {/* يظهر أثناء التحميل */}
 
-  {!loadingFiles && savedFiles.map(f => (
-    <option key={f} value={f}>{f}</option>
-  ))}
-</select>
+              {!loadingFiles && savedFiles.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+          </select>
 
         </div>
 
@@ -126,7 +155,6 @@ useEffect(() => {
             disabled={isScenarioDisabled}
             className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 disabled:opacity-50 w-full sm:w-auto"
           >
-            <option value="select">Select</option>
             {scenarioData.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
@@ -145,6 +173,7 @@ useEffect(() => {
             </select>
             <button
               disabled={isRunsDisabled}
+              onClick={() => runCalculation()}
               className="flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 active:scale-95 transition disabled:opacity-50 cursor-pointer"
             >
               <Play className="w-4 h-4" />

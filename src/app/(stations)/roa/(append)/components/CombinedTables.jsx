@@ -1,7 +1,14 @@
+import { useDispatch ,useSelector} from "react-redux";
+import { updateCellValue } from "../../(data)/store/stationSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
 
-export default function CombinedTables({ stationName, stationData, fileName, jValue, onJChange }) {
+export default function CombinedTables({ stationName, jValue, onJChange }) {
+   const dispatch = useDispatch();
+    const stationData = useSelector(state => state.station.stationData);
+    const handleValueChange = (cellKey, value) => {
+    dispatch(updateCellValue({ cellKey, value }));
+  };
   return (
     <div className="w-full overflow-x-auto">
       <div className="inline-block min-w-[1000px] scale-95">
@@ -15,6 +22,7 @@ export default function CombinedTables({ stationName, stationData, fileName, jVa
             <TableComponent
               stationName={stationName}
               stationData={stationData}
+              onValueChange={handleValueChange}
               jValue={jValue}
               onJChange={onJChange}
             />
