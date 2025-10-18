@@ -4,8 +4,9 @@ import mongoose from "mongoose";
 const FileSchema = new mongoose.Schema({
   file: { type: String, unique: true },
   data: {
-    scenario: String,
-    j: Number,
+    scenario: { type: String, default: "Design" },
+    j: { type: Number, default: 1 },
+    stationData: { type: Array, default: [] }, // ✅ نحفظ الجدول بالكامل هنا
   },
 });
 
@@ -13,17 +14,24 @@ const FileModel = mongoose.models.File || mongoose.model("File", FileSchema);
 
 export async function POST(req) {
   try {
-    const { file, scenario, j } = await req.json();
+    const { file, scenario, j, stationData } = await req.json();
     await connectDB();
+
+    if (!file) {
+      return new Response(
+        JSON.stringify({ success: false, message: "File name is required" }),
+        { status: 400 }
+      );
+    }
 
     const updated = await FileModel.findOneAndUpdate(
       { file },
-      { data: { scenario, j } },
+      { data: { scenario, j, stationData } },
       { upsert: true, new: true }
     );
 
     return new Response(
-      JSON.stringify({ success: true, message: "✅ Saved", data: updated }),
+      JSON.stringify({ success: true, message: "✅ Project saved", data: updated }),
       { status: 200 }
     );
   } catch (err) {
@@ -37,7 +45,7 @@ export async function POST(req) {
 export async function GET() {
   try {
     await connectDB();
-    const files = await FileModel.find();
+    const files = await FileModel.find().lean();
     return new Response(JSON.stringify({ success: true, files }), { status: 200 });
   } catch (err) {
     console.error("❌ Error fetching data:", err);

@@ -1,24 +1,47 @@
-import React, { useState , useEffect} from "react";
+import React, { useEffect } from "react";
 import Tooltip from "@/components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { useAnimate } from "../../(data)/animationContext";
 
+// ✅ مكون الأنيميشن للأرقام
 function AnimatedNumber({ value }) {
-  const motionValue = useMotionValue(0);
+  const { animateTrigger } = useAnimate();
+
+  // ✅ لو القيمة فاضية أو "-"، لا تعرض شيء (تتركها مثل ما هي)
+  if (value === null || value === undefined || value === "" || value === "-") {
+    return <span>{value || "-"}</span>;
+  }
+
+  // ✅ لو القيمة غير رقمية (نص أو شيء ثاني)
+  if (isNaN(Number(value))) {
+    return <span className="text-red-600 font-semibold">ليس رقمًا</span>;
+  }
+
+  const numericValue = Number(value);
+  const motionValue = useMotionValue(numericValue);
   const rounded = useTransform(motionValue, (latest) => Math.round(latest));
 
   useEffect(() => {
-    const controls = animate(motionValue, value, {
+    if (!animateTrigger) {
+      // أول تحميل بدون أنيميشن
+      motionValue.set(numericValue);
+      return;
+    }
+
+    // وقت الضغط على Run فقط
+    const controls = animate(motionValue, numericValue, {
       duration: 1.5,
       ease: "easeOut",
     });
     return controls.stop;
-  }, [value]);
+  }, [numericValue, animateTrigger]);
 
   return <motion.span>{rounded}</motion.span>;
 }
 
-// تعريف الحقول القابلة للتعديل حسب السيناريو (stationName)
+
+// ✅ الحقول القابلة للتعديل حسب السيناريو
 const editableFieldsByScenario = {
   Design: ["N", "A", "FF", "J", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md", "WR"],
   Demand: ["A", "FF", "PV", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md"],
@@ -26,17 +49,19 @@ const editableFieldsByScenario = {
   Rating: ["N", "A", "FF", "J", "PV", "T0", "l", "w", "x", "Pf", "Pp", "M0", "S0"],
 };
 
-// دالة تساعدنا نعرف هل الخلية قابلة للتعديل بناءً على اسم المحطة (السيناريو)
 const isEditable = (stationName, key) => {
   const editableKeys = editableFieldsByScenario[stationName] || [];
   return editableKeys.includes(key);
 };
 
+// ✅ المكون الرئيسي للجدول
 const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueChange }) => {
   const maxRows = stationData?.length
-  ? Math.max(...stationData.map(col => col.length))
-  : 0;
-  const [nState, setNState] = useState("1");
+    ? Math.max(...stationData.map((col) => col.length))
+    : 0;
+
+  const formatNumber = (num) =>
+    typeof num === "number" ? new Intl.NumberFormat().format(num) : num;
 
   return (
     <>
@@ -46,6 +71,7 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueCh
             const cell = col[rowIndex];
             if (!cell) return null;
 
+            // 🔸 عنوان ROA
             if (cell.key && cell.key.startsWith("ROA")) {
               return (
                 <td
@@ -59,6 +85,9 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueCh
             }
 
             let content;
+            const editable = isEditable(stationName, cell.key);
+
+            // 🔸 الحقل J
             if (cell.key === "J") {
               content = (
                 <div className="relative w-full">
@@ -68,50 +97,53 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueCh
                     className="block w-full px-2 py-1 pr-8 outline-none text-base appearance-none min-w-[5ch] cursor-pointer text-green-600"
                   >
                     {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
-                      <option key={num} value={num}>{num}</option>
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
                     ))}
                   </select>
                   <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
               );
-            } else if (cell.key === "N") {
+            }
+
+            // 🔸 الحقل N
+            else if (cell.key === "N") {
               content = (
                 <div className="relative w-full">
                   <select
-                    value={nState}
-                    onChange={(e) => setNState(Number(e.target.value))}
+                    value={cell.value ?? 1}
+                    onChange={(e) => onValueChange("N", Number(e.target.value))}
                     className="block w-full px-2 py-1 pr-8 outline-none text-base appearance-none min-w-[5ch] cursor-pointer text-blue-600"
                   >
                     {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-                      <option key={num} value={num}>{num}</option>
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
                     ))}
                   </select>
                   <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                 </div>
               );
-            } else {
-              const editable = isEditable(stationName, cell.key);
-              const formatNumber = (num) => 
-                typeof num === "number" ? new Intl.NumberFormat().format(num) : num;
-              if (editable) {
-                  content = (
-                    <input
-                      type="text"
-                      value={formatNumber(cell.value)}
-                      onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
-                      disabled={!editable}
-                      inputMode="decimal"
-                      className={`block w-full px-2 py-1 text-center outline-none rounded-md text-base text-green-600 focus:bg-green-100`}
-                    />
-                  );
-                } else {
-                  content = (
-                    <div className="text-gray-700 font-medium">
-                      <AnimatedNumber value={cell.value} />
-                    </div>
-                  );
-                }
+            }
 
+            // 🔸 بقية الحقول
+            else if (editable) {
+              content = (
+                <input
+                  type="text"
+                  value={formatNumber(cell.value)}
+                  onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
+                  inputMode="decimal"
+                  className="block w-full px-2 py-1 text-center outline-none rounded-md text-base text-green-600 focus:bg-green-100"
+                />
+              );
+            } else {
+              content = (
+                <div className="font-semibold text-gray-700 py-1">
+                  <AnimatedNumber value={cell.value} />
+                </div>
+              );
             }
 
             return (

@@ -6,12 +6,14 @@ import TopOptions from "./(append)/components/topOptions";
 import CombinedTables from "./(append)/components/CombinedTables";
 import Lottie from "lottie-react";
 import animationData from "../../../../public/animation/roa.json";
+import { useState } from "react";
 
 export default function RoPage() {
   const dispatch = useDispatch();
   const { selectedFile, selectedScenario, jValue, stationData } = useSelector((state) => state.station);
 
    const isDisabled = !selectedFile || selectedFile === "select";
+   const [animateCells, setAnimateCells] = useState(false);
 
   const buttons = [
       { href: "/roa/media", label: "Media", icon: Play },
@@ -36,6 +38,7 @@ export default function RoPage() {
             stationData={stationData[selectedScenario]}
             jValue={jValue}
             onJChange={(val) => dispatch({ type: "station/setJValue", payload: val })}
+            animateCells={animateCells} 
           />
         </div>
       )}

@@ -3,7 +3,7 @@ import { updateCellValue } from "../../(data)/store/stationSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
 
-export default function CombinedTables({ stationName, jValue, onJChange }) {
+export default function CombinedTables({ stationName, jValue, onJChange, animateCells }) {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.station.stationData);
     const handleValueChange = (cellKey, value) => {
@@ -25,6 +25,7 @@ export default function CombinedTables({ stationName, jValue, onJChange }) {
               onValueChange={handleValueChange}
               jValue={jValue}
               onJChange={onJChange}
+              animateCells={animateCells} 
             />
 
             <tr>
