@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export default function RoPage() {
   const dispatch = useDispatch();
-  const { selectedFile, selectedScenario, jValue, stationData } = useSelector((state) => state.station);
+  const { selectedFile, selectedScenario, stationData } = useSelector((state) => state.station);
 
    const isDisabled = !selectedFile || selectedFile === "select";
    const [animateCells, setAnimateCells] = useState(false);
@@ -36,8 +36,6 @@ export default function RoPage() {
             stationName={selectedScenario}
             fileName={selectedFile}
             stationData={stationData[selectedScenario]}
-            jValue={jValue}
-            onJChange={(val) => dispatch({ type: "station/setJValue", payload: val })}
             animateCells={animateCells} 
           />
         </div>

@@ -1,14 +1,21 @@
 import { useDispatch ,useSelector} from "react-redux";
-import { updateCellValue } from "../../(data)/store/stationSlice";
+import { updateCellValue } from "../../../../store/stationSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
 
-export default function CombinedTables({ stationName, jValue, onJChange, animateCells }) {
+export default function CombinedTables({ stationName, animateCells }) {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.station.stationData);
     const handleValueChange = (cellKey, value) => {
     dispatch(updateCellValue({ cellKey, value }));
   };
+
+    // 🔍 استخراج قيمة J من stationData
+  const jCell = stationData
+    .flat() // لأن stationData مصفوفة من صفوف
+    .find((cell) => cell.key === "J");
+
+  const jValue = jCell ? jCell.value : null;
   return (
     <div className="w-full overflow-x-auto">
       <div className="inline-block min-w-[1000px] scale-95">
@@ -23,8 +30,6 @@ export default function CombinedTables({ stationName, jValue, onJChange, animate
               stationName={stationName}
               stationData={stationData}
               onValueChange={handleValueChange}
-              jValue={jValue}
-              onJChange={onJChange}
               animateCells={animateCells} 
             />
 

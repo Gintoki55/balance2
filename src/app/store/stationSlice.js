@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { StationValueData } from "../roData";
+import { StationValueData } from "../(stations)/roa/(data)/roData";
 import { toast } from "react-hot-toast";
 
 // ─── Thunks كما عندك تماماً ─────────────────────────────
@@ -41,6 +41,8 @@ export const runCalculationNow = createAsyncThunk(
     toast.success("Calculation updated!");
   }
 );
+
+
 
 
 // 📁 جلب الملفات المحفوظة
@@ -172,6 +174,9 @@ export const stationSlice = createSlice({
     },
     setSelectedScenario: (state, action) => {
       state.selectedScenario = action.payload;
+      if (state.stationData.length > 0 && state.stationData[0].length > 0) {
+        state.stationData[0][0].value = action.payload;
+      }
     },
     setJValue: (state, action) => {
       state.jValue = action.payload;

@@ -13,10 +13,10 @@ function AnimatedNumber({ value }) {
     return <span>{value || "-"}</span>;
   }
 
-  // ✅ لو القيمة غير رقمية (نص أو شيء ثاني)
-  if (isNaN(Number(value))) {
-    return <span className="text-red-600 font-semibold">ليس رقمًا</span>;
-  }
+  // // ✅ لو القيمة غير رقمية (نص أو شيء ثاني)
+  // if (isNaN(Number(value))) {
+  //   return <span className="text-red-600 font-semibold">ليس رقمًا</span>;
+  // }
 
   const numericValue = Number(value);
   const motionValue = useMotionValue(numericValue);
@@ -55,13 +55,15 @@ const isEditable = (stationName, key) => {
 };
 
 // ✅ المكون الرئيسي للجدول
-const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueChange }) => {
+const TableComponent = ({ stationName, stationData, onValueChange }) => {
   const maxRows = stationData?.length
     ? Math.max(...stationData.map((col) => col.length))
     : 0;
 
   const formatNumber = (num) =>
     typeof num === "number" ? new Intl.NumberFormat().format(num) : num;
+
+
 
   return (
     <>
@@ -92,8 +94,8 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueCh
               content = (
                 <div className="relative w-full">
                   <select
-                    value={jValue ?? cell.value ?? 1}
-                    onChange={(e) => onJChange(Number(e.target.value))}
+                    value={cell.value ?? 1}
+                    onChange={(e) => onValueChange("J" ,Number(e.target.value))}
                     className="block w-full px-2 py-1 pr-8 outline-none text-base appearance-none min-w-[5ch] cursor-pointer text-green-600"
                   >
                     {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
@@ -133,10 +135,29 @@ const TableComponent = ({ stationName, stationData, jValue, onJChange, onValueCh
                 <input
                   type="text"
                   value={formatNumber(cell.value)}
-                  onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    // ✅ يقبل فقط الأرقام والنقطة العشرية
+                    if (/^-?\d*\.?\d*$/.test(val)) {
+                      onValueChange(cell.key, val);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const val = e.target.value;
+                    const numericValue = Number(val);
+
+                    if (val === "" || val === "-" || isNaN(numericValue)) {
+                      onValueChange(cell.key, "NAN");
+                    } else {
+                      onValueChange(cell.key, numericValue);
+                    }
+                  }}
                   inputMode="decimal"
-                  className="block w-full px-2 py-1 text-center outline-none rounded-md text-base text-green-600 focus:bg-green-100"
+                  className={`block w-full px-2 py-1 text-center outline-none rounded-md text-base ${
+                    cell.value === "NAN" ? "text-red-600" : "text-green-600"
+                  } focus:bg-green-100`}
                 />
+
               );
             } else {
               content = (

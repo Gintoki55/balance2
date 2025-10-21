@@ -5,7 +5,6 @@ const FileSchema = new mongoose.Schema({
   file: { type: String, unique: true },
   data: {
     scenario: { type: String, default: "Design" },
-    j: { type: Number, default: 1 },
     stationData: { type: Array, default: [] }, // ✅ نحفظ الجدول بالكامل هنا
   },
 });
@@ -14,7 +13,7 @@ const FileModel = mongoose.models.File || mongoose.model("File", FileSchema);
 
 export async function POST(req) {
   try {
-    const { file, scenario, j, stationData } = await req.json();
+    const { file, scenario, stationData } = await req.json();
     await connectDB();
 
     if (!file) {
@@ -26,7 +25,7 @@ export async function POST(req) {
 
     const updated = await FileModel.findOneAndUpdate(
       { file },
-      { data: { scenario, j, stationData } },
+      { data: { scenario, stationData } },
       { upsert: true, new: true }
     );
 
