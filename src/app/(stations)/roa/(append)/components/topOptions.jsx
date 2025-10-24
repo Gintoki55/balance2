@@ -9,6 +9,8 @@ import {
   fetchFileData,
   runCalculationNow,
   saveProject,
+  fetchDashboards,
+  saveDashboard
 } from "../../../../store/stationSlice";
 import { runData, scenarioData } from "@/data/allData";
 import { Play, Loader } from "lucide-react";
@@ -25,20 +27,25 @@ export default function TopOptions({ station }) {
     loadingFiles,
     stationData,
     isRunning,
+    dashboardSaveLoading,
+    loadingDashboard,
+    dashboards
   } = useSelector((state) => state.station);
 
   const [selectedRun, setSelectedRun] = useState("");
   const [selectedProject, setSelectedProject] = useState("project 1");
-  const [dashboards, setDashboards] = useState([]);
   const [selectedDashboard, setSelectedDashboard] = useState("New Dashboard");
   const { triggerAnimation } = useAnimate();
-  const [loadingDashboard, setLoadingDashboard] = useState(true);
-  const [dashboardSaveLoading, setdashboardSaveLoading] = useState(false);
 
   // جلب الملفات
   useEffect(() => {
     dispatch(fetchSavedFiles());
   }, [dispatch]);
+  
+  // جلب داشبورد
+  useEffect(() => {
+  dispatch(fetchDashboards());
+}, [dispatch]);
 
   // جلب بيانات الملف عند تغييره
   useEffect(() => {
@@ -51,84 +58,87 @@ export default function TopOptions({ station }) {
     }
   }, [selectedFile, dispatch]);
 
-  // ✅ جلب الـ Dashboards من الـ API
-  useEffect(() => {
-    const fetchDashboards = async () => {
-      try {
-        const res = await fetch("/api/dashboard");
-        const data = await res.json();
-        if (data.success) {
-          setDashboards(data.dashboards.map((d) => d.name));
-          setLoadingDashboard(false);
-        }
-      } catch (err) {
-        console.error("Error fetching dashboards:", err);
-        setLoadingDashboard(false);
-      }
-    };
-    fetchDashboards();
-  }, []);
+  // // ✅ جلب الـ Dashboards من الـ API
+  // useEffect(() => {
+  //   const fetchDashboards = async () => {
+  //     try {
+  //       const res = await fetch("/api/dashboard");
+  //       const data = await res.json();
+  //       if (data.success) {
+  //         setDashboards(data.dashboards.map((d) => d.name));
+  //         setLoadingDashboard(false);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching dashboards:", err);
+  //       setLoadingDashboard(false);
+  //     }
+  //   };
+  //   fetchDashboards();
+  // }, []);
 
 // ✅ حفظ أو تحديث Dashboard
-const handleSaveDashboard = async () => {
-  try {
-    let dashboardName = selectedDashboard;
-    setdashboardSaveLoading(true);
+// const handleSaveDashboard = async () => {
+//   try {
+//     let dashboardName = selectedDashboard;
+//     setdashboardSaveLoading(true);
 
-    // 🆕 إذا المستخدم اختار "New Dashboard" → أنشئ اسم جديد
-    if (selectedDashboard === "New Dashboard") {
-      const res = await fetch("/api/dashboard");
-      const json = await res.json();
+//     // 🆕 إذا المستخدم اختار "New Dashboard" → أنشئ اسم جديد
+//     if (selectedDashboard === "New Dashboard") {
+//       const res = await fetch("/api/dashboard");
+//       const json = await res.json();
 
-      if (json.success) {
-        // استخرج الأسماء الموجودة مثل D1, D2, D3 ...
-        const existing = json.dashboards.map((d) => d.name);
-        let nextNumber = 1;
-        while (existing.includes(`D${nextNumber}`)) {
-          nextNumber++;
-        }
-        dashboardName = `D${nextNumber}`;
-      }
-    }
+//       if (json.success) {
+//         // استخرج الأسماء الموجودة مثل D1, D2, D3 ...
+//         const existing = json.dashboards.map((d) => d.name);
+//         let nextNumber = 1;
+//         while (existing.includes(`D${nextNumber}`)) {
+//           nextNumber++;
+//         }
+//         dashboardName = `D${nextNumber}`;
+//       }
+//     }
 
-    // 💾 حفظ أو تحديث
-    const saveRes = await fetch("/api/dashboard", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: dashboardName,
-        stationData,
-      }),
-    });
+//     // 💾 حفظ أو تحديث
+//     const saveRes = await fetch("/api/dashboard", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//         name: dashboardName,
+//         stationData,
+//       }),
+//     });
 
-    const data = await saveRes.json();
+//     const data = await saveRes.json();
 
-    if (data.success) {
-      // ✅ إذا موجود → حدثه، إذا جديد → أضفه
-      setDashboards((prev) => {
-        const exists = prev.find((d) => d.name === dashboardName);
-        if (exists) {
-          return prev.map((d) =>
-            d.name === dashboardName ? { ...d, stationData } : d
-          );
-        } else {
-          return [...prev, { name: dashboardName, stationData }];
-        }
-      });
+//     if (data.success) {
+//       // ✅ إذا موجود → حدثه، إذا جديد → أضفه
+//       setDashboards((prev) => {
+//         const exists = prev.find((d) => d.name === dashboardName);
+//         if (exists) {
+//           return prev.map((d) =>
+//             d.name === dashboardName ? { ...d, stationData } : d
+//           );
+//         } else {
+//           return [...prev, { name: dashboardName, stationData }];
+//         }
+//       });
 
-      setSelectedDashboard(dashboardName);
-      console.log(`✅ Dashboard saved as: ${dashboardName}`);
-    } else {
-      console.error("❌ Save failed:", data.message);
-    }
-  } catch (err) {
-    console.error("❌ Error saving dashboard:", err);
-  }finally {
-    // ✅ إيقاف التحميل مهما كانت النتيجة
-    setdashboardSaveLoading(false);
-  }
-};
+//       setSelectedDashboard(dashboardName);
+//       console.log(`✅ Dashboard saved as: ${dashboardName}`);
+//     } else {
+//       console.error("❌ Save failed:", data.message);
+//     }
+//   } catch (err) {
+//     console.error("❌ Error saving dashboard:", err);
+//   }finally {
+//     // ✅ إيقاف التحميل مهما كانت النتيجة
+//     setdashboardSaveLoading(false);
+//   }
+// };
 
+  const handleSaveDashboard = () => {
+    dispatch(saveDashboard({ selectedDashboard, stationData }));
+  };
 
   const handleSave = () => {
     dispatch(

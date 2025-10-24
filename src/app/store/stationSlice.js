@@ -152,6 +152,71 @@ export const fetchFileData = createAsyncThunk(
   }
 );
 
+// 📊 جلب جميع Dashboards
+export const fetchDashboards = createAsyncThunk(
+  "station/fetchDashboards",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/dashboard");
+      const data = await res.json();
+      if (data.success) {
+        return data.dashboards.map((d) => d.name);
+      } else {
+        return rejectWithValue("Failed to fetch dashboards");
+      }
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// 💾 حفظ أو تحديث Dashboard
+export const saveDashboard = createAsyncThunk(
+  "station/saveDashboard",
+  async ({ selectedDashboard, stationData }, { rejectWithValue }) => {
+    try {
+      let dashboardName = selectedDashboard;
+
+      // 🆕 إذا المستخدم اختار "New Dashboard"
+      if (selectedDashboard === "New Dashboard") {
+        const res = await fetch("/api/dashboard");
+        const json = await res.json();
+
+        if (json.success) {
+          const existing = json.dashboards.map((d) => d.name);
+          let nextNumber = 1;
+          while (existing.includes(`D${nextNumber}`)) nextNumber++;
+          dashboardName = `D${nextNumber}`;
+        }
+      }
+
+      // 🔹 إرسال البيانات إلى API
+      const saveRes = await fetch("/api/dashboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: dashboardName,
+          stationData,
+        }),
+      });
+
+      const data = await saveRes.json();
+
+      if (data.success) {
+        toast.success(`Dashboard saved as ${dashboardName}`);
+        return dashboardName;
+      } else {
+        toast.error("Save failed");
+        return rejectWithValue("Save failed");
+      }
+    } catch (err) {
+      toast.error("Error saving dashboard");
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+
 
 // ─── الحالة الأساسية والـ reducers ────────────────────────────
 
@@ -163,6 +228,9 @@ const initialState = {
   savedFiles: [],
   loadingFiles: false,
   error: null,
+  dashboards: [],
+  dashboardSaveLoading: false,
+  loadingDashboard:true,
 };
 
 export const stationSlice = createSlice({
@@ -226,8 +294,31 @@ export const stationSlice = createSlice({
       .addCase(saveProject.fulfilled, (state, action) => {
         if (!state.savedFiles.includes(action.payload)) {
           state.savedFiles.push(action.payload);
+        }    
+      })
+      .addCase(fetchDashboards.pending, (state) => {
+        state.loadingDashboard = true;
+      })
+      .addCase(fetchDashboards.fulfilled, (state, action) => {
+        state.loadingDashboard = false;
+        state.dashboards = action.payload;
+      })
+      .addCase(fetchDashboards.rejected, (state) => {
+        state.loadingDashboard = false;
+      })
+      .addCase(saveDashboard.pending, (state) => {
+        state.dashboardSaveLoading = true;
+      })
+      .addCase(saveDashboard.fulfilled, (state, action) => {
+        state.dashboardSaveLoading = false;
+        if (!state.dashboards.includes(action.payload)) {
+          state.dashboards.push(action.payload);
         }
+      })
+      .addCase(saveDashboard.rejected, (state) => {
+        state.dashboardSaveLoading = false;
       });
+
   },
 });
 

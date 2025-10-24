@@ -1,6 +1,6 @@
 const ROAbaseColumns = [
   [
-    { key: "ROA Design", value: "", editable: false, info: "NULL" },
+    { key: "ROA", value: "design", editable: false, info: "NULL" },
     { key: "N", value: 1, editable: false, info: "Trains in the plant, Na # About Na = 1 ∼ Md/500" },
     { key: "A", value: 10.00, editable: false, info: "Element active area, A; m2" },
     { key: "FF", value: 10.00, editable: false, info: "Fouling factor, FF" },
