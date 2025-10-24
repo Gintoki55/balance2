@@ -32,7 +32,7 @@ export const runCalculationNow = createAsyncThunk(
         // ✅ فقط القيم الرقمية يتم تحديثها
         return {
           ...cell,
-          value: Number(cell.value) + 10,
+          value: Number(cell.value) * 2,
         };
       })
     );
@@ -41,8 +41,6 @@ export const runCalculationNow = createAsyncThunk(
     toast.success("Calculation updated!");
   }
 );
-
-
 
 
 // 📁 جلب الملفات المحفوظة
@@ -99,7 +97,6 @@ export const saveProject = createAsyncThunk(
     }
   }
 );
-
 
 
 // 📂 تحميل بيانات ملف محدد
@@ -291,11 +288,15 @@ export const stationSlice = createSlice({
         state.loadingFiles = false;
         state.error = action.payload;
       })
+
+
       .addCase(saveProject.fulfilled, (state, action) => {
         if (!state.savedFiles.includes(action.payload)) {
           state.savedFiles.push(action.payload);
         }    
       })
+
+
       .addCase(fetchDashboards.pending, (state) => {
         state.loadingDashboard = true;
       })
@@ -306,6 +307,8 @@ export const stationSlice = createSlice({
       .addCase(fetchDashboards.rejected, (state) => {
         state.loadingDashboard = false;
       })
+
+
       .addCase(saveDashboard.pending, (state) => {
         state.dashboardSaveLoading = true;
       })
