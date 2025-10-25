@@ -13,11 +13,10 @@ import {
   saveDashboard
 } from "../../../../store/stationSlice";
 import { runData, scenarioData } from "@/data/allData";
-import { Play, Loader } from "lucide-react";
+import { Play, Loader, ArrowDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useAnimate } from "../../(data)/animationContext";
-
 export default function TopOptions({ station }) {
   const dispatch = useDispatch();
   const {
@@ -35,6 +34,10 @@ export default function TopOptions({ station }) {
   const [selectedRun, setSelectedRun] = useState("");
   const [selectedProject, setSelectedProject] = useState("project 1");
   const [selectedDashboard, setSelectedDashboard] = useState("New Dashboard");
+
+  const [selectedExport, setSelectedExport] = useState("device");
+  const [selectedAdmin, setSelectedAdmin] = useState("control");
+
   const { triggerAnimation } = useAnimate();
 
   // جلب الملفات
@@ -74,7 +77,7 @@ export default function TopOptions({ station }) {
   };
 
   return (
-    <div className="bg-white p-4 relative">
+    <div className="bg-white p-4 relative flex flex-col gap-2">
       <Toaster position="top-center" />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-4 sm:gap-6 w-full">
@@ -94,7 +97,7 @@ export default function TopOptions({ station }) {
             }}
             className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
           >
-            <option value="select">Select</option>
+            <option value="select">open</option>
             <option value="New Plant">New Plant</option>
             {loadingFiles && <option disabled>Loading...</option>}
             {!loadingFiles &&
@@ -186,7 +189,10 @@ export default function TopOptions({ station }) {
           </div>
         </div>
 
-        {/* ✅ Dashboard Section */}
+      </div>
+      <div className="w-full flex justify-center items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 sm:gap-12 sm:w-[900px] max-sm:w-full ">
+         {/* ✅ Dashboard Section */}
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
             Dashboard
@@ -214,8 +220,6 @@ export default function TopOptions({ station }) {
                 <option disabled>No dashboards found</option>
               )}
             </select>
-
-
             <button
               onClick={handleSaveDashboard}
               disabled={dashboardSaveLoading}
@@ -231,7 +235,64 @@ export default function TopOptions({ station }) {
             </button>
           </div>
         </div>
+
+         {/* ✅ Export To Section */}
+        <div className="flex flex-col w-full sm:w-auto">
+          <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
+            Export To
+          </span>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <select
+              value={selectedExport || "device"}
+              onChange={(e) => setSelectedExport(e.target.value)}
+              className="px-3 py-1 border border-orange-600 rounded-lg text-orange-600 hover:bg-orange-50 transition w-full sm:w-auto"
+            >
+              <option value="device">Device</option>
+              <option value="excel">As Excel</option>
+              <option value="pdf">As PDF</option>
+            </select>
+
+            <button
+              onClick={() => console.log("Export:", selectedExport)}
+              className="flex items-center justify-center px-6 py-2 bg-orange-600 text-white rounded-lg shadow hover:bg-orange-700 active:scale-95 transition cursor-pointer text-sm"
+            >
+              <ArrowDown className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ✅ Admin Section */}
+        <div className="flex flex-col w-full sm:w-auto">
+          <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
+            Admin
+          </span>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <select
+              value={selectedAdmin || "control"}
+              onChange={(e) => setSelectedAdmin(e.target.value)}
+              className="px-3 py-1 border border-red-600 rounded-lg text-red-600 hover:bg-red-50 transition w-full sm:w-auto"
+            >
+              <option value="control">Control</option>
+              <option value="subscription">Subscription</option>
+              <option value="users">Users</option>
+              <option value="experts">Experts</option>
+              <option value="institutions">Institutions</option>
+            </select>
+
+            <button
+              onClick={() => console.log("Admin Action:", selectedAdmin)}
+              className="flex items-center justify-center px-6 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 active:scale-95 transition cursor-pointer text-sm"
+            >
+            <Play className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+      </div>
       </div>
     </div>
   );
 }
+
+
+  

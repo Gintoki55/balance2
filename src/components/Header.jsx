@@ -29,7 +29,7 @@ export default function Header() {
         <div className="flex items-center gap-3 2xl:gap-6">
           {/* Dashboard button */}
           <Link href="/dashboard">
-            <button className="bg-sky-300 text-white px-3 sm:px-4 2xl:px-6 py-1 sm:py-2 2xl:py-3 rounded text-sm sm:text-base 2xl:text-lg hover:bg-sky-400 active:scale-95 transition-transform duration-150 cursor-pointer">
+            <button className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 text-sm sm:text-base bg-white text-[#429988] border-[#429988] hover:bg-[#429988] hover:text-white">
               Dashboard
             </button>
           </Link>
@@ -44,11 +44,11 @@ export default function Header() {
         </div>
 
         {/* Desktop: Login + Register */}
-        <div className="hidden sm:flex items-center gap-8 2xl:gap-12">
-          <button className="text-[rgb(66,153,136)] font-semibold text-sm sm:text-base 2xl:text-lg border-b-4 border-[rgb(66,153,136)] active:scale-95 transition-transform duration-150 cursor-pointer">
+        <div className="hidden sm:flex items-center gap-4 2xl:gap-12">
+          <button className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 text-sm sm:text-base bg-[#429988] text-white border-[#429988] hover:bg-white hover:text-[#429988]">
             Login
           </button>
-          <button className="bg-[rgb(66,153,136)] text-white font-semibold px-6 sm:px-8 2xl:px-10 py-3 2xl:py-4 rounded-lg text-sm sm:text-base 2xl:text-lg hover:bg-[rgb(54,124,110)] active:scale-95 transition-transform duration-150 cursor-pointer">
+          <button className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg shadow-md active:scale-95 transition cursor-pointer border-2 text-sm sm:text-base bg-[#429988] text-white border-[#429988] hover:bg-white hover:text-[#429988]">
             Register Now
           </button>
         </div>
