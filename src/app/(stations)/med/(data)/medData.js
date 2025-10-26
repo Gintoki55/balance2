@@ -1,6 +1,6 @@
 const MEDbaseColumns = [
   [
-    { key: "MED Design", value: "", editable: false, info: "NUll" },
+    { key: "MED", value: "design", editable: false, info: "NUll" },
     { key: "Ka", value: "1.00", editable: false, info: "Heat transfer correction factor Recommended range: 0.5 ~ 3" },
     { key: "Kb", value: "1.00", editable: false, info: "Heat transfer correction factor Recommended range: 0.5 ~ 3 Kb =0, for process without preheaters" },
     { key: "Kc", value: "1.00", editable: false, info: "Heat transfer correction factor Recommended range: 0.5 ~ 3" },
@@ -43,36 +43,4 @@ const MEDbaseColumns = [
   ],
 ];
 
-
-// دالة لتحديد editable حسب النوع
-const makeEditableByType = (rows, type) => {
-  const clone = JSON.parse(JSON.stringify(rows));
-
-  // الحقول التي يجب تفعيلها لكل نوع
-  const editableFieldsByType = {
-    Design: ["Ka", "Kb", "Kc","ER", "cg","δb","δc","Ts","Td","T0","S0","Sh","Md"],
-    Demand: ["Ka", "Kb", "Kc","ER", "Aa","Ab","Ac","cg","Td","T0","S0","Sh","Md"],
-    Energy:["Ka", "Kb", "Kc","ER", "Aa","Ab","Ac","cg","Td","T0","S0","Sh","Ms"],
-    Rating: ["Ka", "Kb", "Kc","ER", "Aa","Ab","Ac","cg","Td","T0","S0","M0","Mf"],
-  };
-
-  const editableKeys = editableFieldsByType[type] || [];
-
-  clone.forEach(row => {
-    row.forEach(cell => {
-      if (editableKeys.includes(cell.key)) {
-        cell.editable = true;
-      }
-    });
-  });
-
-  return clone;
-};
-
-// تصدير البيانات حسب النوع
-export const StationValueData = {
-  Design: makeEditableByType(MEDbaseColumns, "Design"),
-  Demand: makeEditableByType(MEDbaseColumns, "Demand"),
-  Energy: makeEditableByType(MEDbaseColumns, "Energy"),
-  Rating: makeEditableByType(MEDbaseColumns, "Rating"),
-};
+export const StationValueData =  MEDbaseColumns;

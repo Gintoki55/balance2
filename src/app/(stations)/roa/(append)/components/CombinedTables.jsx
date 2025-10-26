@@ -1,9 +1,9 @@
-import { useDispatch ,useSelector} from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../store/stationSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
 
-export default function CombinedTables({ stationName, animateCells }) {
+export default function CombinedTables({ stationName}) {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.station.stationData);
     const handleValueChange = (cellKey, value) => {
@@ -15,7 +15,7 @@ export default function CombinedTables({ stationName, animateCells }) {
     .flat() // لأن stationData مصفوفة من صفوف
     .find((cell) => cell.key === "J");
 
-  const jValue = jCell ? jCell.value : null;
+  const jValue = jCell ? jCell.value : 1;
   return (
     <div className="w-full overflow-x-auto">
       <div className="inline-block min-w-[1000px] scale-95">
@@ -30,7 +30,6 @@ export default function CombinedTables({ stationName, animateCells }) {
               stationName={stationName}
               stationData={stationData}
               onValueChange={handleValueChange}
-              animateCells={animateCells} 
             />
 
             <tr>

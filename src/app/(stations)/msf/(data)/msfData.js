@@ -1,20 +1,20 @@
 const MSFbaseColumns = [
   [
-    { key: "MSF Design", value: "", editable: false, info: "NULL" },
-    { key: "Jb", value: "1", editable: false, info: "Number of upper stages, Jb" },
+    { key: "MSF", value: "design", editable: false, info: "NULL" },
+    { key: "Jb", value: "2", editable: false, info: "Number of upper stages, Jb" },
     { key: "Ka", value: "1.00", editable: false, info: "Heat transfer correction factor for brine heater recommended range: 0.5 ~ 3" },
     { key: "Kb", value: "1.00", editable: false, info: "Heat transfer correction factor for upper stages recommended range: 0.5 ~ 3" },
     { key: "Kc", value: "1.00", editable: false, info: "Heat transfer correction factor for lower stages recommended range: 0.5 ~ 3" },
   ],
   [
-    { key: "", value: "", editable: false, info: "" },
-    { key: "Jc", value: "1", editable: false, info: "Number of lower stages, Jc" },
+    { key: "", value: "-", editable: false, info: "" },
+    { key: "Jc", value: "2", editable: false, info: "Number of lower stages, Jc" },
     { key: "Aa", value: "45638.61", editable: false, info: "Brine heater area, Aa: m2" },
     { key: "Ab", value: "77593.10", editable: false, info: "Each upper stage area, Ab: m2" },
     { key: "Ac", value: "101495.02", editable: false, info: "Each lower stage area, Ac: m2" },
   ],
   [
-    { key: "", value: "", editable: false, info: "" },
+    { key: "", value: "-", editable: false, info: "" },
     { key: "cg", value: "0.99", editable: false, info: "Condensation gain, cg recommended range: 0.5 ~ 1" },
     { key: "δa", value: "5.00", editable: false, info: "Brine heater approach temperature recommended range: 1~ 9 [⁰C]" },
     { key: "δb", value: "2.00", editable: false, info: "Upper stages approach temperature recommended range: 1~ 5 [⁰C]" },
@@ -43,39 +43,4 @@ const MSFbaseColumns = [
   ],
 ];
 
-
-
-
-
-// دالة لتحديد editable حسب النوع
-const makeEditableByType = (rows, type) => {
-  const clone = JSON.parse(JSON.stringify(rows));
-
-  // الحقول التي يجب تفعيلها لكل نوع
-  const editableFieldsByType = {
-    Design: ["Jb","Ka", "Kb", "Kc","Jc","Aa","Ab","Ac","cg","Th","T0","m","S0","Md"],
-    Demand: ["Ka", "Kb", "Kc","Aa","Ab","Ac","cg","Th","T0","m","S0","Md"],
-    Energy:["Jb","Ka", "Kb", "Kc","Jc","Aa","Ab","Ac","cg","Th","T0","m","S0","Ms"],
-    Rating: ["Jb","Ka", "Kb", "Kc","Jc","Aa","Ab","Ac","cg","Th","T0","M0","m","S0"],
-  };
-
-  const editableKeys = editableFieldsByType[type] || [];
-
-  clone.forEach(row => {
-    row.forEach(cell => {
-      if (editableKeys.includes(cell.key)) {
-        cell.editable = true;
-      }
-    });
-  });
-
-  return clone;
-};
-
-// تصدير البيانات حسب النوع
-export const StationValueData = {
-  Design: makeEditableByType(MSFbaseColumns, "Design"),
-  Demand: makeEditableByType(MSFbaseColumns, "Demand"),
-  Energy: makeEditableByType(MSFbaseColumns, "Energy"),
-  Rating: makeEditableByType(MSFbaseColumns, "Rating"),
-};
+export const StationValueData =  MSFbaseColumns;

@@ -1,19 +1,22 @@
-"use client";
-import React, { useEffect } from "react";
+import { useDispatch, useSelector} from "react-redux";
+import { updateCellValue } from "@/app/store/msfSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
-import { useStationStore } from "../../(data)/store/jStore";
 
-const CombinedTables = ({ stationName, stationData, fileName }) => {
+const CombinedTables = ({ stationName}) => {
+    const dispatch = useDispatch();
+    const stationData = useSelector(state => state.msf.stationData);
+    const handleValueChange = (cellKey, value) => {
+      dispatch(updateCellValue({ cellKey, value }));
+    };
 
-  const jbValue = useStationStore((s) => s.data[fileName]?.[stationName]?.jb ?? 2);
-  const setJb = useStationStore((s) => s.setJb);
 
-  const jcValue = useStationStore((s) => s.data[fileName]?.[stationName]?.jc ?? 2);
-  const setJc = useStationStore((s) => s.setJc);
+       // 🔍 استخراج قيمة J من stationData
+  const jbCell = stationData.flat().find((cell) => cell.key === "Jb");
+  const jcCell = stationData.flat().find((cell) => cell.key === "Jc");
 
-  // ✅ عند تغيير المحطة، نعيد Jb و Jc ونحفظ آخر سيناريو
-
+  const jbValue = jbCell ? jbCell.value : 2;
+  const jcValue = jcCell ? jcCell.value : 2;
 
   return (
     <div className="w-full overflow-x-auto">
@@ -29,10 +32,7 @@ const CombinedTables = ({ stationName, stationData, fileName }) => {
             <TableComponent
               stationName={stationName}
               stationData={stationData}
-              JbValue={jbValue}
-              onJbChange={(newJb) => setJb(fileName, stationName, newJb)}
-              JcValue={jcValue}
-              onJcChange={(newJc) => setJc(fileName, stationName, newJc)}
+              onValueChange={handleValueChange}
             />
 
             {/* فاصل */}

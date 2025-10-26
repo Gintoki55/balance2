@@ -1,19 +1,16 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import StationHeader from "@/components/stationheader";
 import { Play, Bot, Calculator } from "lucide-react";
 import TopOptions from "./(append)/components/topOptions";
 import CombinedTables from "./(append)/components/CombinedTables";
 import Lottie from "lottie-react";
 import animationData from "../../../../public/animation/roa.json";
-import { useState } from "react";
 
 export default function RoPage() {
-  const dispatch = useDispatch();
   const { selectedFile, selectedScenario, stationData } = useSelector((state) => state.station);
 
    const isDisabled = !selectedFile || selectedFile === "select";
-   const [animateCells, setAnimateCells] = useState(false);
 
   const buttons = [
       { href: "/roa/media", label: "Media", icon: Play },
@@ -36,7 +33,6 @@ export default function RoPage() {
             stationName={selectedScenario}
             fileName={selectedFile}
             stationData={stationData[selectedScenario]}
-            animateCells={animateCells} 
           />
         </div>
       )}

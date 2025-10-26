@@ -1,5 +1,12 @@
 "use client";
 import React from "react";
+import { Eye } from "lucide-react";
+// 🔹 تعريف أنماط المحطات
+const stationStyles = {
+  ROA: "bg-blue-200 text-blue-800",
+  MSF: "bg-green-200 text-green-800",
+  MED: "bg-orange-200 text-orange-800",
+};
 
 const TableDashboard = ({ stationData, name }) => {
   if (!stationData || stationData.length === 0) {
@@ -18,9 +25,19 @@ const TableDashboard = ({ stationData, name }) => {
 
   return (
     <div className="mb-6">
+      
       {/* 🔹 العنوان من الـ Dashboard نفسه */}
-      <div className="mb-2 font-bold text-lg text-blue-700">{name}</div>
+      <div className="mb-3 flex items-center justify-between">
+        <div className="font-bold text-lg text-blue-700">{name}</div>
 
+        {/* 🔹 الزر الجديد */}
+        <button
+          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 transition cursor-pointer hover:underline"
+        >
+          See in Station
+          <Eye className="w-4 h-4" />
+        </button>
+      </div>
       <table className="table-auto border border-gray-300 border-collapse w-full text-center">
         <tbody>
           {Array.from({ length: maxRows }).map((_, rowIndex) => (
@@ -29,17 +46,24 @@ const TableDashboard = ({ stationData, name }) => {
                 const cell = col[rowIndex];
                 if (!cell) return null;
 
+                if (cell.key) {
+                  // 🔹 نحصل على اسم المحطة من أول 3 أحرف (مثلاً ROA أو MSF أو MED)
+                  const prefix = Object.keys(stationStyles).find((name) =>
+                    cell.key.startsWith(name)
+                  );
+
                 // 🔹 استثناء خلايا ROA
-                if (cell.key && cell.key.startsWith("ROA")) {
-                  return (
-                    <td
-                      key={colIndex}
-                      colSpan={2}
-                      className="px-4 py-0 border font-bold text-gray-800 bg-gray-200 text-center text-lg"
-                    >
-                      ROA {stationName}
-                    </td>
-              );
+                if (prefix) {
+                    return (
+                      <td
+                        key={colIndex}
+                        colSpan={2}
+                        className={`px-4 py-0 border font-bold text-center text-lg ${stationStyles[prefix]}`}
+                      >
+                        {prefix} {stationName}
+                      </td>
+                    );
+                  }
                 }
 
                 return (

@@ -1,12 +1,18 @@
-"use client";
-import React from "react";
+import { useDispatch, useSelector} from "react-redux";
+import { updateCellValue } from "@/app/store/medSlice";
 import TableComponent from "./TableComponent";
 import SecondTable from "./secondTable";
-import { useJaStore } from "../../(data)/store/jaStore";
 
-const CombinedTables = ({ stationName, stationData, fileName }) => {
-  const jaValue = useJaStore((s) => s.data[fileName]?.[stationName]?.ja ?? 1);
-  const setJa = useJaStore((s) => s.setJa);
+const CombinedTables = ({ stationName }) => {
+
+    const dispatch = useDispatch();
+    const stationData = useSelector(state => state.med.stationData);
+    const handleValueChange = (cellKey, value) => {
+      dispatch(updateCellValue({ cellKey, value }));
+    };
+    const jaCell = stationData.flat().find((cell) => cell.key === "Ja");
+    const jaValue = jaCell ? jaCell.value : 1;
+
 
   return (
     <div className="w-full overflow-x-auto">
@@ -17,8 +23,7 @@ const CombinedTables = ({ stationName, stationData, fileName }) => {
             <TableComponent
               stationName={stationName}
               stationData={stationData}
-              jaValue={jaValue}
-              onJaChange={(newJa) => setJa(fileName, stationName, newJa)}
+              onValueChange={handleValueChange}
             />
 
             {/* خط فاصل داخلي */}
