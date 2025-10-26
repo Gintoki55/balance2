@@ -159,14 +159,12 @@ export const fetchDashboards = createAsyncThunk(
   }
 );
 
-// 💾 حفظ أو تحديث Dashboard
 export const saveDashboard = createAsyncThunk(
   "msf/saveDashboard",
   async ({ selectedDashboard, stationData }, { rejectWithValue }) => {
     try {
       let dashboardName = selectedDashboard;
 
-      // 🆕 إذا المستخدم اختار "New Dashboard"
       if (selectedDashboard === "New Dashboard") {
         const res = await fetch("/api/dashboard");
         const json = await res.json();
@@ -174,12 +172,20 @@ export const saveDashboard = createAsyncThunk(
         if (json.success) {
           const existing = json.dashboards.map((d) => d.name);
           let nextNumber = 1;
+
           while (existing.includes(`D${nextNumber}`)) nextNumber++;
+
+          // ✅ تحقق من الحد الأقصى
+          if (nextNumber > 20) {
+            toast.error("You reached the maximum limit of 20 dashboards");
+            return rejectWithValue("Max dashboards reached");
+          }
+
           dashboardName = `D${nextNumber}`;
         }
       }
 
-      // 🔹 إرسال البيانات إلى API
+      // إرسال البيانات إلى API
       const saveRes = await fetch("/api/dashboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -40,6 +40,34 @@ export default function TopOptions({ station }) {
 
   const { triggerAnimation } = useAnimate();
 
+    const projectObject = [
+    "project 1",
+    "project 2",
+    "project 3",
+    "project 4",
+    "project 5",
+    "plant 1",
+    "plant 2",
+    "plant 3",
+    "plant 4",
+    "plant 5",
+    "plant 6",
+    "plant 7",
+    "plant 8",
+    "plant 9",
+    "plant 10",
+    "plant 11",
+    "plant 12",
+    "plant 13",
+    "plant 14",
+    "plant 15",
+    "plant 16",
+    "plant 17",
+    "plant 18",
+    "plant 19",
+    "plant 20",
+  ]
+
   // جلب الملفات
   useEffect(() => {
     dispatch(fetchSavedFiles());
@@ -172,7 +200,7 @@ export default function TopOptions({ station }) {
               onChange={(e) => setSelectedProject(e.target.value)}
               className="px-3 py-1 border border-blue-600 rounded-lg text-blue-600 hover:bg-blue-50 transition w-full sm:w-auto"
             >
-              {["project 1", "project 2", "project 3", "project 4", "project 5"].map(
+              {projectObject.map(
                 (p) => (
                   <option key={p} value={p}>
                     {p}
