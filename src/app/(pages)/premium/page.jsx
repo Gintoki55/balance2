@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 export default function PremiumPage() {
   const plans = [
     {
