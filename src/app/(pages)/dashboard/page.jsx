@@ -36,7 +36,7 @@ export default function Dashboard() {
       <StationHeader title="Dashboard" />
 
       {/* Legend */}
-      <div className="w-full bg-white border-y border-gray-200 flex items-center gap-8 py-3 px-8 shadow-sm  sticky top-[55px] z-30">
+      <div className="w-full bg-white border-y border-gray-200 flex items-center gap-8 py-3 px-8 shadow-sm  sticky top-[45px] z-30">
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-sm bg-blue-200 border border-blue-400" />
           <span className="text-sm font-medium text-blue-800">ROA</span>
