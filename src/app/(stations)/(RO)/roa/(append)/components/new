@@ -1,0 +1,175 @@
+"use client";
+
+import React from "react";
+import Tooltip from "@/components/Tooltip";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { AnimatedNumber } from "../../(data)/tableData";
+
+const editableFieldsByScenario = {
+  Design: ["N", "A", "FF", "J", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md", "WR"],
+  Demand: ["A", "FF", "PV", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md"],
+  Energy: ["A", "FF", "PV", "T0", "l", "w", "x", "Pf", "Pp", "S0", "Sd"],
+  Rating: ["N", "A", "FF", "J", "PV", "T0", "l", "w", "x", "Pf", "Pp", "M0", "S0"],
+};
+
+const isEditable = (scenario, key) =>
+  (editableFieldsByScenario[scenario] || []).includes(key);
+
+// =============================
+// 🔹 اختيار السيناريو
+// =============================
+const ScenarioSelector = ({ cell, scenario, onValueChange }) => (
+  <td colSpan={2} className="px-4 py-1 font-bold bg-gray-200 text-center">
+    <div className="relative w-full">
+      <select
+        values={scenario || "Design"}
+        onChange={(e) => onValueChange(cell.key, 0, e.target.value)}
+        className="w-full px-3 py-1 rounded-md bg-gray-200 appearance-none outline-none"
+      >
+        {["Design", "Demand", "Energy", "Rating"].map((o) => (
+          <option key={o} values={o}>
+            ROA {o}
+          </option>
+        ))}
+      </select>
+      <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2" />
+    </div>
+  </td>
+);
+
+// =============================
+// 🔹 محتوى الخلية
+// =============================
+const CellContent = ({ cell, valueIndex, editable, onValueChange }) => {
+  const value = cell.values?.[valueIndex];
+
+  // N / J dropdown
+  if (["N", "J"].includes(cell.key)) {
+    const max = cell.key === "J" ? 9 : 20;
+
+    return (
+      <div className="relative text-center">
+        <select
+          value={value ?? 1}
+          onChange={(e) =>
+            //TODO
+            onValueChange(cell.key, valueIndex, Number(e.target.value))
+          }
+          className="px-2 py-1 pr-6 appearance-none cursor-pointer"
+        >
+          {Array.from({ length: max }, (_, i) => i + 1).map((n) => (
+            <option key={n} value={n}>
+              {n}
+            </option>
+          ))}
+        </select>
+        <MdKeyboardArrowDown className="absolute lg:right-8 right-4 top-1/2 -translate-y-1/2" />
+      </div>
+    );
+  }
+
+  // Editable
+  if (editable) {
+    return (
+      <input
+        type="text"
+        value={value ?? ""}
+        onChange={(e) => {
+          if (/^-?\d*\.?\d*$/.test(e.target.value)) {
+            onValueChange(cell.key, valueIndex, e.target.value);
+          }
+        }}
+        onBlur={(e) => {
+          const n = Number(e.target.value);
+          onValueChange(
+            cell.key,
+            valueIndex,
+            e.target.value === "" || isNaN(n) ? "NAN" : n
+          );
+        }}
+        className="block w-full px-2 py-1 text-center font-semibold rounded-md text-green-600 focus:bg-green-100 outline-none"
+      />
+    );
+  }
+
+  // Static
+  return (
+    <div className="font-semibold text-gray-700 py-1 text-center">
+      <AnimatedNumber value={value} />
+    </div>
+  );
+};
+
+// =============================
+// 🔹 Key cell
+// =============================
+const CellKey = ({ cell }) => (
+  <td className="px-2 font-semibold bg-gray-100 text-center">
+    {cell.info ? (
+      <Tooltip text={cell.info}>
+        <span>{cell.key}</span>
+      </Tooltip>
+    ) : (
+      cell.key
+    )}
+  </td>
+);
+
+// =============================
+// 🔥 الجدول
+// =============================
+const TableComponent = ({ stationData, onValueChange }) => {
+  const maxRows = Math.max(...stationData.map((col) => col.length));
+
+  const scenarioCell = stationData.flat().find((c) => c.key === "ROA");
+  const scenario = scenarioCell?.values?.[0];
+
+  return (
+    <>
+      {Array.from({ length: maxRows }).map((_, rowIndex) => (
+        <tr key={rowIndex}>
+          {stationData.map((col, colIndex) => {
+            const cell = col[rowIndex];
+            if (!cell) return null;
+
+            if (cell.key === "ROA") {
+              return (
+                <ScenarioSelector
+                  key={colIndex}
+                  cell={cell}
+                  scenario={scenario}
+                  onValueChange={onValueChange}
+                />
+              );
+            }
+
+            const editable = isEditable(scenario, cell.key);
+
+            return (
+              <React.Fragment key={colIndex}>
+              <CellKey cell={cell} />
+
+                  {(Array.isArray(cell.values) ? cell.values : [cell.values]).map((_, valueIndex) => (
+                    <td
+                      key={valueIndex}
+                      className="px-2 py-0 text-center text-sm min-w-[7ch] max-w-[12ch]"
+                    >
+                      <CellContent
+                        cell={cell}
+                        valueIndex={valueIndex}
+                        editable={editable}
+                        onValueChange={onValueChange}
+                      />
+                    </td>
+                  ))}
+                </React.Fragment>
+
+            );
+          })}
+        </tr>
+      ))}
+    </>
+  );
+};
+
+export default TableComponent;

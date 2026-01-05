@@ -1,0 +1,41 @@
+const ROAbaseColumns = [
+  [
+    { key: "", value: "Design", editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+  ],
+  
+    { key: "", value: "-", editable: false, info: "" },
+    { key: "", value:, editable: false, info: "" },
+    { key: "", value: .00, editable: false, info: "" },
+    { key: "", value: .00, editable: false, info: "" },
+  ],
+  [
+    { key: "", value: "-", editable: false, info: "" },
+    { key: "", value:, editable: false, info: "" },
+    { key: "", value:, editable: false, info: "" },
+    { key: "", value:, editable: false, info: "" },
+  
+  [
+    { key: "", value: "-", editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+  ],
+  [
+    { key: "", value: "-", editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+  ],
+  [
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: ""},
+    { key: "", value: , editable: false, info: "" },
+    { key: "", value: , editable: false, info: "" },
+  ],
+];
+
+// تصدير البيانات حسب النوع
+export const StationValueData = ROAbaseColumns;

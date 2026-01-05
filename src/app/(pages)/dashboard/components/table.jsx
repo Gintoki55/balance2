@@ -5,28 +5,39 @@ import Tooltip from "@/components/Tooltip";
 
 const stationStyles = {
   ROA: "bg-blue-200 text-blue-800",
+  ROB: "bg-blue-200 text-blue-800",
+  ROC: "bg-blue-200 text-blue-800",
+  ROD: "bg-blue-200 text-blue-800",
+  ROE: "bg-blue-200 text-blue-800",
+  ROF: "bg-blue-200 text-blue-800",
+  ROG: "bg-blue-200 text-blue-800",
   MSF: "bg-orange-400 text-amber-900",
   MED: "bg-orange-200 text-amber-800",
 };
 
 // 🔹 خلية الـ Key مع Tooltip
-const CellKey = ({ cell }) => (
-  <td className="px-2 py-0 font-semibold bg-gray-100 text-md min-w-[6ch] text-center">
-    {cell.info ? (
-      <Tooltip text={cell.info}>
+const CellKey = ({ cell }) => {
+  if (!cell.key) {
+    return <></>;
+  }
+  return(
+    <td className="px-2 py-0 font-semibold bg-gray-100 text-center text-md min-w-[6ch]">
+      {cell.info ? (
+        <Tooltip text={cell.info}>
+          <span>{cell.key}</span>
+        </Tooltip>
+      ) : (
         <span>{cell.key}</span>
-      </Tooltip>
-    ) : (
-      <span>{cell.key}</span>
-    )}
-  </td>
-);
+      )}
+    </td>
+  );
+}
 
 // 🔹 خلية الـ Value (بدون أنيميشن)
 const CellValue = ({ value }) => (
   <td className="px-2 py-0 text-center text-sm min-w-[7ch] max-w-[12ch]">
     <div className="font-semibold text-gray-700 py-1">
-      {value ?? "-"}
+      {value === "NAN" || value == null ? "-" : value}
     </div>
   </td>
 );
@@ -80,8 +91,14 @@ const TableDashboard = ({ stationData}) => {
                 return (
                   <React.Fragment key={colIndex}>
                     <CellKey cell={cell} />
-                    <CellValue value={cell.value} />
+
+                    {(Array.isArray(cell.value) ? cell.value : [cell.value]).map(
+                      (v, i) => (
+                        <CellValue key={i} value={v} />
+                      )
+                    )}
                   </React.Fragment>
+
                 );
               })}
             </tr>

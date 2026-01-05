@@ -7,7 +7,7 @@ import { Loader, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import MEDSecondTable from "@/app/(stations)/med/(append)/components/secondTable";
 import MSFSecondTable from "@/app/(stations)/msf/(append)/components/secondTable";
-import ROASecondTable from "@/app/(stations)/roa/(append)/components/secondTable";
+import ROASecondTable from "@/app/(stations)/(RO)/roa/(append)/components/secondTable";
 
 export default function Dashboard() {
   const [dashboards, setDashboards] = useState([]);

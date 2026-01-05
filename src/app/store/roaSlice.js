@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { StationValueData } from "../(stations)/roa/(data)/roData";
+import { StationValueData } from "../(stations)/(RO)/roa/(data)/roaData";
 import { toast } from "react-hot-toast";
 
 // ─── Thunks كما عندك تماماً ─────────────────────────────
 
+// 🧮 تشغيل الحسابات
 // 🧮 تشغيل الحسابات
 export const runCalculationNow = createAsyncThunk(
   "roa/runCalculationNow",
@@ -18,7 +19,28 @@ export const runCalculationNow = createAsyncThunk(
           return cell;
         }
 
-        // ✅ استثناء القيم الفارغة أو "-" أو undefined أو غير رقمية
+        // 🔹 لو القيمة مصفوفة
+        if (Array.isArray(cell.value)) {
+          const newValues = cell.value.map((v) => {
+            if (
+              v === null ||
+              v === undefined ||
+              v === "" ||
+              v === "-" ||
+              isNaN(Number(v))
+            ) {
+              return v;
+            }
+            return Number(v) * 2;
+          });
+
+          return {
+            ...cell,
+            value: newValues,
+          };
+        }
+
+        // 🔹 لو القيمة مفردة
         if (
           cell.value === null ||
           cell.value === undefined ||
@@ -29,7 +51,6 @@ export const runCalculationNow = createAsyncThunk(
           return cell;
         }
 
-        // ✅ فقط القيم الرقمية يتم تحديثها
         return {
           ...cell,
           value: Number(cell.value) * 2,
@@ -212,6 +233,7 @@ const initialState = {
   dashboards: [],
   loadingDashboard:true,
   hasUnsavedChanges: false,
+  activeIndex: 0,
 };
 
 export const roaSlice = createSlice({
@@ -223,6 +245,10 @@ export const roaSlice = createSlice({
     },
     setStationData: (state, action) => {
       state.stationData = action.payload;
+    },
+    //activte index
+    setActiveIndex: (state, action) => {
+      state.activeIndex = action.payload;
     },
 
     resetStation: (state) => {
@@ -238,12 +264,34 @@ export const roaSlice = createSlice({
     },
 
     updateCellValue: (state, action) => {
-      const { cellKey, value } = action.payload;
+      const { cellKey, value, index } = action.payload;
+
       state.stationData = state.stationData.map((row) =>
-        row.map((cell) => (cell.key === cellKey ? { ...cell, value } : cell))
+        row.map((cell) => {
+          if (cell.key !== cellKey) return cell;
+
+          // 🔹 لو value Array
+          if (Array.isArray(cell.value)) {
+            const newValues = [...cell.value];
+            newValues[index] = value;
+
+            return {
+              ...cell,
+              value: newValues,
+            };
+          }
+
+          // 🔹 لو value عادي
+          return {
+            ...cell,
+            value,
+          };
+        })
       );
+
       state.hasUnsavedChanges = true;
     },
+
 
     setHasUnsavedChanges: (state, action) => {
       state.hasUnsavedChanges = action.payload; // ← للتحكم بها يدوياً
@@ -292,6 +340,7 @@ export const {
   setStationData,
   resetStation,
   updateCellValue,
+  setActiveIndex,
   setHasUnsavedChanges
 } = roaSlice.actions;
 
