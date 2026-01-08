@@ -26,7 +26,7 @@ const ROGbaseColumns = [
     { key: "T0", value: [30.0], editable: false, info: "Raw water Temperature T0 [⁰C],about 10 ~ 37" },
     { key: "S0", value: [40.0], editable: false, info: "Raw water salinity S0 [g/l],about 1 ~ 50" },
     { key: "Sd", value: [0.2], editable: false, info: "Product water salinity Sd [g/l],about 0.100 ~ 0.500" },
-    { key: "-", value: [99.5, 0.0], editable: false, info: "" },
+    { key: "-", value: [99.5], editable: false, info: "" },
   ],
   [
     { key: "Md", value: [1000.0], editable: false, info: "Fresh water production Md [t/h],about 1 ~ 9999" },
