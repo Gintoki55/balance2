@@ -7,10 +7,10 @@ import {AnimatedNumber } from "../../(data)/tableData";
 
 
 const editableFieldsByScenario = {
-  Design: ["N", "A", "FF", "J", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md", "WR"],
-  Demand: ["A", "FF", "PV", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md"],
-  Energy: ["A", "FF", "PV", "T0", "l", "w", "x", "Pf", "Pp", "S0", "Sd"],
-  Rating: ["N", "A", "FF", "J", "PV", "T0", "l", "w", "x", "Pf", "Pp", "M0", "S0"],
+  Design: ["Na","Nc", "Ja", "Jc", "FF", "A", "w", "x", "Pf", "Pp", "PV", "k", "l", "M0", "T0", "S0","Sp","Sd", "Md","WR"],
+  Demand: ["Na","Nc", "Ja", "Jc", "FF", "A", "w", "x","Pp", "PV", "l", "T0", "S0","Sp","Sd", "Md"],
+  Energy: ["Na","Nc", "Ja", "Jc", "FF", "A", "w", "x", "Pf", "Pp", "PV", "l", "T0", "S0","Sp","Sd"],
+  Rating: ["Na","Nc", "Ja", "Jc", "FF", "A", "w", "x", "Pf", "Pp", "PV", "k", "l", "M0", "T0", "S0"],
 };
 
 const isEditable = (scenario, key) =>

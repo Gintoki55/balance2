@@ -7,10 +7,10 @@ import {AnimatedNumber } from "../../(data)/tableData";
 
 
 const editableFieldsByScenario = {
-  Design: ["N", "A", "FF", "J", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md", "WR"],
-  Demand: ["A", "FF", "PV", "T0", "l", "w", "x", "Pp", "S0", "Sd", "Md"],
-  Energy: ["A", "FF", "PV", "T0", "l", "w", "x", "Pf", "Pp", "S0", "Sd"],
-  Rating: ["N", "A", "FF", "J", "PV", "T0", "l", "w", "x", "Pf", "Pp", "M0", "S0"],
+  Design: ["Na","Nc", "Ja", "Jc", "Jd","Pp","FF", "A", "w", "x", "Pf", "T0", "S0","Sp","Sd","k", "Md","WR", "l"],
+  Demand: ["Na","Nc", "Ja", "Jc", "Jd","Pp","FF", "A", "w", "x","PVa","PVc","PVd", "Pf", "T0", "S0","Sp","Sd", "Md","l"],
+  Energy: ["Na","Nc", "Ja", "Jc", "Jd","Pp","FF", "A", "w", "x","Pfa","PVa","PVc","PVd", "Pf", "T0", "S0","Sp","Sd","l"],
+  Rating: ["Na","Nc", "Ja", "Jc", "Jd","Pp","FF", "A", "w", "x","Pfa","PVa","PVc","PVd","M0", "T0", "S0","k","l"],
 };
 
 const isEditable = (scenario, key) =>
