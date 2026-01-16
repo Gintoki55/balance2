@@ -61,14 +61,14 @@ export const stationLinksData = {
   ROs: [
     { title: "roa", info: "RO process (contains stage a)", link: "/roa" },
     { title: "rob", info: "RO process (contains stages a; b)", link: "/rob" },
-    { title: "roc", info: "RO process (contains stages a; c)", link: "premium" },
-    { title: "rod", info: "RO process (contains stages a; c; d)", link: "premium" },
-    { title: "roe", info: "RO process (contains stages a; b; c)", link: "premium" },
-    { title: "rof", info: "RO process (contains stages a; b; c; d)", link: "premium" },
+    { title: "roc", info: "RO process (contains stages a; c)", link: "roc" },
+    { title: "rod", info: "RO process (contains stages a; c; d)", link: "rod" },
+    { title: "roe", info: "RO process (contains stages a; b; c)", link: "roe" },
+    { title: "rof", info: "RO process (contains stages a; b; c; d)", link: "rof" },
     {
       title: "rog",
       info: "RO process (contains stages a; b with feed mixing)",
-      link: "premium",
+      link: "rog",
     },
   ],
 };

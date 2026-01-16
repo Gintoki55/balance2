@@ -37,9 +37,16 @@ export default function TechnologySections() {
                     (item) => item.title.toLowerCase() === badge.toLowerCase()
                   )?.info || "No description available";
 
+                  const item =
+                    stationLinksData[section.key]?.find(
+                      (i) => i.title.toLowerCase() === badge.toLowerCase()
+                    );
+
+                  const link = item?.link || section.paidLink;
+
                 return (
                   <Tooltip key={index} text={info}>
-                    <Link href={index === 0 ? section.link : section.paidLink}>
+                    <Link href={link}>
                       <button
                         className="text-gray-900 
                         border-2 border-gray-300
