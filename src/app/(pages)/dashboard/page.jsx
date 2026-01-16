@@ -2,12 +2,15 @@
 import React, { useState, useEffect } from "react";
 import StationHeader from "@/components/stationheader";
 import TableDashboard from "./components/table";
-import SecondTableRows from "./components/secondTable";
+// import SecondTableRows from "./components/secondTable";
 import { Loader, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import MEDSecondTable from "@/app/(stations)/med/(append)/components/secondTable";
 import MSFSecondTable from "@/app/(stations)/msf/(append)/components/secondTable";
-import ROASecondTable from "@/app/(stations)/(RO)/roa/(append)/components/secondTable";
+// import ROASecondTable from "@/app/(stations)/(RO)/roa/(append)/components/secondTable";
+// import ROGSecondTable from "@/app/(stations)/(RO)/rog/(append)/components/secondTable";
+// import ROSecondTable from "@/app/(stations)/(RO)/system/secondTable";
+import ROSecondTable from "@/app/(stations)/(RO)/system/secondTable";
 
 export default function Dashboard() {
   const [dashboards, setDashboards] = useState([]);
@@ -55,7 +58,7 @@ export default function Dashboard() {
       <div className="w-full bg-white border-y border-gray-200 flex items-center gap-8 py-3 px-8 shadow-sm sticky top-[45px] z-30">
         <div className="flex items-center gap-2">
           <span className="w-4 h-4 rounded-sm bg-blue-200 border border-blue-400" />
-          <span className="text-sm font-medium text-blue-800">ROA</span>
+          <span className="text-sm font-medium text-blue-800">RO</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -158,10 +161,9 @@ function DashboardCard({ dashboard }) {
                 </colgroup>
 
                 <tbody>
-                   {stationName === "ROA" && (
-                      <ROASecondTable JValues={dashboard.JValues} />
-                    )}
-
+                  {stationName.startsWith("RO") && (
+                    <ROSecondTable JValues={dashboard.JValues} />
+                  )}
                     {stationName === "MED" && (
                       <MEDSecondTable JValues={dashboard.JValues} />
                     )}
@@ -169,6 +171,10 @@ function DashboardCard({ dashboard }) {
                     {stationName === "MSF" && (
                       <MSFSecondTable JValues={dashboard.JValues} />
                     )}
+
+                    {/* {stationName === "ROG" && (
+                      <ROGSecondTable JValues={dashboard.JValues} />
+                    )} */}
                 </tbody>
               </table>
             </motion.div>

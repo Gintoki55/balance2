@@ -2,27 +2,38 @@ import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roeSlice";
 import TableComponent from "./TableComponent";
 import ROESecondTable from "./secondTable";
+import { useEffect } from "react";
+import { fetchFileData } from "@/app/store/roeSlice";
 
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.roe.stationData);
     const activeIndex = useSelector(state => state.roe.activeIndex);
+    const selectedFile = useSelector((state) => state.roe.selectedFile);
     const handleValueChange = (cellKey, value, index) => {
       dispatch(updateCellValue({ cellKey, value, index }));
     };
 
        // 🔍 استخراج قيمة J من stationData
-      const jaCell = stationData.flat().find((cell) => cell.key === "Ja");
-      const jbCell = stationData.flat().find((cell) => cell.key === "Jb");
-      const jcCell = stationData.flat().find((cell) => cell.key === "Jc");
-      
+      const jaCell = stationData?.flat()?.find((cell) => cell.key === "Ja");
+      const jbCell = stationData?.flat()?.find((cell) => cell.key === "Jb");
+      const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
+    
 
-      const jaValue = jaCell?.value?.[0] ?? 2;
-      const jbValue = jbCell?.value?.[0] ?? 2;
-      const jcValue = jcCell?.value?.[0] ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
 
       const JValues = [jaValue,jbValue, jcValue]
-      console.log("here is the data: ", JValues)
+      console.log("here is the data ROE: ", JValues)
+
+      useEffect(() => {
+            if (!stationData || stationData.length === 0) {
+              dispatch(fetchFileData("New Plant"));
+      
+            }
+          }, []);
+      
 
   return (
     <div className="w-full overflow-x-auto">
@@ -38,6 +49,7 @@ export default function CombinedTables() {
               stationData={stationData}
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
+              selectedFile={selectedFile}
             />
 
             <tr>

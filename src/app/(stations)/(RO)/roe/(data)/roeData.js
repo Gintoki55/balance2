@@ -13,7 +13,7 @@ const ROEbaseColumns = [
     { key: "A", value: [40900, 40900, 37200], editable: false, info: "Element active area in each stage A [m²]" },
     { key: "w", value: [1.018, 1.018, 5.874], editable: false, info: "Water permeability in each stage w [l/m².h.bar]" },
     { key: "x", value: [0.074, 0.074, 0.339], editable: false, info: "Salt permeability in each stage x [g/m².h.(g/l)]" },
-    { key: "-", value: [0, 0, 0], editable: false, info: "" },
+    { key: "-", value: [0, 0, 0], editable: false, info: "",locked: true },
   ],
   [
     { key: "Pfa", value: [74.755], editable: false, info: "Feed pressure to first stage Pfa [bar]" },

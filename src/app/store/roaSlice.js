@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 // ─── Thunks كما عندك تماماً ─────────────────────────────
 
 // 🧮 تشغيل الحسابات
-// 🧮 تشغيل الحسابات
 export const runCalculationNow = createAsyncThunk(
   "roa/runCalculationNow",
   async (_, { getState, dispatch }) => {
@@ -104,6 +103,9 @@ export const saveProject = createAsyncThunk(
 
       if (data.success) {
         dispatch(setSelectedFile(finalFileName)); // ✅ نحدّث الاسم بعد الحفظ
+        if (finalFileName === "New Plant") {
+          dispatch(setStationData(stationData));
+        }
         toast.success(`Saved successfully as ${finalFileName}`);
         return finalFileName;
       } else {
@@ -187,14 +189,13 @@ export const saveDashboard = createAsyncThunk(
       const dashboardName = selectedDashboard; // المستخدم اختاره مباشرة (D1 إلى D20)
 
      
-      // 🔹 ابحث عن الخلايا الخاصة بـ Jb و Jc
-      const jCell = stationData.flat().find((cell) => cell.key === "J");
+    const jCell = stationData?.flat()?.find((cell) => cell.key === "J");
 
-      // 🔹 تأكد أن القيم موجودة، وإذا لا موجودة عيّنها كـ null لتفادي الأخطاء
-      const JValues = [
-        jCell ? jCell.value : null,
-      ];
-
+const JValues = jCell
+  ? Array.isArray(jCell.value)
+    ? jCell.value
+    : [jCell.value]
+  : [1];
       // 🔹 إرسال البيانات إلى الـ API
       const saveRes = await fetch("/api/dashboard", {
         method: "POST",
@@ -226,7 +227,7 @@ export const saveDashboard = createAsyncThunk(
 
 const initialState = {
   selectedFile: "",
-  stationData: StationValueData,
+  stationData: null,
   savedFiles: [],
   loadingFiles: false,
   error: null,
@@ -234,6 +235,7 @@ const initialState = {
   loadingDashboard:true,
   hasUnsavedChanges: false,
   activeIndex: 0,
+  editAll: false,
 };
 
 export const roaSlice = createSlice({
@@ -250,6 +252,9 @@ export const roaSlice = createSlice({
     setActiveIndex: (state, action) => {
       state.activeIndex = action.payload;
     },
+     setEditAll: (state, action) => {
+      state.editAll = action.payload; // true or false
+    },
 
     resetStation: (state) => {
       state.selectedFile = "New Plant";
@@ -263,34 +268,34 @@ export const roaSlice = createSlice({
       state.hasUnsavedChanges = false;
     },
 
-    updateCellValue: (state, action) => {
-      const { cellKey, value, index } = action.payload;
+updateCellValue: (state, action) => {
+  const { cellKey, value, index } = action.payload;
 
-      state.stationData = state.stationData.map((row) =>
-        row.map((cell) => {
-          if (cell.key !== cellKey) return cell;
+  state.stationData = state.stationData.map((row) =>
+    row.map((cell) => {
+      if (cell.key !== cellKey) return { ...cell };
 
-          // 🔹 لو value Array
-          if (Array.isArray(cell.value)) {
-            const newValues = [...cell.value];
-            newValues[index] = value;
+      // Array
+      if (Array.isArray(cell.value)) {
+        const newValues = [...cell.value];
+        newValues[index] = value;
 
-            return {
-              ...cell,
-              value: newValues,
-            };
-          }
+        return {
+          ...cell,
+          value: newValues,
+        };
+      }
 
-          // 🔹 لو value عادي
-          return {
-            ...cell,
-            value,
-          };
-        })
-      );
+      // Single value
+      return {
+        ...cell,
+        value,
+      };
+    })
+  );
 
-      state.hasUnsavedChanges = true;
-    },
+  state.hasUnsavedChanges = true;
+},
 
 
     setHasUnsavedChanges: (state, action) => {
@@ -313,11 +318,12 @@ export const roaSlice = createSlice({
       })
 
 
-      .addCase(saveProject.fulfilled, (state, action) => {
-        if (!state.savedFiles.includes(action.payload)) {
-          state.savedFiles.push(action.payload);
-        }    
-      })
+     .addCase(saveProject.fulfilled, (state, action) => {
+                              const fileName = action.payload;
+                              if (fileName !== "New Plant" && !state.savedFiles.includes(fileName)) {
+                                state.savedFiles.push(fileName);
+                              }    
+                            })
 
 
       .addCase(fetchDashboards.pending, (state) => {
@@ -341,6 +347,7 @@ export const {
   resetStation,
   updateCellValue,
   setActiveIndex,
+  setEditAll,
   setHasUnsavedChanges
 } = roaSlice.actions;
 

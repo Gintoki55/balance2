@@ -9,6 +9,7 @@ import {
   saveProject,
   fetchDashboards,
   saveDashboard,
+  setEditAll,
   setHasUnsavedChanges
 } from "../../../../../store/roaSlice";
 import { runData, projectObject } from "@/data/allData";
@@ -16,6 +17,7 @@ import { Play, Loader } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useAnimate } from "../../(data)/animationContext";
+import { setStationData } from "@/app/store/roaSlice";
 export default function TopOptions({ station }) {
   const dispatch = useDispatch();
   const {
@@ -34,7 +36,7 @@ export default function TopOptions({ station }) {
 
   const [selectedExport, setSelectedExport] = useState("select");
   const [selectedAdmin, setSelectedAdmin] = useState("select");
-
+  const [selectedMenuOption, setSelectedMenuOption] = useState("select");
   const { triggerAnimation } = useAnimate();
 
 
@@ -48,31 +50,29 @@ export default function TopOptions({ station }) {
   dispatch(fetchDashboards());
 }, [dispatch]);
 
-  // جلب بيانات الملف عند تغييره
-      useEffect(() => {
-        if (
-          selectedFile &&
-          selectedFile !== "New Plant" &&
-          selectedFile !== "select" &&
-          !hasUnsavedChanges 
-        ) {
-          dispatch(fetchFileData(selectedFile));
-        }
-      }, [selectedFile, dispatch, hasUnsavedChanges])
-
-const sortedFiles = [...savedFiles].sort((a, b) => {
-  // ترتيب Project 1 → Project 5 أولاً
-  const projectOrder = ["Project 1", "Project 2", "Project 3", "Project 4", "Project 5"];
-
-  const indexA = projectOrder.indexOf(a);
-  const indexB = projectOrder.indexOf(b);
-
-  if (indexA !== -1 && indexB !== -1) return indexA - indexB; // كلاهما في المشروع
-  if (indexA !== -1) return -1; // a في Project list وb لا → a أول
-  if (indexB !== -1) return 1;  // b في Project list وa لا → b بعد
-  return a.localeCompare(b); // غير ذلك → ترتيب أبجدي
-});
-
+ // جلب بيانات الملف عند تغييره
+       useEffect(() => {
+         if (
+           selectedFile && selectedFile !== "select" && selectedFile !== "edit" && !hasUnsavedChanges 
+         ) {
+           dispatch(setStationData([]));
+           dispatch(fetchFileData(selectedFile));
+         }
+       }, [selectedFile, hasUnsavedChanges])
+ 
+ const sortedFiles = [...savedFiles]
+   .filter(f => f !== "New Plant") // تجاهل New Plant من الملفات المحفوظة
+   .sort((a, b) => {
+     const projectOrder = ["Project 1", "Project 2", "Project 3", "Project 4", "Project 5"];
+     const indexA = projectOrder.indexOf(a);
+     const indexB = projectOrder.indexOf(b);
+ 
+     if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+     if (indexA !== -1) return -1;
+     if (indexB !== -1) return 1;
+     return a.localeCompare(b);
+   });
+ 
 
   return (
     <div className="bg-white p-4 relative flex flex-col gap-2">
@@ -83,33 +83,43 @@ const sortedFiles = [...savedFiles].sort((a, b) => {
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 font-medium">{station} Files</span>
           <select
-            value={selectedFile}
+            value={selectedMenuOption}
             onChange={(e) => {
-                          const val = e.target.value;
-                          // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
-                          if (hasUnsavedChanges) {
-                            const confirmLeave = window.confirm(
-                              "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
-                            );
-                            if (!confirmLeave) {
-                              return; // ❌ المستخدم رفض — لا تغيّر الملف
-                            }
-                          }
-                           // ✅ إذا اختار New Plant
-                          if (val === "New Plant") {
-                            dispatch(resetStation());
-                            dispatch(setSelectedFile("New Plant"));
-                          }
-                            // ✅ أي ملف آخر
-                          else {
-                            dispatch(setSelectedFile(val));
-                            dispatch(setHasUnsavedChanges(false));
-                          }
-                        }}
+                                                              const val = e.target.value;
+                                                              setSelectedMenuOption(val)
+                                                              // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
+                                                              if (hasUnsavedChanges) {
+                                                                const confirmLeave = window.confirm(
+                                                                  "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
+                                                                );
+                                                                if (!confirmLeave) {
+                                                                  return; // ❌ المستخدم رفض — لا تغيّر الملف
+                                                                }
+                                                              }
+                                                               // ✅ إذا اختار New Plant
+                                                              if (val === "New Plant") {
+                                                                // dispatch(resetStation());
+                                                                dispatch(setSelectedFile("New Plant"));
+                                                                dispatch(setEditAll(false));
+                                                                // dispatch(setHasUnsavedChanges(false));
+                                                              }
+                                                              else if (val === "edit") {
+                                                                // dispatch(setSelectedFile("edit"));
+                                                                // dispatch(setHasUnsavedChanges(false));
+                                                                dispatch(setEditAll(true))
+                                                              }
+                                                                // ✅ أي ملف آخر
+                                                              else {
+                                                                dispatch(setSelectedFile(val));
+                                                                // dispatch(setHasUnsavedChanges(false));
+                                                                dispatch(setEditAll(false));
+                                                              }
+                                                            }}
             className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
           >
             <option value="select">open</option>
             <option value="New Plant">New Plant</option>
+            <option value="edit">Edit Table</option>
             {loadingFiles && <option disabled>Loading...</option>}
             {!loadingFiles &&
               sortedFiles.map((f) => (
@@ -184,6 +194,7 @@ const sortedFiles = [...savedFiles].sort((a, b) => {
               className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-blue-50 transition w-full sm:w-auto"
             >
               <option value="select">Select</option>
+              <option value="New Plant">New Plant</option>
 
               {/* ✅ عرض المشاريع project 1 → project 5 */}
               {projectObject

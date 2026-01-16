@@ -4,7 +4,7 @@ import React from "react";
 import Tooltip from "@/components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {AnimatedNumber } from "../../(data)/tableData";
-
+import { useSelector } from "react-redux";
 
 const editableFieldsByScenario = {
   Design: ["Na","Nc", "Ja", "Jc", "FF", "A", "w", "x", "Pf", "Pp", "PV", "k", "l", "M0", "T0", "S0","Sp","Sd", "Md","WR"],
@@ -56,7 +56,7 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
      return (
        <div className="relative w-full text-center">
          <select
-           value={value ?? 2}
+           value={cell.value ?? 2}
            onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
            className="inline-block w-auto px-2 py-1 pr-8 outline-none appearance-none cursor-pointer text-green-600"
          >
@@ -131,13 +131,40 @@ const CellKey = ({ cell }) => {
 // =============================
 // 🔥 الجدول الرئيسي بالكامل
 // =============================
-const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
+const TableComponent = ({ stationData, onValueChange ,activeIndex, selectedFile}) => {
 
-  // عدد صفوف الجدول
-  const maxRows = Math.max(...stationData.map((col) => col.length));
+
+  const editAll = useSelector((state) => state.roc.editAll);
+      
+         // دالة تحدد هل الخلية قابلة للتعديل
+          const isCellEditableFinal = (cell) => {
+            // 🔒 إذا الخلية مقفلة لا تعدلها أبدًا
+            if (cell.locked) return false;
+      
+            // ❌ إذا مفتاح الخلية فاضي لا تعدلها
+            if (!cell.key || cell.key.trim() === "") return false;
+      
+            // ❌ إذا هي خلية dash "-"
+            if (cell.key === "-") return false;
+      
+            // 🟢 وضع تحرير كامل editAll
+            if (editAll) return true;
+      
+            // 🟢 وضع تعديل خاص
+            if (selectedFile === "edit") return true;
+      
+            // 🟢 حسب السيناريو
+            return isEditable(scenario, cell.key);
+        };
+
+   // عدد صفوف الجدول
+const maxRows = stationData && stationData.length > 0
+  ? Math.max(...stationData.map((col) => col.length))
+  : 0;
+
 
   // قراءة سيناريو ROA الحالي
-  const scenarioCell = stationData.flat().find((c) => c.key === "ROC");
+  const scenarioCell = stationData?.flat()?.find((c) => c.key === "ROC");
   const scenario = scenarioCell?.value;
 
   return (
@@ -161,8 +188,6 @@ const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
               );
             }
 
-            const editable = isEditable(scenario, cell.key);
-
             return (
               <React.Fragment key={colIndex}>
               <CellKey cell={cell} />
@@ -174,12 +199,13 @@ const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
                     >
                       <CellContent
                         cell={cell}
-                        editable={editable}
+                        // editable={editable}
                         // onValueChange={onValueChange}
                         activeIndex={activeIndex}
                         onValueChange={(key, value) =>
                           onValueChange(key, value, activeIndex)
                         }
+                        editable={isCellEditableFinal(cell)}
                       />
                     </td>
                   ))}

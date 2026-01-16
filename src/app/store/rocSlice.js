@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 // ─── Thunks كما عندك تماماً ─────────────────────────────
 
 // 🧮 تشغيل الحسابات
-// 🧮 تشغيل الحسابات
 export const runCalculationNow = createAsyncThunk(
   "roc/runCalculationNow",
   async (_, { getState, dispatch }) => {
@@ -104,6 +103,9 @@ export const saveProject = createAsyncThunk(
 
       if (data.success) {
         dispatch(setSelectedFile(finalFileName)); // ✅ نحدّث الاسم بعد الحفظ
+        if (finalFileName === "New Plant") {
+          dispatch(setStationData(stationData));
+        }
         toast.success(`Saved successfully as ${finalFileName}`);
         return finalFileName;
       } else {
@@ -192,11 +194,11 @@ export const saveDashboard = createAsyncThunk(
 
      
       // 🔍 استخراج قيمة J من stationData
-      const jaCell = stationData.flat().find((cell) => cell.key === "Ja");
-      const jcCell = stationData.flat().find((cell) => cell.key === "Jc");
-
-      const jaValue = jaCell ? jaCell.value : 2;
-      const jcValue = jcCell ? jcCell.value : 2;
+      const jaCell = stationData?.flat()?.find((cell) => cell.key === "Ja");
+      const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
+          
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
 
       const JValues = [jaValue,jcValue]
 
@@ -231,7 +233,7 @@ export const saveDashboard = createAsyncThunk(
 
 const initialState = {
   selectedFile: "",
-  stationData: StationValueData,
+  stationData: null,
   savedFiles: [],
   loadingFiles: false,
   error: null,
@@ -239,6 +241,7 @@ const initialState = {
   loadingDashboard:true,
   hasUnsavedChanges: false,
   activeIndex: 0,
+  editAll: false,
 };
 
 export const rocSlice = createSlice({
@@ -255,6 +258,9 @@ export const rocSlice = createSlice({
     setActiveIndex: (state, action) => {
       state.activeIndex = action.payload;
     },
+    setEditAll: (state, action) => {
+      state.editAll = action.payload; // true or false
+    },
 
     resetStation: (state) => {
       state.selectedFile = "New Plant";
@@ -270,34 +276,34 @@ export const rocSlice = createSlice({
       state.hasUnsavedChanges = false;
     },
 
-    updateCellValue: (state, action) => {
-      const { cellKey, value, index } = action.payload;
+updateCellValue: (state, action) => {
+  const { cellKey, value, index } = action.payload;
 
-      state.stationData = state.stationData.map((row) =>
-        row.map((cell) => {
-          if (cell.key !== cellKey) return cell;
+  state.stationData = state.stationData.map((row) =>
+    row.map((cell) => {
+      if (cell.key !== cellKey) return { ...cell };
 
-          // 🔹 لو value Array
-          if (Array.isArray(cell.value)) {
-            const newValues = [...cell.value];
-            newValues[index] = value;
+      // Array
+      if (Array.isArray(cell.value)) {
+        const newValues = [...cell.value];
+        newValues[index] = value;
 
-            return {
-              ...cell,
-              value: newValues,
-            };
-          }
+        return {
+          ...cell,
+          value: newValues,
+        };
+      }
 
-          // 🔹 لو value عادي
-          return {
-            ...cell,
-            value,
-          };
-        })
-      );
+      // Single value
+      return {
+        ...cell,
+        value,
+      };
+    })
+  );
 
-      state.hasUnsavedChanges = true;
-    },
+  state.hasUnsavedChanges = true;
+},
 
 
     setHasUnsavedChanges: (state, action) => {
@@ -320,11 +326,12 @@ export const rocSlice = createSlice({
       })
 
 
-      .addCase(saveProject.fulfilled, (state, action) => {
-        if (!state.savedFiles.includes(action.payload)) {
-          state.savedFiles.push(action.payload);
-        }    
-      })
+       .addCase(saveProject.fulfilled, (state, action) => {
+                         const fileName = action.payload;
+                         if (fileName !== "New Plant" && !state.savedFiles.includes(fileName)) {
+                           state.savedFiles.push(fileName);
+                         }    
+                       })
 
 
       .addCase(fetchDashboards.pending, (state) => {
@@ -348,6 +355,7 @@ export const {
   resetStation,
   updateCellValue,
   setActiveIndex,
+  setEditAll,
   setHasUnsavedChanges
 } = rocSlice.actions;
 

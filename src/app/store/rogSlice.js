@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 // ─── Thunks كما عندك تماماً ─────────────────────────────
 
 // 🧮 تشغيل الحسابات
-// 🧮 تشغيل الحسابات
 export const runCalculationNow = createAsyncThunk(
   "rog/runCalculationNow",
   async (_, { getState, dispatch }) => {
@@ -103,7 +102,12 @@ export const saveProject = createAsyncThunk(
       const data = await res.json();
 
       if (data.success) {
+
         dispatch(setSelectedFile(finalFileName)); // ✅ نحدّث الاسم بعد الحفظ
+
+        if (finalFileName === "New Plant") {
+          dispatch(setStationData(stationData));
+        }
         toast.success(`Saved successfully as ${finalFileName}`);
         return finalFileName;
       } else {
@@ -121,45 +125,27 @@ export const saveProject = createAsyncThunk(
 // 📂 تحميل بيانات ملف محدد
 export const fetchFileData = createAsyncThunk(
   "rog/fetchFileData",
-  async (fileName, { dispatch, rejectWithValue }) => {
+  async (fileName, { dispatch }) => {
     try {
       const res = await fetch("/api/rogData");
       const data = await res.json();
 
+      // dispatch(setStationData(null));
+
       if (data.success) {
         const fileData = data.files.find((f) => f.file === fileName);
-        if (fileData) {
 
-          // إذا في stationData محفوظ نرجعه كما هو
-          if (fileData.data.stationData) {
-            dispatch(setStationData(fileData.data.stationData));
-          } else {
-            // إذا ما في بيانات محفوظة نرجع الافتراضي
-            const updatedData = StationValueData.map((row) =>
-              row.map((cell) => {
-                if (cell.key === "N") return { ...cell, value: 1 };
-                if (cell.key === "Ja") return { ...cell, value: 2 };
-                if (cell.key === "Jb") return { ...cell, value: 2 };
-                return cell;
-              })
-            );
-            dispatch(setStationData(updatedData));
-          }
-        } else {
-
-          const resetData = StationValueData.map((row) =>
-            row.map((cell) => {
-               if (cell.key === "N") return { ...cell, value: 1 };
-               if (cell.key === "Ja") return { ...cell, value: 2 };
-               if (cell.key === "Jb") return { ...cell, value: 2 };
-              return cell;
-            })
-          );
-          dispatch(setStationData(resetData));
+        if (fileData && fileData.data.stationData) {
+          // 👍 موجود في الداتا
+          dispatch(setStationData(fileData.data.stationData));
+          return;
         }
+
+        // ❗ لا يوجد في الداتا → نستخدم الافتراضي (مره واحدة فقط)
+        dispatch(setStationData(StationValueData));
       }
     } catch (err) {
-      return console.log(err.message);
+      dispatch(setStationData(StationValueData));
     }
   }
 );
@@ -189,12 +175,12 @@ export const saveDashboard = createAsyncThunk(
       const dashboardName = selectedDashboard; // المستخدم اختاره مباشرة (D1 إلى D20)
 
      
-      // 🔍 استخراج قيمة J من stationData
-      const jaCell = stationData.flat().find((cell) => cell.key === "Ja");
-      const jbCell = stationData.flat().find((cell) => cell.key === "Jb");
+      const jaCell = stationData?.flat()?.find((cell) => cell.key === "Ja");
+      const jbCell = stationData?.flat()?.find((cell) => cell.key === "Jb");
+      
 
-      const jaValue = jaCell ? jaCell.value : 2;
-      const jbValue = jbCell ? jbCell.value : 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
 
       const JValues = [jaValue,jbValue]
 
@@ -229,7 +215,7 @@ export const saveDashboard = createAsyncThunk(
 
 const initialState = {
   selectedFile: "",
-  stationData: StationValueData,
+  stationData: null,
   savedFiles: [],
   loadingFiles: false,
   error: null,
@@ -237,6 +223,7 @@ const initialState = {
   loadingDashboard:true,
   hasUnsavedChanges: false,
   activeIndex: 0,
+  editAll: false,
 };
 
 export const rogSlice = createSlice({
@@ -253,6 +240,9 @@ export const rogSlice = createSlice({
     setActiveIndex: (state, action) => {
       state.activeIndex = action.payload;
     },
+    setEditAll: (state, action) => {
+      state.editAll = action.payload; // true or false
+    },
 
     resetStation: (state) => {
       state.selectedFile = "New Plant";
@@ -267,34 +257,34 @@ export const rogSlice = createSlice({
       state.hasUnsavedChanges = false;
     },
 
-    updateCellValue: (state, action) => {
-      const { cellKey, value, index } = action.payload;
+updateCellValue: (state, action) => {
+  const { cellKey, value, index } = action.payload;
 
-      state.stationData = state.stationData.map((row) =>
-        row.map((cell) => {
-          if (cell.key !== cellKey) return cell;
+  state.stationData = state.stationData.map((row) =>
+    row.map((cell) => {
+      if (cell.key !== cellKey) return { ...cell };
 
-          // 🔹 لو value Array
-          if (Array.isArray(cell.value)) {
-            const newValues = [...cell.value];
-            newValues[index] = value;
+      // Array
+      if (Array.isArray(cell.value)) {
+        const newValues = [...cell.value];
+        newValues[index] = value;
 
-            return {
-              ...cell,
-              value: newValues,
-            };
-          }
+        return {
+          ...cell,
+          value: newValues,
+        };
+      }
 
-          // 🔹 لو value عادي
-          return {
-            ...cell,
-            value,
-          };
-        })
-      );
+      // Single value
+      return {
+        ...cell,
+        value,
+      };
+    })
+  );
 
-      state.hasUnsavedChanges = true;
-    },
+  state.hasUnsavedChanges = true;
+},
 
 
     setHasUnsavedChanges: (state, action) => {
@@ -318,8 +308,9 @@ export const rogSlice = createSlice({
 
 
       .addCase(saveProject.fulfilled, (state, action) => {
-        if (!state.savedFiles.includes(action.payload)) {
-          state.savedFiles.push(action.payload);
+        const fileName = action.payload;
+        if (fileName !== "New Plant" && !state.savedFiles.includes(fileName)) {
+          state.savedFiles.push(fileName);
         }    
       })
 
@@ -345,6 +336,7 @@ export const {
   resetStation,
   updateCellValue,
   setActiveIndex,
+  setEditAll,
   setHasUnsavedChanges
 } = rogSlice.actions;
 

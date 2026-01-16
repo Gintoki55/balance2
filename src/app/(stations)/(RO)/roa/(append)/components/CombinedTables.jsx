@@ -2,16 +2,18 @@ import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roaSlice";
 import TableComponent from "./TableComponent";
 import ROASecondTable from "./secondTable";
-
+import { useEffect } from "react";
+import { fetchFileData } from "@/app/store/roaSlice";
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.roa.stationData);
     const activeIndex = useSelector(state => state.roa.activeIndex);
+     const selectedFile = useSelector((state) => state.roa.selectedFile);
     const handleValueChange = (cellKey, value, index) => {
       dispatch(updateCellValue({ cellKey, value, index }));
     };
 
-const jCell = stationData.flat().find((cell) => cell.key === "J");
+const jCell = stationData?.flat()?.find((cell) => cell.key === "J");
 
 const JValues = jCell
   ? Array.isArray(jCell.value)
@@ -19,6 +21,12 @@ const JValues = jCell
     : [jCell.value]
   : [1];
   console.log("here is the data 2: ", JValues)
+
+   useEffect(() => {
+      if (!stationData || stationData.length === 0) {
+        dispatch(fetchFileData("New Plant"));
+       }
+      }, []);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -34,6 +42,7 @@ const JValues = jCell
               stationData={stationData}
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
+              selectedFile={selectedFile}
             />
 
             <tr>

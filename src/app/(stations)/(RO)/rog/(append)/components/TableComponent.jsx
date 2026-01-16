@@ -4,7 +4,7 @@ import React from "react";
 import Tooltip from "@/components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {AnimatedNumber } from "../../(data)/tableData";
-
+import { useSelector } from "react-redux";
 
 const editableFieldsByScenario = {
   Design: ["N","Ja", "Jb","l","FF", "A", "w","x","Pp","T0","S0","Sd","Md","WR"],
@@ -48,8 +48,8 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
   const value = cell.value?.[activeIndex];
 
   // 🔸 قوائم ثابتة لـ N و J
- if (["Ja", "Jb", "Jc", "Jd", "Na", "Nc"].includes(cell.key)) {
-    const isN = ["Na", "Nc"].includes(cell.key);
+ if (["Ja", "Jb", "N"].includes(cell.key)) {
+    const isN = ["N"].includes(cell.key);
 
     const min = isN ? 1 : 2;
     const max = isN ? 20 : 9;
@@ -132,13 +132,26 @@ const CellKey = ({ cell }) => {
 // =============================
 // 🔥 الجدول الرئيسي بالكامل
 // =============================
-const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
+const TableComponent = ({ stationData, onValueChange ,activeIndex, selectedFile}) => {
+
+  const editAll = useSelector((state) => state.rog.editAll);
+
+   // دالة تحدد هل الخلية قابلة للتعديل
+  const isCellEditableFinal = (cell) => {
+    if (cell.key === "-") return false; 
+    if (selectedFile === "edit") return true;
+    if (editAll) return true;
+    return isEditable(scenario, cell.key);
+  };
 
   // عدد صفوف الجدول
-  const maxRows = Math.max(...stationData.map((col) => col.length));
+const maxRows = stationData && stationData.length > 0
+  ? Math.max(...stationData.map((col) => col.length))
+  : 0;
+
 
   // قراءة سيناريو ROA الحالي
-  const scenarioCell = stationData.flat().find((c) => c.key === "ROG");
+  const scenarioCell = stationData?.flat()?.find((c) => c.key === "ROG");
   const scenario = scenarioCell?.value;
 
   return (
@@ -162,8 +175,6 @@ const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
               );
             }
 
-            const editable = isEditable(scenario, cell.key);
-
             return (
               <React.Fragment key={colIndex}>
               <CellKey cell={cell} />
@@ -175,12 +186,13 @@ const TableComponent = ({ stationData, onValueChange ,activeIndex}) => {
                     >
                       <CellContent
                         cell={cell}
-                        editable={editable}
+                        // editable={editable}
                         // onValueChange={onValueChange}
                         activeIndex={activeIndex}
                         onValueChange={(key, value) =>
                           onValueChange(key, value, activeIndex)
                         }
+                        editable={isCellEditableFinal(cell)}
                       />
                     </td>
                   ))}

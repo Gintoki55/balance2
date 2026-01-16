@@ -2,25 +2,41 @@ import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rogSlice";
 import TableComponent from "./TableComponent";
 import ROGSecondTable from "./secondTable";
+import { useEffect } from "react";
+import { fetchFileData } from "@/app/store/rogSlice";
+
 
 export default function CombinedTables() {
+   
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.rog.stationData);
     const activeIndex = useSelector(state => state.rog.activeIndex);
+    const selectedFile = useSelector((state) => state.rog);
+    
     const handleValueChange = (cellKey, value, index) => {
       dispatch(updateCellValue({ cellKey, value, index }));
     };
 
        // 🔍 استخراج قيمة J من stationData
-      const jaCell = stationData.flat().find((cell) => cell.key === "Ja");
-      const jbCell = stationData.flat().find((cell) => cell.key === "Jb");
+      const jaCell = stationData?.flat()?.find((cell) => cell.key === "Ja");
+      const jbCell = stationData?.flat()?.find((cell) => cell.key === "Jb");
       
 
-      const jaValue = jaCell?.value?.[0] ?? 2;
-      const jbValue = jbCell?.value?.[0] ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
 
       const JValues = [jaValue,jbValue]
-      console.log("here is the data: ", JValues)
+      console.log("here is the data ROG: ", JValues)
+
+    useEffect(() => {
+      if (!stationData || stationData.length === 0) {
+        dispatch(fetchFileData("New Plant"));
+
+      }
+    }, []);
+
+
+    
 
   return (
     <div className="w-full overflow-x-auto">
@@ -36,6 +52,7 @@ export default function CombinedTables() {
               stationData={stationData}
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
+              selectedFile={selectedFile}
             />
 
             <tr>

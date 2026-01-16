@@ -11,7 +11,7 @@ const ROCbaseColumns = [
     { key: "A", value: [37100, 37200], editable: false, info: "Element active area in each stage A [m²]" },
     { key: "w", value: [1.01, 5.874], editable: false, info: "Water permability in each stage w [l/m².h.bar]" },
     { key: "x", value: [0.073, 0.339], editable: false, info: "Salt permability in each stage  x [g/m².h.(g/l)]" },
-    { key: "-", value: [0, 0], editable: false, info: "" },
+    { key: "-", value: [0, 0], editable: false, info: "",locked: true},
   ],
   [
     { key: "Pf", value: [263.121, 1000], editable: false, info: "Feed water pressure to each stage Pf [bar]" },
