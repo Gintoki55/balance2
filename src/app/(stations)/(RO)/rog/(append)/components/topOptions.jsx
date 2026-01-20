@@ -10,7 +10,7 @@ import {
   fetchDashboards,
   saveDashboard,
   setEditAll,
-  setHasUnsavedChanges
+  setHasUnsavedChanges,
 } from "../../../../../store/rogSlice";
 import { runData, projectObject } from "@/data/allData";
 import { Play, Loader } from "lucide-react";
@@ -28,9 +28,9 @@ export default function TopOptions({ station }) {
     isRunning,
     hasUnsavedChanges,
     loadingDashboard,
-    dashboards
+    dashboards,
   } = useSelector((state) => state.rog);
- const [selectedRun, setSelectedRun] = useState("");
+  const [selectedRun, setSelectedRun] = useState("");
   const [selectedProject, setSelectedProject] = useState("select");
   const [selectedDashboard, setSelectedDashboard] = useState("select");
 
@@ -43,42 +43,47 @@ export default function TopOptions({ station }) {
 
   // const editAll = useSelector((state) => state.rog.editAll);
 
-
-
   // جلب الملفات
   useEffect(() => {
     dispatch(fetchSavedFiles());
   }, [dispatch]);
-  
+
   // جلب داشبورد
   useEffect(() => {
-  dispatch(fetchDashboards());
-}, [dispatch]);
+    dispatch(fetchDashboards());
+  }, [dispatch]);
 
   // جلب بيانات الملف عند تغييره
-      useEffect(() => {
-        if (
-          selectedFile && selectedFile !== "select" && selectedFile !== "edit" && !hasUnsavedChanges
-        ) {
-          dispatch(setStationData([]));
-          dispatch(fetchFileData(selectedFile));
-        }
-      }, [selectedFile, hasUnsavedChanges])
+  useEffect(() => {
+    if (
+      selectedFile &&
+      selectedFile !== "select" &&
+      selectedFile !== "edit" &&
+      !hasUnsavedChanges
+    ) {
+      dispatch(setStationData([]));
+      dispatch(fetchFileData(selectedFile));
+    }
+  }, [selectedFile, hasUnsavedChanges]);
 
-const sortedFiles = [...savedFiles]
-  .filter(f => f !== "New Plant") // تجاهل New Plant من الملفات المحفوظة
-  .sort((a, b) => {
-    const projectOrder = ["Project 1", "Project 2", "Project 3", "Project 4", "Project 5"];
-    const indexA = projectOrder.indexOf(a);
-    const indexB = projectOrder.indexOf(b);
+  const sortedFiles = [...savedFiles]
+    .filter((f) => f !== "New Plant") // تجاهل New Plant من الملفات المحفوظة
+    .sort((a, b) => {
+      const projectOrder = [
+        "Project 1",
+        "Project 2",
+        "Project 3",
+        "Project 4",
+        "Project 5",
+      ];
+      const indexA = projectOrder.indexOf(a);
+      const indexB = projectOrder.indexOf(b);
 
-    if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-    if (indexA !== -1) return -1;
-    if (indexB !== -1) return 1;
-    return a.localeCompare(b);
-  });
-
-
+      if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+      return a.localeCompare(b);
+    });
 
   return (
     <div className="bg-white p-4 relative flex flex-col gap-2">
@@ -87,41 +92,36 @@ const sortedFiles = [...savedFiles]
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-around gap-4 sm:gap-6 w-full overflow-x-auto">
         {/* File */}
         <div className="flex flex-col w-full sm:w-auto">
-          <span className="text-gray-700 mb-1 font-medium">{station} Files</span>
+          <span className="text-gray-700 mb-1 font-medium">
+            {station} Files
+          </span>
           <select
             value={selectedMenuOption}
             onChange={(e) => {
-                          const val = e.target.value;
-                          setSelectedMenuOption(val);
-                          // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
-                          if (hasUnsavedChanges) {
-                            const confirmLeave = window.confirm(
-                              "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
-                            );
-                            if (!confirmLeave) {
-                              return; // ❌ المستخدم رفض — لا تغيّر الملف
-                            }
-                          }
-                           // ✅ إذا اختار New Plant
-                          if (val === "New Plant") {
-                            // dispatch(resetStation());
-                            dispatch(setSelectedFile("New Plant"));
-                            dispatch(setEditAll(false));
-                            // dispatch(setHasUnsavedChanges(false)); 
-                            
-                          }
-                          else if (val === "edit") {
-                            // dispatch(setSelectedFile("edit"));
-                            // dispatch(setHasUnsavedChanges(false)); 
-                            dispatch(setEditAll(true))
-                          }
-                            // ✅ أي ملف آخر
-                          else {
-                            dispatch(setSelectedFile(val));
-                            // dispatch(setHasUnsavedChanges(false));
-                            dispatch(setEditAll(false));
-                          }
-                        }}
+              const val = e.target.value;
+              setSelectedMenuOption(val);
+              // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
+              if (hasUnsavedChanges) {
+                const confirmLeave = window.confirm(
+                  "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
+                );
+                if (!confirmLeave) {
+                  return; // ❌ المستخدم رفض — لا تغيّر الملف
+                }
+              }
+              // ✅ إذا اختار New Plant
+              if (val === "New Plant") {
+                dispatch(setSelectedFile("New Plant"));
+                dispatch(setEditAll(false));
+              } else if (val === "edit") {
+                dispatch(setEditAll(true));
+              }
+              // ✅ أي ملف آخر
+              else {
+                dispatch(setSelectedFile(val));
+                dispatch(setEditAll(false));
+              }
+            }}
             className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
           >
             <option value="select">open</option>
@@ -133,10 +133,9 @@ const sortedFiles = [...savedFiles]
                 <option key={f} value={f}>
                   {f}
                 </option>
-            ))}
+              ))}
           </select>
         </div>
-
 
         {/* Runs */}
         <div className="flex flex-col w-full sm:w-auto">
@@ -174,8 +173,7 @@ const sortedFiles = [...savedFiles]
           </div>
         </div>
 
-
-            {/* Save files */}
+        {/* Save files */}
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
             Save to Files
@@ -201,7 +199,7 @@ const sortedFiles = [...savedFiles]
               className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-blue-50 transition w-full sm:w-auto"
             >
               <option value="select">Select</option>
-               <option value="New Plant">New Plant</option>
+              <option value="New Plant">New Plant</option>
 
               {/* ✅ عرض المشاريع project 1 → project 5 */}
               {projectObject
@@ -227,38 +225,40 @@ const sortedFiles = [...savedFiles]
           </div>
         </div>
 
-      {/* ✅ Dashboard Section */}
-      <div className="flex flex-col w-full sm:w-auto">
-        <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
-          Save to
-        </span>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <select
-            value={selectedDashboard}
-            onChange={(e) => {
-              const val = e.target.value;
-              setSelectedDashboard(val);
+        {/* ✅ Dashboard Section */}
+        <div className="flex flex-col w-full sm:w-auto">
+          <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
+            Save to
+          </span>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <select
+              value={selectedDashboard}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedDashboard(val);
 
-              if (val !== "select") {
-                // ✅ حفظ تلقائي عند الاختيار
-                dispatch(saveDashboard({ selectedDashboard: val, stationData }));
-              }
-            }}
-            className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
-          >
-            <option value="select">Dashboard</option>
+                if (val !== "select") {
+                  // ✅ حفظ تلقائي عند الاختيار
+                  dispatch(
+                    saveDashboard({ selectedDashboard: val, stationData })
+                  );
+                }
+              }}
+              className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition w-full sm:w-auto"
+            >
+              <option value="select">Dashboard</option>
 
-            {/* ✅ نولّد تلقائيًا D1 إلى D20 */}
-            {Array.from({ length: 20 }, (_, i) => (
-              <option key={i + 1} value={`D${i + 1}`}>
-                D{i + 1}
-              </option>
-            ))}
-          </select>
+              {/* ✅ نولّد تلقائيًا D1 إلى D20 */}
+              {Array.from({ length: 20 }, (_, i) => (
+                <option key={i + 1} value={`D${i + 1}`}>
+                  D{i + 1}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
 
-      {/* ✅ Export To Section */}
+        {/* ✅ Export To Section */}
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
             Export To
@@ -285,7 +285,7 @@ const sortedFiles = [...savedFiles]
           </div>
         </div>
 
-      {/* ✅ Admin Section */}
+        {/* ✅ Admin Section */}
         <div className="flex flex-col w-full sm:w-auto">
           <span className="text-gray-700 mb-1 text-sm sm:text-base font-medium">
             Admin
@@ -314,13 +314,7 @@ const sortedFiles = [...savedFiles]
             </select>
           </div>
         </div>
-
       </div>
-
-
     </div>
   );
 }
-
-
-  

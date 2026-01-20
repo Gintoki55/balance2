@@ -15,14 +15,14 @@ export const runCalculationNow = createAsyncThunk(
       row.map((cell) => {
         // ✅ استثناء الحقول J و N
         if (
-  cell.key === "Ja" ||
-  cell.key === "Jb" ||
-  cell.key === "Jc" ||
-  cell.key === "Na" ||
-  cell.key === "Nc"
-) {
-  return cell;
-}
+          cell.key === "Ja" ||
+          cell.key === "Jb" ||
+          cell.key === "Jc" ||
+          cell.key === "Na" ||
+          cell.key === "Nc"
+        ) {
+          return cell;
+        }
 
 
         // 🔹 لو القيمة مصفوفة
@@ -186,9 +186,9 @@ export const saveDashboard = createAsyncThunk(
       const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
     
 
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
-      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 1;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 1;
 
       const JValues = [jaValue,jbValue, jcValue]
 
@@ -256,9 +256,9 @@ export const roeSlice = createSlice({
       state.selectedFile = "New Plant";
       state.stationData = StationValueData.map((row) =>
         row.map((cell) => {
-          if (cell.key === "Ja") return { ...cell, value: [2] };
-          if (cell.key === "Jb") return { ...cell, value: [2] };
-          if (cell.key === "Jc") return { ...cell, value: [2] };
+          if (cell.key === "Ja") return { ...cell, value: [1] };
+          if (cell.key === "Jb") return { ...cell, value: [1] };
+          if (cell.key === "Jc") return { ...cell, value: [1] };
           if (cell.key === "Na") return { ...cell, value: [1] };
           if (cell.key === "Nc") return { ...cell, value: [1] };
           return cell;

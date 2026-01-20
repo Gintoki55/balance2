@@ -51,14 +51,14 @@ export default function TopOptions({ station }) {
 }, [dispatch]);
 
  // جلب بيانات الملف عند تغييره
-       useEffect(() => {
-         if (
-           selectedFile && selectedFile !== "select" && selectedFile !== "edit" && !hasUnsavedChanges 
-         ) {
-           dispatch(setStationData([]));
-           dispatch(fetchFileData(selectedFile));
-         }
-       }, [selectedFile, hasUnsavedChanges])
+  useEffect(() => {
+    if (
+      selectedFile && selectedFile !== "select" && selectedFile !== "edit" && !hasUnsavedChanges 
+    ) {
+     dispatch(setStationData([]));
+     dispatch(fetchFileData(selectedFile));
+    }
+  }, [selectedFile, hasUnsavedChanges])
  
  const sortedFiles = [...savedFiles]
    .filter(f => f !== "New Plant") // تجاهل New Plant من الملفات المحفوظة
@@ -85,41 +85,41 @@ export default function TopOptions({ station }) {
           <select
             value={selectedMenuOption}
             onChange={(e) => {
-                                                              const val = e.target.value;
-                                                              setSelectedMenuOption(val)
-                                                              // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
-                                                              if (hasUnsavedChanges) {
-                                                                const confirmLeave = window.confirm(
-                                                                  "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
-                                                                );
-                                                                if (!confirmLeave) {
-                                                                  return; // ❌ المستخدم رفض — لا تغيّر الملف
-                                                                }
-                                                              }
-                                                               // ✅ إذا اختار New Plant
-                                                              if (val === "New Plant") {
-                                                                // dispatch(resetStation());
-                                                                dispatch(setSelectedFile("New Plant"));
-                                                                dispatch(setEditAll(false));
-                                                                // dispatch(setHasUnsavedChanges(false));
-                                                              }
-                                                              else if (val === "edit") {
-                                                                // dispatch(setSelectedFile("edit"));
-                                                                // dispatch(setHasUnsavedChanges(false));
-                                                                dispatch(setEditAll(true))
-                                                              }
-                                                                // ✅ أي ملف آخر
-                                                              else {
-                                                                dispatch(setSelectedFile(val));
-                                                                // dispatch(setHasUnsavedChanges(false));
-                                                                dispatch(setEditAll(false));
-                                                              }
-                                                            }}
+              const val = e.target.value;
+              setSelectedMenuOption(val)
+              // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
+              if (hasUnsavedChanges) {
+                const confirmLeave = window.confirm(
+                  "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
+                );
+                if (!confirmLeave) {
+                  return; // ❌ المستخدم رفض — لا تغيّر الملف
+                }
+              }
+                // ✅ إذا اختار New Plant
+              if (val === "New Plant") {
+                // dispatch(resetStation());
+                dispatch(setSelectedFile("New Plant"));
+                dispatch(setEditAll(false));
+                // dispatch(setHasUnsavedChanges(false));
+              }
+              else if (val === "edit") {
+                // dispatch(setSelectedFile("edit"));
+                // dispatch(setHasUnsavedChanges(false));
+                 dispatch(setEditAll(true))
+              }
+              // ✅ أي ملف آخر
+              else {
+                dispatch(setSelectedFile(val));
+                // dispatch(setHasUnsavedChanges(false));
+                dispatch(setEditAll(false));
+              }
+            }}
             className="px-3 py-1 border border-green-600 rounded-lg text-green-600 hover:bg-green-50"
           >
             <option value="select">open</option>
             <option value="New Plant">New Plant</option>
-            <option value="edit">Edit Table</option>
+            {/* <option value="edit">Edit Table</option> */}
             {loadingFiles && <option disabled>Loading...</option>}
             {!loadingFiles &&
               sortedFiles.map((f) => (

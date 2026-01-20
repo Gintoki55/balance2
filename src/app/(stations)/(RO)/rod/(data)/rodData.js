@@ -1,7 +1,7 @@
 const RODbaseColumns = [
   [
     { key: "ROD", value: "Design", editable: false, info: "Scenario type" },
-    { key: "Na", value: [2], editable: false, info: "Trains in the first pass Na,About 1 ∼  Md/500" },
+    { key: "Na", value: [1], editable: false, info: "Trains in the first pass Na,About 1 ∼  Md/500" },
     { key: "Nc", value: [1], editable: false, info: "Trains in the second pass Nc,about  0.5*Na" },
     { key: "Ja", value: [1], editable: false, info: "Number of membrane elements in pressure vessel Ja,about 1 ~ 9" },
     { key: "Jc", value: [1], editable: false, info: "Number of membrane elements in pressure vessel Jc,about1 ~ 9" },

@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rogSlice";
 import TableComponent from "./TableComponent";
-import ROGSecondTable from "./secondTable";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rogSlice";
+import ROSecondTable from "../../../system/secondTable";
 
 
 export default function CombinedTables() {
@@ -22,8 +22,8 @@ export default function CombinedTables() {
       const jbCell = stationData?.flat()?.find((cell) => cell.key === "Jb");
       
 
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 1;
 
       const JValues = [jaValue,jbValue]
       console.log("here is the data ROG: ", JValues)
@@ -61,7 +61,7 @@ export default function CombinedTables() {
                 className="border-t border-gray-400 bg-gray-200 py-1"
               ></td>
             </tr>
-            <ROGSecondTable JValues={JValues} />
+            <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
       </div>

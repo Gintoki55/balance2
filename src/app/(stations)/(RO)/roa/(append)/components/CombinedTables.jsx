@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roaSlice";
 import TableComponent from "./TableComponent";
-import ROASecondTable from "./secondTable";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/roaSlice";
+import ROSecondTable from "../../../system/secondTable";
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.roa.stationData);
@@ -52,7 +52,7 @@ const JValues = jCell
               ></td>
             </tr>
 
-            <ROASecondTable JValues={JValues} />
+            <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
       </div>

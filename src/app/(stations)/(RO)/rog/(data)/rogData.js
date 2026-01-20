@@ -2,8 +2,8 @@ const ROGbaseColumns = [
   [
     { key: "ROG", value: "Design", editable: false, info: "Scenario type" },
     { key: "N", value: [1], editable: false, info: "Trains in the plant N,about 1~ Md/500" },
-    { key: "Ja", value: [2], editable: false, info: "Elements in pressure vessel Ja,about 1 ~ 9" },
-    { key: "Jb", value: [2], editable: false, info: "Elements in pressure vessel Jb,about 1 ~ 9" },
+    { key: "Ja", value: [1], editable: false, info: "Elements in pressure vessel Ja,about 1 ~ 9" },
+    { key: "Jb", value: [1], editable: false, info: "Elements in pressure vessel Jb,about 1 ~ 9" },
     { key: "l", value: [0.1], editable: false, info: "Second permeate ratio l, about 0.1 ~ 1where Mr = l*M0" },
   ],
   [

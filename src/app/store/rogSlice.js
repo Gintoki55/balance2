@@ -179,8 +179,8 @@ export const saveDashboard = createAsyncThunk(
       const jbCell = stationData?.flat()?.find((cell) => cell.key === "Jb");
       
 
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 1;
 
       const JValues = [jaValue,jbValue]
 
@@ -248,8 +248,8 @@ export const rogSlice = createSlice({
       state.selectedFile = "New Plant";
       state.stationData = StationValueData.map((row) =>
         row.map((cell) => {
-          if (cell.key === "Ja") return { ...cell, value: [2] };
-          if (cell.key === "Jb") return { ...cell, value: [2] };
+          if (cell.key === "Ja") return { ...cell, value: [1] };
+          if (cell.key === "Jb") return { ...cell, value: [1] };
           if (cell.key === "N") return { ...cell, value: [1] };
           return cell;
         })

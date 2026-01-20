@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/robSlice";
 import TableComponent from "./TableComponent";
-import ROBSecondTable from "./secondTable";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/robSlice";
+import ROSecondTable from "../../../system/secondTable";
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector((state) =>state.rob.stationData);
@@ -17,8 +17,8 @@ export default function CombinedTables() {
       const jaCell = stationData?.flat().find((cell) => cell.key === "Ja");
       const jbCell = stationData?.flat().find((cell) => cell.key === "Jb");
       
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 1;
       
 
 
@@ -26,12 +26,12 @@ export default function CombinedTables() {
       console.log("here is the data rob: ", JValues)
 
 
-             useEffect(() => {
-                              if (!stationData || stationData.length === 0) {
-                                dispatch(fetchFileData("New Plant"));
-                        
-                              }
-                            }, []);
+      useEffect(() => {
+        if (!stationData || stationData.length === 0) {
+          dispatch(fetchFileData("New Plant"));
+                          
+        }
+      }, []);
       
 
   return (
@@ -57,7 +57,7 @@ export default function CombinedTables() {
                 className="border-t border-gray-400 bg-gray-200 py-1"
               ></td>
             </tr>
-            <ROBSecondTable JValues={JValues} />
+            <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
       </div>

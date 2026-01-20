@@ -1,12 +1,12 @@
 const ROFbaseColumns = [
   [
     { key: "ROF", value: "Design", editable: false, info: "Scenario type" },
-    { key: "Na", value: [2], editable: false, info: "Trains in the first pass Na,About 1 ∼  Md/500" },
+    { key: "Na", value: [1], editable: false, info: "Trains in the first pass Na,About 1 ∼  Md/500" },
     { key: "Nc", value: [1], editable: false, info: "Trains in the second pass Nc,about  0.5*Na" },
-    { key: "Ja", value: [2], editable: false, info: "Number of elements in pressure vessel Ja,about 1 ~ 9" },
-    { key: "Jb", value: [2], editable: false, info: "Number of elements in pressure vessel Jb,about 1 ~ 9)" },
-    { key: "Jc", value: [2], editable: false, info: "Number of elements in pressure vessel Jc,about 1 ~ 9" },
-    { key: "Jd", value: [2], editable: false, info: "Number of elements in pressure vessel Jd,about 1 ~ 9" },
+    { key: "Ja", value: [1], editable: false, info: "Number of elements in pressure vessel Ja,about 1 ~ 9" },
+    { key: "Jb", value: [1], editable: false, info: "Number of elements in pressure vessel Jb,about 1 ~ 9)" },
+    { key: "Jc", value: [1], editable: false, info: "Number of elements in pressure vessel Jc,about 1 ~ 9" },
+    { key: "Jd", value: [1], editable: false, info: "Number of elements in pressure vessel Jd,about 1 ~ 9" },
   ],
   [
     { key: "", value: [0], editable: false, info: "",locked: true },

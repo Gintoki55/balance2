@@ -51,12 +51,12 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
  if (["Ja", "Jb", "Jc", "Na", "Nc"].includes(cell.key)) {
     const isN = ["Na", "Nc"].includes(cell.key);
 
-    const min = isN ? 1 : 2;
+    const min = isN ? 1 : 1;
     const max = isN ? 20 : 9;
      return (
        <div className="relative w-full text-center">
          <select
-           value={value ?? 2}
+           value={cell.value ?? 1}
            onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
            className="inline-block w-auto px-2 py-1 pr-8 outline-none appearance-none cursor-pointer text-green-600"
          >

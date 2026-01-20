@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rodSlice";
 import TableComponent from "./TableComponent";
-import RODSecondTable from "./secondTable";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rodSlice";
+import ROSecondTable from "../../../system/secondTable";
 
 export default function CombinedTables() {
    const dispatch = useDispatch();
@@ -20,19 +20,18 @@ export default function CombinedTables() {
       const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
       const jdCell = stationData?.flat()?.find((cell) => cell.key === "Jd");
       
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
-      const jdValue = Array.isArray(jdCell?.value) ? jdCell.value[0] : jdCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 1;
+      const jdValue = Array.isArray(jdCell?.value) ? jdCell.value[0] : jdCell?.value ?? 1;
 
       const JValues = [jaValue,jcValue, jdValue]
       console.log("here is the data: ", JValues)
 
-       useEffect(() => {
-                  if (!stationData || stationData.length === 0) {
-                    dispatch(fetchFileData("New Plant"));
-            
-                  }
-                }, []);
+      useEffect(() => {
+        if (!stationData || stationData.length === 0) {
+          dispatch(fetchFileData("New Plant"));
+        }
+      }, []);
             
 
   return (
@@ -58,7 +57,7 @@ export default function CombinedTables() {
                 className="border-t border-gray-400 bg-gray-200 py-1"
               ></td>
             </tr>
-            <RODSecondTable JValues={JValues} />
+            <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
       </div>

@@ -141,8 +141,8 @@ export const fetchFileData = createAsyncThunk(
               row.map((cell) => {
                 if (cell.key === "Na") return { ...cell, value: 1 };
                 if (cell.key === "Nc") return { ...cell, value: 1 };
-                if (cell.key === "Ja") return { ...cell, value: 2 };
-                if (cell.key === "Jc") return { ...cell, value: 2 };
+                if (cell.key === "Ja") return { ...cell, value: 1 };
+                if (cell.key === "Jc") return { ...cell, value: 1 };
                 return cell;
               })
             );
@@ -154,8 +154,8 @@ export const fetchFileData = createAsyncThunk(
             row.map((cell) => {
                if (cell.key === "Na") return { ...cell, value: 1 };
                if (cell.key === "Nc") return { ...cell, value: 1 };
-               if (cell.key === "Ja") return { ...cell, value: 2 };
-               if (cell.key === "Jc") return { ...cell, value: 2 };
+               if (cell.key === "Ja") return { ...cell, value: 1 };
+               if (cell.key === "Jc") return { ...cell, value: 1 };
               return cell;
             })
           );
@@ -197,8 +197,8 @@ export const saveDashboard = createAsyncThunk(
       const jaCell = stationData?.flat()?.find((cell) => cell.key === "Ja");
       const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
           
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 1;
 
       const JValues = [jaValue,jcValue]
 
@@ -266,8 +266,8 @@ export const rocSlice = createSlice({
       state.selectedFile = "New Plant";
       state.stationData = StationValueData.map((row) =>
         row.map((cell) => {
-          if (cell.key === "Ja") return { ...cell, value: [2] };
-          if (cell.key === "Jc") return { ...cell, value: [2] };
+          if (cell.key === "Ja") return { ...cell, value: [1] };
+          if (cell.key === "Jc") return { ...cell, value: [1] };
           if (cell.key === "Na") return { ...cell, value: [1] };
           if (cell.key === "Nc") return { ...cell, value: [1] };
           return cell;

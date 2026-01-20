@@ -51,7 +51,7 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
  if (["Ja", "Jc", "Jd", "Na", "Nc"].includes(cell.key)) {
     const isN = ["Na", "Nc"].includes(cell.key);
 
-    const min = isN ? 1 : 2;
+    const min = isN ? 1 : 1;
     const max = isN ? 20 : 9;
      return (
        <div className="relative w-full text-center">

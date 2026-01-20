@@ -2,29 +2,30 @@
 import React from "react";
 import Tooltip from "@/components/Tooltip";
 
+
 const infoMap = {
-  j: "Level number",
-  Pvj: "Vapour saturation pressure Pvj [bar]\n1 atm = 101.3 kPa\n1 bar = 100 kPa\n1 bar = 689.5 psia",
-  ΔTj: "Flashing temperature drop [°C]",
-  Tbj: "Flashing brine temperature [°C]",
-  Tvj: "Vapour saturation temperature [°C]",
-  Tdj: "Distillate saturation temperature [°C]",
-  Tcj: "Cooling water temperature [°C]",
-  Mbj: "Flashing brine flow rate [t/h]",
-  mj: "Fresh distillate [t/h]",
-  Mdj: "Accumulated distillate [t/h]",
-  Sbj: "Brine salinity [kg/t]\n1 kg/t = 1 g/L = 1000 ppm",
-  Balance: "Heat balance through the preheater surface",
+  "j": "Element number in the pressure vessel",
+  "Pbj" : "Brine pressure Pbj [bar],which is constrained: Pbj < max",
+  "Δπj": "Transmembrane osmotic pressure Δπj [bar]",
+  "Balance": "Pressure balance across the membrane",
+  "∆Pj": "Net driving pressure ∆Pj [bar]",
+  "mj": "Permeate flux mj [l/m².h],which is constrained: lmh < max",
+  "Mdj": "Accumulating permeate Mdj [t/h]",
+  "Mbj": "Leaving brine Mbj [t/h],which is constrained: min < Mbj < max",
+  "Sbj": "Bulk brine salinity Sbj [g/l],which is constrained: Sbj <99",
+  "ΔSj": "Salinity gradient acros the membrane ΔSj [g/l]",
+  "Sj": "Salinity at the permeate envelope Sj [g/l]",
+  'Sdj': "Salinity at the product tube Sdj [g/l]",
 };
 
 const ROSecondTable = ({ JValues }) => {
   const headersSecond = [
-    "j", "Pvj", "ΔTj", "Tbj", "Tvj", "Tdj",
-    "Tcj", "Mbj", "mj", "Mdj", "Sbj", "Balance"
+    "j", "Pbj", "Δπj", "Balance", "∆Pj", "mj",
+    "Mdj", "Mbj", "Sbj", "ΔSj", "Sj", "Sdj"
   ];
 
   const defaultRow = [
-    "0", "1.0000", "0.50", "1.00", "1.00",
+    "", "1.0000", "0.50", "1.00", "1.00",
     "1.00", "50.00", "1.00", "1.00", "1.00", "40.00", "1.0000"
   ];
 

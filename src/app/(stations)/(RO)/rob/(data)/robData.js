@@ -2,8 +2,8 @@ const ROBbaseColumns = [
   [
     { key: "ROB", value: "Design", editable: false, info: "NULL" },
     { key: "N", value: [1], editable: false, info: "Trains in the plant N,About 1 ∼  Md/500" },
-    { key: "Ja", value: [2], editable: false, info: "Elements in the pressure vessel Ja,about 1 ~ 9" },
-    { key: "Jb", value: [2], editable: false, info: "Elements in the pressure vessel Jb,about 1 ~ 9" },
+    { key: "Ja", value: [1], editable: false, info: "Elements in the pressure vessel Ja,about 1 ~ 9" },
+    { key: "Jb", value: [1], editable: false, info: "Elements in the pressure vessel Jb,about 1 ~ 9" },
     { key: "T0", value: [30000], editable: false, info: "Raw water Temperature T0 [⁰C],about 10 ~ 37" },
     // F
   ],

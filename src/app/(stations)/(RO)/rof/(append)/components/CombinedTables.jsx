@@ -1,9 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rofSlice";
 import TableComponent from "./TableComponent";
-import ROFSecondTable from "./secondTable";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rofSlice";
+import ROSecondTable from "../../../system/secondTable";
 
 export default function CombinedTables() {
    const dispatch = useDispatch();
@@ -20,10 +20,10 @@ export default function CombinedTables() {
       const jcCell = stationData?.flat()?.find((cell) => cell.key === "Jc");
       const jdCell = stationData?.flat()?.find((cell) => cell.key === "Jd");
       
-      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 2;
-      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 2;
-      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 2;
-      const jdValue = Array.isArray(jdCell?.value) ? jdCell.value[0] : jdCell?.value ?? 2;
+      const jaValue = Array.isArray(jaCell?.value) ? jaCell.value[0] : jaCell?.value ?? 1;
+      const jbValue = Array.isArray(jbCell?.value) ? jbCell.value[0] : jbCell?.value ?? 1;
+      const jcValue = Array.isArray(jcCell?.value) ? jcCell.value[0] : jcCell?.value ?? 1;
+      const jdValue = Array.isArray(jdCell?.value) ? jdCell.value[0] : jdCell?.value ?? 1;
 
       const JValues = [jaValue,jbValue, jcValue,jdValue]
       console.log("here is the data ROF: ", JValues)
@@ -59,7 +59,7 @@ export default function CombinedTables() {
                 className="border-t border-gray-400 bg-gray-200 py-1"
               ></td>
             </tr>
-            <ROFSecondTable JValues={JValues} />
+            <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
       </div>
