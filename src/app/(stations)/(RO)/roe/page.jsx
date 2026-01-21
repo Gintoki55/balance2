@@ -2,11 +2,12 @@
 import { useSelector } from "react-redux";
 import StationHeader from "@/components/stationheader";
 import { Play, Bot, Calculator } from "lucide-react";
-import TopOptions from "./(append)/components/topOptions";
+import TopOptions from "../system/topOptions";
 import CombinedTables from "./(append)/components/CombinedTables";
 import Lottie from "lottie-react";
 import animationData from "../../../../../public/animation/(RO)/roe.json";
-
+import * as roeActions from "../../../store/roeSlice";
+import { useAnimate } from "./(data)/animationContext";
 export default function RoPage() {
   const { selectedFile } = useSelector((state) => state.roe);
 
@@ -26,7 +27,7 @@ export default function RoPage() {
         <Lottie animationData={animationData} loop />
       </div>
 
-      <TopOptions  station="ROE"/>
+      <TopOptions  station="ROE" actions={roeActions} useAnimate={useAnimate}/>
 
       {!isDisabled && (
         <div className="flex flex-col gap-4 justify-center items-center w-full overflow-x-auto">
