@@ -6,48 +6,57 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import {AnimatedNumber } from "../../(data)/tableData";
 import { useSelector } from "react-redux";
 
+const editableFieldsByScenario = {
+  Design: ["Na","Nc", "Ja", "Jb", "Jc","Jd","Pp","FF", "A", "w", "x","T0", "S0","Sp","Sd","k","l","Md","WR","b"],
+  Demand: ["Na","Nc", "Ja", "Jb", "Jc","Jd","Pp","PV","FF", "A", "w", "x","T0", "S0","Sp","Sd","l","Md","b"],
+  Energy: ["Na","Nc", "Ja", "Jb", "Jc","Jd","Pf","Pp","PV","FF", "A", "w", "x","T0", "S0","Sp","Sd","l","b"],
+  Rating: ["Na","Nc", "Ja", "Jb", "Jc","Jd","Pf","Pp","PV","FF", "A", "w", "x","M0","T0", "S0","k","l","b"],
+};
+
+const isEditable = (scenario, key) =>
+  (editableFieldsByScenario[scenario] || []).includes(key);
 
 // =============================
 // 🔹 مكوّن اختيار السيناريو ROA
 // =============================
 
-const ScenarioSelector = ({ cell, scenario, onValueChange, rules, scenarioKey }) => {
-  const options = rules?.scenarioOptions || ["Design", "Demand", "Energy", "Rating"];
-  return (
-    <td colSpan={2} className="px-4 py-1 font-bold bg-gray-200 text-center lg:text-lg text-sm">
-      <div className="relative w-full">
-        <select
-          value={scenario || options[0]}
-          onChange={(e) => onValueChange(cell.key, e.target.value)}
-          className="w-full px-3 py-1 rounded-md bg-gray-200 border border-gray-200 text-gray-800 font-semibold appearance-none outline-none"
-        >
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {scenarioKey} {o}
-            </option>
-          ))}
-        </select>
+const ScenarioSelector = ({ cell, scenario, onValueChange }) => (
+  <td colSpan={2} className="px-4 py-1 font-bold bg-gray-200 text-center lg:text-lg text-sm">
+    <div className="relative w-full">
+      <select
+        value={scenario || "Design"}
+        onChange={(e) => onValueChange(cell.key, e.target.value)}
+        className="w-full px-3 py-1 rounded-md bg-gray-200 border border-gray-200 text-gray-800 font-semibold appearance-none outline-none"
+      >
+        {["Design","Demand","Energy","Rating"].map((o) => (
+          <option key={o} value={o}>
+            ROF {o}
+          </option>
+        ))}
+      </select>
 
-        <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600" />
-      </div>
-    </td>
-  )
-};
+      <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600" />
+    </div>
+  </td>
+);
 
 
 // =====================================
 // 🔹 محتوى الخلية (Dropdown / Editable / Static)
 // =====================================
-const CellContent = ({ cell, editable, activeIndex,onValueChange, rules }) => {
+const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
   const value = cell.value?.[activeIndex];
-  const selectRule = rules?.selectRules?.[cell.key];
 
-  if (selectRule) {
-    const { min, max } = selectRule;
+  // 🔸 قوائم ثابتة لـ N و J
+ if (["Ja", "Jb", "Jc", "Jd", "Na", "Nc"].includes(cell.key)) {
+    const isN = ["Na", "Nc"].includes(cell.key);
+
+    const min = isN ? 1 : 1;
+    const max = isN ? 20 : 9;
      return (
        <div className="relative w-full text-center">
          <select
-           value={cell.value ?? min}
+           value={cell.value ?? 1}
            onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
            className="inline-block w-auto px-2 py-1 pr-8 outline-none appearance-none cursor-pointer text-green-600"
          >
@@ -123,16 +132,9 @@ const CellKey = ({ cell }) => {
 // =============================
 // 🔥 الجدول الرئيسي بالكامل
 // =============================
-const TableComponent = ({ stationData, onValueChange ,activeIndex, selectedFile, rules, scenarioKey}) => {
+const TableComponent = ({ stationData, onValueChange ,activeIndex, selectedFile}) => {
 
-  const sliceKey = scenarioKey.toLowerCase();
-  
-  const editAll = useSelector(
-    (state) => state[sliceKey]?.editAll
-  );
-  
-  const isEditable = (scenario, key) =>
-  (rules.editableFieldsByScenario[scenario] || []).includes(key);
+  const editAll = useSelector((state) => state.rof.editAll);
 
    // دالة تحدد هل الخلية قابلة للتعديل
     const isCellEditableFinal = (cell) => {
@@ -163,7 +165,7 @@ const maxRows = stationData && stationData.length > 0
   : 0;
 
   // قراءة سيناريو ROA الحالي
-  const scenarioCell = stationData?.flat()?.find((c) => c.key === scenarioKey);
+  const scenarioCell = stationData?.flat()?.find((c) => c.key === "ROF");
   const scenario = scenarioCell?.value;
 
   return (
@@ -176,15 +178,13 @@ const maxRows = stationData && stationData.length > 0
             if (!cell) return null;
 
             // عنوان سيناريو ROA
-            if (cell.key?.startsWith(scenarioKey)) {
+            if (cell.key?.startsWith("ROF")) {
               return (
                 <ScenarioSelector
                   key={colIndex}
                   cell={cell}
                   scenario={scenario}
                   onValueChange={onValueChange}
-                  scenarioKey={scenarioKey}
-                  rules={rules}
                 />
               );
             }
@@ -201,12 +201,13 @@ const maxRows = stationData && stationData.length > 0
                     >
                       <CellContent
                         cell={cell}
+                        // editable={editable}
+                        // onValueChange={onValueChange}
                         activeIndex={activeIndex}
                         onValueChange={(key, value) =>
                           onValueChange(key, value, activeIndex)
                         }
                         editable={isCellEditableFinal(cell)}
-                        rules={rules}
                       />
                     </td>
                   ))}

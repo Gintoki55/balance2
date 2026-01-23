@@ -4,7 +4,6 @@ import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rofSlice";
 import ROSecondTable from "../../../system/secondTable";
-import { rofRules } from "./scenario";
 
 export default function CombinedTables() {
    const dispatch = useDispatch();
@@ -33,6 +32,7 @@ export default function CombinedTables() {
       useEffect(() => {
         if (!stationData || stationData.length === 0) {
           dispatch(fetchFileData("New Plant"));
+      
         }
       }, []);
 
@@ -51,8 +51,6 @@ export default function CombinedTables() {
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
               selectedFile={selectedFile}
-              scenarioKey="ROF"
-              rules={rofRules}
             />
 
             <tr>
