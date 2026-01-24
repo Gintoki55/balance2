@@ -36,7 +36,7 @@ export default function TopOptions({ station, actions, useAnimate}) {
 
   const [selectedExport, setSelectedExport] = useState("select");
   const [selectedAdmin, setSelectedAdmin] = useState("select");
-  const [selectedMenuOption, setSelectedMenuOption] = useState("select");
+  // const [selectedMenuOption, setSelectedMenuOption] = useState("select");
 
   const { triggerAnimation } = useAnimate();
 
@@ -51,17 +51,12 @@ export default function TopOptions({ station, actions, useAnimate}) {
   }, [dispatch]);
 
   // جلب بيانات الملف عند تغييره
-  useEffect(() => {
-    if (
-      selectedFile &&
-      selectedFile !== "select" &&
-      selectedFile !== "edit" &&
-      !hasUnsavedChanges
-    ) {
-      dispatch(setStationData([]));
-      dispatch(fetchFileData(selectedFile));
-    }
-  }, [selectedFile, hasUnsavedChanges]);
+useEffect(() => {
+  if (selectedFile && selectedFile !== "select") {
+    dispatch(fetchFileData(selectedFile));
+  }
+}, [selectedFile, dispatch]);
+
 
   const sortedFiles = [...savedFiles]
     .filter((f) => f !== "New Plant") // تجاهل New Plant من الملفات المحفوظة
@@ -93,18 +88,16 @@ export default function TopOptions({ station, actions, useAnimate}) {
             {station} Files
           </span>
           <select
-            value={selectedMenuOption}
+            value={selectedFile || "select"}
             onChange={(e) => {
               const val = e.target.value;
-              setSelectedMenuOption(val);
               // ⛔ إذا هناك تعديلات غير محفوظة → اسأل المستخدم
               if (hasUnsavedChanges) {
                 const confirmLeave = window.confirm(
                   "لديك تعديلات غير محفوظة، هل تريد تجاهلها والمتابعة؟"
                 );
-                if (!confirmLeave) {
-                  return; // ❌ المستخدم رفض — لا تغيّر الملف
-                }
+                if (!confirmLeave) return;
+                dispatch(setHasUnsavedChanges(false));
               }
               // ✅ إذا اختار New Plant
               if (val === "New Plant") {
@@ -123,7 +116,6 @@ export default function TopOptions({ station, actions, useAnimate}) {
           >
             <option value="select">open</option>
             <option value="New Plant">New Plant</option>
-            {/* <option value="edit">Edit Table</option> */}
             {loadingFiles && <option disabled>Loading...</option>}
             {!loadingFiles &&
               sortedFiles.map((f) => (

@@ -1,11 +1,11 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rofSlice";
-import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rofSlice";
 import ROSecondTable from "../../../system/secondTable";
-import { rofRules } from "./scenario";
-
+import { rofRules } from "../../(data)/scenario";
+import TableComponent from "../../../system/TableComponent";
+import {AnimatedNumber } from "../../(data)/tableData";
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.rof.stationData);
@@ -53,6 +53,7 @@ export default function CombinedTables() {
               selectedFile={selectedFile}
               scenarioKey="ROF"
               rules={rofRules}
+              AnimatedNumber={AnimatedNumber}
             />
 
             <tr>

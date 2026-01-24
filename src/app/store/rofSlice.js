@@ -268,21 +268,15 @@ export const rofSlice = createSlice({
         row.map((cell) => {
           if (cell.key !== cellKey) return cell;
 
-          // 🔹 لو value Array
-          if (Array.isArray(cell.value)) {
-            const newValues = [...cell.value];
-            newValues[index] = value;
+          const values = Array.isArray(cell.value)
+            ? [...cell.value]
+            : [cell.value];
 
-            return {
-              ...cell,
-              value: newValues,
-            };
-          }
+          values[index] = value;
 
-          // 🔹 لو value عادي
           return {
             ...cell,
-            value,
+            value: values,
           };
         })
       );

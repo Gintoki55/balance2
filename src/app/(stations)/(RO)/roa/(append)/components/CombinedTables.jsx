@@ -1,9 +1,12 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roaSlice";
-import TableComponent from "./TableComponent";
+// import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/roaSlice";
 import ROSecondTable from "../../../system/secondTable";
+import { roaRules } from "../../(data)/scenario";
+import TableComponent from "../../../system/TableComponent";
+import {AnimatedNumber } from "../../(data)/tableData";
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.roa.stationData);
@@ -43,6 +46,9 @@ const JValues = jCell
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
               selectedFile={selectedFile}
+              scenarioKey="ROA"
+              rules={roaRules}
+              AnimatedNumber={AnimatedNumber}
             />
 
             <tr>

@@ -3,59 +3,57 @@
 import React from "react";
 import Tooltip from "@/components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import {AnimatedNumber } from "../../(data)/tableData";
 import { useSelector } from "react-redux";
 
-const editableFieldsByScenario = {
-  Design: ["N", "Ja", "Jb", "T0", "FF", "A", "w", "x","Pp", "b", "S0", "Sd", "l", "Md","WR"],
-  Demand: ["N", "Ja", "Jb", "T0", "FF", "A", "w", "x","Pp","PV", "b", "S0", "Sd", "l", "Md"],
-  Energy: ["N", "Ja", "Jb", "T0", "FF", "A", "w", "x","Pf","Pp","PV", "b", "S0", "Sd", "l"],
-  Rating: ["N", "Ja", "Jb", "T0", "FF", "A", "w", "x","Pf","Pp","PV", "b", "M0", "S0", "l"],
-};
-
-const isEditable = (scenario, key) =>
-  (editableFieldsByScenario[scenario] || []).includes(key);
 
 // =============================
 // 🔹 مكوّن اختيار السيناريو ROA
 // =============================
 
-const ScenarioSelector = ({ cell, scenario, onValueChange }) => (
-  <td colSpan={2} className="px-4 py-1 font-bold bg-gray-200 text-center lg:text-lg text-sm">
-    <div className="relative w-full">
-      <select
-        value={scenario || "Design"}
-        onChange={(e) => onValueChange(cell.key, e.target.value)}
-        className="w-full px-3 py-1 rounded-md bg-gray-200 border border-gray-200 text-gray-800 font-semibold appearance-none outline-none"
-      >
-        {["Design","Demand","Energy","Rating"].map((o) => (
-          <option key={o} value={o}>
-            ROB {o}
-          </option>
-        ))}
-      </select>
+const ScenarioSelector = ({ cell, scenario, onValueChange, rules, scenarioKey }) => {
+  const options = rules?.scenarioOptions || ["Design", "Demand", "Energy", "Rating"];
+  return (
+    <td colSpan={2} className="px-4 py-1 font-bold bg-gray-200 text-center lg:text-lg text-sm">
+      <div className="relative w-full">
+        <select
+          value={scenario || options[0]}
+          onChange={(e) => onValueChange(cell.key, e.target.value, 0)}
+          className="w-full px-3 py-1 rounded-md bg-gray-200 border border-gray-200 text-gray-800 font-semibold appearance-none outline-none"
+        >
+          {options.map((o) => (
+            <option key={o} value={o}>
+              {scenarioKey} {o}
+            </option>
+          ))}
+        </select>
 
-      <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600" />
-    </div>
-  </td>
-);
+        <MdKeyboardArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600" />
+      </div>
+    </td>
+  )
+};
 
 
 // =====================================
 // 🔹 محتوى الخلية (Dropdown / Editable / Static)
 // =====================================
-const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
-  const value = cell.value?.[activeIndex];
+const CellContent = ({ cell, editable, activeIndex,onValueChange, rules, AnimatedNumber}) => {
+  
+  const baseValue = cell.value?.[activeIndex];
+  const selectRule = rules?.selectRules?.[cell.key];
 
-  // 🔸 قوائم ثابتة لـ N و J
- if (["Ja", "Jb", "N"].includes(cell.key)) {
-    const min = cell.key === "N" ? 1 : 1;
-    const max = cell.key === "N" ? 20 : 9;
+  if (selectRule) {
+    const { min, max } = selectRule;
+    const value = baseValue ?? min;
+        console.log(baseValue, "is thrisl")
      return (
        <div className="relative w-full text-center">
          <select
-           value={cell.value ?? 1}
-           onChange={(e) => onValueChange(cell.key, Number(e.target.value))}
+           value={value}
+           onChange={(e) =>
+              onValueChange(cell.key, Number(e.target.value), activeIndex)
+            }
+
            className="inline-block w-auto px-2 py-1 pr-8 outline-none appearance-none cursor-pointer text-green-600"
          >
            {Array.from(
@@ -76,14 +74,18 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
   if (editable) {
     const handleBlur = (v) => {
       const n = Number(v);
-      onValueChange(cell.key, v === "" || v === "-" || isNaN(n) ? "NAN" : n);
+      onValueChange(
+        cell.key,
+        v === "" || v === "-" || isNaN(n) ? "NAN" : n,
+        activeIndex
+      );
     };
 
     return (
       <input
         type="text"
         inputMode="decimal"
-        value={value ?? ""}
+        value={baseValue ?? ""}
         onFocus={(e) => e.target.select()}
         onChange={(e) => {
           if (/^-?\d*\.?\d*$/.test(e.target.value)) {
@@ -99,7 +101,7 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
   // 🔸 غير قابل للتعديل (scientific)
   return (
     <div className="font-semibold text-gray-700 py-1 text-center">
-      <AnimatedNumber value={value} />
+      <AnimatedNumber value={baseValue} />
     </div>
   );
 };
@@ -108,60 +110,71 @@ const CellContent = ({ cell, editable, activeIndex,onValueChange }) => {
 // =============================
 // 🔹 خلية الـ Key مع Tooltip
 // =============================
-const CellKey = ({ cell }) =>{
-  if (!cell.key) {
+const CellKey = ({ cell }) => {
+   if (!cell.key) {
     return <></>;
   }
-  return(
-    <td className="px-2 py-0 font-semibold bg-gray-100 text-center text-md min-w-[6ch]">
-      {cell.info ? (
-        <Tooltip text={cell.info}>
-          <span>{cell.key}</span>
-        </Tooltip>
-      ) : (
+
+  return (
+  <td className="px-2 py-0 font-semibold bg-gray-100 text-center text-md min-w-[6ch]">
+    {cell.info ? (
+      <Tooltip text={cell.info}>
         <span>{cell.key}</span>
-      )}
-    </td>
+      </Tooltip>
+    ) : (
+      <span>{cell.key}</span>
+    )}
+  </td>
   );
-}
+};
 
 
 // =============================
 // 🔥 الجدول الرئيسي بالكامل
 // =============================
-const TableComponent = ({ stationData, onValueChange ,activeIndex , selectedFile}) => {
+const TableComponent = ({ stationData, onValueChange ,activeIndex, selectedFile, rules, scenarioKey, AnimatedNumber}) => {
 
-   const editAll = useSelector((state) => state.rob.editAll);
-      
-         // دالة تحدد هل الخلية قابلة للتعديل
-          const isCellEditableFinal = (cell) => {
-            // 🔒 إذا الخلية مقفلة لا تعدلها أبدًا
-            if (cell.locked) return false;
-      
-            // ❌ إذا مفتاح الخلية فاضي لا تعدلها
-            if (!cell.key || cell.key.trim() === "") return false;
-      
-            // ❌ إذا هي خلية dash "-"
-            if (cell.key === "-") return false;
-      
-            // 🟢 وضع تحرير كامل editAll
-            if (editAll) return true;
-      
-            // 🟢 وضع تعديل خاص
-            if (selectedFile === "edit") return true;
-      
-            // 🟢 حسب السيناريو
-            return isEditable(scenario, cell.key);
-        };
+  const sliceKey = scenarioKey.toLowerCase();
 
-   // عدد صفوف الجدول
+  const editAll = useSelector(
+    (state) => state[sliceKey]?.editAll
+  );
+  
+  const isEditable = (scenario, key) =>
+  (rules.editableFieldsByScenario[scenario] || []).includes(key);
+
+   // دالة تحدد هل الخلية قابلة للتعديل
+    const isCellEditableFinal = (cell) => {
+      // 🔒 إذا الخلية مقفلة لا تعدلها أبدًا
+      if (cell.locked) return false;
+
+      // ❌ إذا مفتاح الخلية فاضي لا تعدلها
+      if (!cell.key || cell.key.trim() === "") return false;
+
+      // ❌ إذا هي خلية dash "-"
+      if (cell.key === "-") return false;
+
+      // 🟢 وضع تحرير كامل editAll
+      if (editAll) return true;
+
+      // 🟢 وضع تعديل خاص
+      if (selectedFile === "edit") return true;
+
+      // 🟢 حسب السيناريو
+      return isEditable(scenario, cell.key);
+  };
+
+
+
+  // عدد صفوف الجدول
 const maxRows = stationData && stationData.length > 0
   ? Math.max(...stationData.map((col) => col.length))
   : 0;
 
   // قراءة سيناريو ROA الحالي
-  const scenarioCell = stationData?.flat()?.find((c) => c.key === "ROB");
+  const scenarioCell = stationData?.flat()?.find((c) => c.key === scenarioKey);
   const scenario = scenarioCell?.value;
+
 
   return (
     <>
@@ -173,37 +186,39 @@ const maxRows = stationData && stationData.length > 0
             if (!cell) return null;
 
             // عنوان سيناريو ROA
-            if (cell.key?.startsWith("ROB")) {
+            if (cell.key?.startsWith(scenarioKey)) {
               return (
                 <ScenarioSelector
                   key={colIndex}
                   cell={cell}
                   scenario={scenario}
                   onValueChange={onValueChange}
+                  scenarioKey={scenarioKey}
+                  rules={rules}
                 />
               );
             }
 
+            const values = Array.isArray(cell.value) ? cell.value : [cell.value];
             return (
               <React.Fragment key={colIndex}>
               <CellKey cell={cell} />
 
-                  {(Array.isArray(cell.value) ? cell.value : [cell.value]).map((_, activeIndex) => (
+                  {values.map((_, activeIndex) => (
                     <td
                       key={activeIndex}
                       className="px-2 py-0 text-center text-sm min-w-[7ch] max-w-[12ch]"
                     >
                       <CellContent
                         cell={cell}
-                        // editable={editable}
-                        // onValueChange={onValueChange}
                         activeIndex={activeIndex}
                         onValueChange={(key, value) =>
                           onValueChange(key, value, activeIndex)
                         }
                         editable={isCellEditableFinal(cell)}
+                        rules={rules}
+                        AnimatedNumber={AnimatedNumber}
                       />
-                      
                     </td>
                   ))}
                 </React.Fragment>
