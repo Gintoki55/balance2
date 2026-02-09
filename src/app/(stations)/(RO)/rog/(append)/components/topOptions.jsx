@@ -1,11 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { runData, projectObject } from "@/data/allData";
-import { Play, Loader } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-export default function TopOptions({ station, actions, useAnimate}) {
-  const {
+import {
   setSelectedFile,
   resetStation,
   fetchSavedFiles,
@@ -16,29 +11,37 @@ export default function TopOptions({ station, actions, useAnimate}) {
   saveDashboard,
   setEditAll,
   setHasUnsavedChanges,
-  setStationData
-} = actions;
-
+} from "../../../../../store/rogSlice";
+import { runData, projectObject } from "@/data/allData";
+import { Play, Loader } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useAnimate } from "../../(data)/animationContext";
+import { setStationData } from "@/app/store/rogSlice";
+export default function TopOptions({ station }) {
   const dispatch = useDispatch();
-
-    const {
+  const {
     selectedFile,
     savedFiles,
     loadingFiles,
     stationData,
     isRunning,
     hasUnsavedChanges,
-  } = useSelector((state) => state[station.toLowerCase()]);
-
+    loadingDashboard,
+    dashboards,
+  } = useSelector((state) => state.rog);
   const [selectedRun, setSelectedRun] = useState("");
   const [selectedProject, setSelectedProject] = useState("select");
   const [selectedDashboard, setSelectedDashboard] = useState("select");
 
   const [selectedExport, setSelectedExport] = useState("select");
   const [selectedAdmin, setSelectedAdmin] = useState("select");
+  //اختيار edit بدون ماياثر على اللوجيك
   const [selectedMenuOption, setSelectedMenuOption] = useState("select");
 
   const { triggerAnimation } = useAnimate();
+
+  // const editAll = useSelector((state) => state.rog.editAll);
 
   // جلب الملفات
   useEffect(() => {
@@ -123,7 +126,7 @@ export default function TopOptions({ station, actions, useAnimate}) {
           >
             <option value="select">open</option>
             <option value="New Plant">New Plant</option>
-            {/* <option value="edit">Edit Table</option> */}
+            <option value="edit">Edit Table</option>
             {loadingFiles && <option disabled>Loading...</option>}
             {!loadingFiles &&
               sortedFiles.map((f) => (

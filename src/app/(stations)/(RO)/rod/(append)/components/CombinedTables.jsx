@@ -1,11 +1,10 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rodSlice";
+import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rodSlice";
 import ROSecondTable from "../../../system/secondTable";
-import {AnimatedNumber } from "../../(data)/tableData";
-import TableComponent from "../../../system/TableComponent";
-import { rodRules } from "../../(data)/scenario";
+
 export default function CombinedTables() {
    const dispatch = useDispatch();
     const stationData = useSelector(state => state.rod.stationData);
@@ -50,9 +49,6 @@ export default function CombinedTables() {
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
               selectedFile={selectedFile}
-              scenarioKey="ROD"
-              rules={rodRules}
-              AnimatedNumber={AnimatedNumber}
             />
 
             <tr>

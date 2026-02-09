@@ -1,11 +1,10 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/rogSlice";
+import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/rogSlice";
 import ROSecondTable from "../../../system/secondTable";
-import { rogRules } from "../../(data)/scenario";
-import {AnimatedNumber } from "../../(data)/tableData";
-import TableComponent from "../../../system/TableComponent";
+
 
 export default function CombinedTables() {
    
@@ -54,9 +53,6 @@ export default function CombinedTables() {
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
               selectedFile={selectedFile}
-              scenarioKey="ROG"
-              rules={rogRules}
-              AnimatedNumber={AnimatedNumber}
             />
 
             <tr>

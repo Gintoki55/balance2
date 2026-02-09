@@ -276,28 +276,34 @@ export const rocSlice = createSlice({
       state.hasUnsavedChanges = false;
     },
 
-    updateCellValue: (state, action) => {
-      const { cellKey, value, index } = action.payload;
+updateCellValue: (state, action) => {
+  const { cellKey, value, index } = action.payload;
 
-      state.stationData = state.stationData.map((row) =>
-        row.map((cell) => {
-          if (cell.key !== cellKey) return cell;
+  state.stationData = state.stationData.map((row) =>
+    row.map((cell) => {
+      if (cell.key !== cellKey) return { ...cell };
 
-          const values = Array.isArray(cell.value)
-            ? [...cell.value]
-            : [cell.value];
+      // Array
+      if (Array.isArray(cell.value)) {
+        const newValues = [...cell.value];
+        newValues[index] = value;
 
-          values[index] = value;
+        return {
+          ...cell,
+          value: newValues,
+        };
+      }
 
-          return {
-            ...cell,
-            value: values,
-          };
-        })
-      );
+      // Single value
+      return {
+        ...cell,
+        value,
+      };
+    })
+  );
 
-      state.hasUnsavedChanges = true;
-    },
+  state.hasUnsavedChanges = true;
+},
 
 
     setHasUnsavedChanges: (state, action) => {

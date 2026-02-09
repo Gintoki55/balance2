@@ -1,12 +1,9 @@
 import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roeSlice";
+import TableComponent from "./TableComponent";
 import { useEffect } from "react";
 import { fetchFileData } from "@/app/store/roeSlice";
 import ROSecondTable from "../../../system/secondTable";
-import { roeRules } from "../../(data)/scenario";
-import {AnimatedNumber } from "../../(data)/tableData";
-import TableComponent from "../../../system/TableComponent";
-
 
 export default function CombinedTables() {
    const dispatch = useDispatch();
@@ -53,9 +50,6 @@ export default function CombinedTables() {
               onValueChange={handleValueChange}
               activeIndex={activeIndex}
               selectedFile={selectedFile}
-              scenarioKey="ROE"
-              rules={roeRules}
-              AnimatedNumber={AnimatedNumber}
             />
 
             <tr>

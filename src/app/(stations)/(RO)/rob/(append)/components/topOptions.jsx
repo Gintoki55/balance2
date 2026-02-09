@@ -1,11 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { runData, projectObject } from "@/data/allData";
-import { Play, Loader } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
-export default function TopOptions({ station, actions, useAnimate}) {
-  const {
+import {
   setSelectedFile,
   resetStation,
   fetchSavedFiles,
@@ -16,20 +11,25 @@ export default function TopOptions({ station, actions, useAnimate}) {
   saveDashboard,
   setEditAll,
   setHasUnsavedChanges,
-  setStationData
-} = actions;
-
+} from "../../../../../store/robSlice";
+import { runData, projectObject } from "@/data/allData";
+import { Play, Loader } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useAnimate } from "../../(data)/animationContext";
+import { setStationData } from "@/app/store/robSlice";
+export default function TopOptions({ station }) {
   const dispatch = useDispatch();
-
-    const {
+  const {
     selectedFile,
     savedFiles,
     loadingFiles,
     stationData,
     isRunning,
     hasUnsavedChanges,
-  } = useSelector((state) => state[station.toLowerCase()]);
-
+    loadingDashboard,
+    dashboards,
+  } = useSelector((state) => state.rob);
   const [selectedRun, setSelectedRun] = useState("");
   const [selectedProject, setSelectedProject] = useState("select");
   const [selectedDashboard, setSelectedDashboard] = useState("select");
@@ -37,7 +37,6 @@ export default function TopOptions({ station, actions, useAnimate}) {
   const [selectedExport, setSelectedExport] = useState("select");
   const [selectedAdmin, setSelectedAdmin] = useState("select");
   const [selectedMenuOption, setSelectedMenuOption] = useState("select");
-
   const { triggerAnimation } = useAnimate();
 
   // جلب الملفات
