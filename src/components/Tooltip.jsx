@@ -34,7 +34,7 @@ export default function Tooltip({ children, text }) {
           style={floatingStyles}
           className="bg-gray-600 text-white text-xs sm:text-sm md:text-base lg:text-sm 
                      px-3 py-1.5 rounded-lg shadow-lg
-                    sm:min-w-[150px] md:min-w-[200px] 
+                    sm:min-w-[150px] md:min-w-[50px] 
                      whitespace-pre-wrap break-keep z-10"
         >
           <pre className="whitespace-pre-wrap font-mono">
