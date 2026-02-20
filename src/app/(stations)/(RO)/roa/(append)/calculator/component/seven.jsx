@@ -27,17 +27,38 @@ const infoMap_7 = {
 };
 
 export default function Seven() {
-  /* ================= EC → Salinity ================= */
+  /* ================= salinity calculations ================= */
   const [g4, setG4] = useState("");
   const [g5, setG5] = useState("");
+  const [g6, setG6] = useState("");
 
   /* ================= Salinity Convertor ================= */
   const [g8, setG8] = useState("");
 
   /* ================= Water Recovery ================= */
-  const [g13, setG13] = useState("");
-  const [g14, setG14] = useState("");
-  const [g15, setG15] = useState("");
+  // Column 1
+  const [wr1, setWr1] = useState("");
+  const [wr2, setWr2] = useState("");
+  const [wr3, setWr3] = useState("");
+
+  // Column 2
+  const [wr4, setWr4] = useState("");
+  const [wr5, setWr5] = useState("");
+  const [wr6, setWr6] = useState("");
+
+  /* ================= Salt Rejection ================= */
+
+  // Column 1 - Section 1
+  const [sr1_a, setSr1_a] = useState(""); // SR %
+  const [sr1_b, setSr1_b] = useState(""); // Sf g/l
+
+  // Column 1 - Section 2
+  const [sr2_a, setSr2_a] = useState(""); // Sd g/l
+  const [sr2_b, setSr2_b] = useState(""); // SR %
+
+  // Column 2 - Section 1
+  const [sr3_a, setSr3_a] = useState(""); // Sf g/l
+  const [sr3_b, setSr3_b] = useState(""); // Sd g/l
 
   /* ================= Salt Rejection ================= */
   const [g18, setG18] = useState("");
@@ -54,10 +75,31 @@ export default function Seven() {
   const [g29, setG29] = useState("");
 
   const allow = (v, s) => /^-?\d*\.?\d*$/.test(v) && s(v);
-  const fmt = (v, s) => {
-    if (v === "" || v === "-") return;
-    const n = Number(v);
-    if (!isNaN(n)) s(n.toFixed(4));
+
+  /* ===== Normal Format (no decimal limit) ===== */
+  const formatOnBlur = (value, setter) => {
+    if (value === "" || value === "-") return;
+
+    const n = Number(value);
+
+    if (!isNaN(n)) {
+      // يحولها رقم نظيف بدون تحديد منازل
+      setter(String(n));
+    }
+  };
+
+  /* ===== Smart Scientific Format ===== */
+  const formatScientific = (num, decimals = 3) => {
+    if (num === null || num === "-" || isNaN(num)) return "-";
+
+    const n = Number(num);
+
+    // إذا زاد عن 9999 أو أقل من 0.001
+    if (Math.abs(n) >= 10000 || (Math.abs(n) > 0 && Math.abs(n) < 0.001)) {
+      return n.toExponential(decimals).replace("e", "E");
+    }
+
+    return n.toFixed(4);
   };
 
   /* ================= Calculations ================= */
@@ -82,11 +124,8 @@ export default function Seven() {
   })();
 
   const WR =
-    g13 && g14 && g15
-      ? (
-          (100 * (Number(g14) - Number(g13))) /
-          (Number(g14) - Number(g15) || 1)
-        ).toFixed(4)
+    wr4 && wr5 && wr6
+      ? (100 * (Number(wr5) - Number(wr4))) / (Number(wr5) - Number(wr6) || 1)
       : "-";
 
   const SR =
@@ -106,157 +145,285 @@ export default function Seven() {
     g28 && g29 ? (0.00255 * (273 + Number(g28)) * Number(g29)).toFixed(2) : "-";
 
   return (
-    <div className="max-w-md w-full p-6 bg-white rounded-2xl shadow-lg space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800">
-        Salinity Calculations
-      </h2>
+    <div className="max-w-7xl w-full space-y-10">
+      {/* ================= TABLE 1 ================= */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Salinity Calculations
+        </h2>
 
-      <Section title="Electrical conductivity convertor">
-        <Input
-          label="T"
-          unit="°C"
-          value={g4}
-          set={setG4}
-          allow={allow}
-          fmt={fmt}
-          autoFocus
-        />
-        <Input
-          label="EC"
-          unit="µs/cm"
-          value={g5}
-          set={setG5}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="S" unit="ppm" value={ppm} />
-      </Section>
+        <div className="grid md:grid-cols-2 bg-white border border-gray-300 p-6 rounded-l shadow-lg">
+          {/* Column 1 */}
+          <div className="space-y-3 pl-6 pt-6 pr-1 pb-6">
+            <Input
+              label="T"
+              unit="°C"
+              value={g4}
+              set={setG4}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="EC"
+              unit="µs/cm"
+              value={g5}
+              set={setG5}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <View
+              label="S"
+              unit="ppm"
+              value={ppm}
+              formatScientific={formatScientific}
+            />
+          </div>
 
-      <Section title="Salinity Convertor">
-        <Input
-          label="S"
-          unit="ppm"
-          value={g8}
-          set={setG8}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="S" unit="mg/l" value={g8 || "-"} />
-        <View
-          label="S"
-          unit="g/l"
-          value={g8 ? (Number(g8) / 1000).toFixed(4) : "-"}
-        />
-        <View
-          label="S"
-          unit="%"
-          value={g8 ? (Number(g8) / 10000).toFixed(4) : "-"}
-        />
-      </Section>
+          {/* Column 2 */}
+          <div className="space-y-3 pr-6 pt-6 pl-1 pb-6">
+            <Input
+              label="S"
+              unit="ppm"
+              value={g6}
+              set={setG6}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <View
+              label="S"
+              unit="g/l"
+              value={g6 === "" || g6 === "-" ? "-" : Number(g6) / 1000}
+              formatScientific={formatScientific}
+            />
 
-      <Section title="Water Recovery">
-        <Input
-          label="S0"
-          unit="g/l"
-          value={g13}
-          set={setG13}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="Sb"
-          unit="g/l"
-          value={g14}
-          set={setG14}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="Sd"
-          unit="g/l"
-          value={g15}
-          set={setG15}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="WR" unit="%" value={WR} />
-      </Section>
+            <View
+              label="S"
+              unit="%"
+              value={g6 === "" || g6 === "-" ? "-" : Number(g6) / 10000}
+              formatScientific={formatScientific}
+            />
+          </div>
+        </div>
+      </div>
 
-      <Section title="Salt Rejection SR">
-        <Input
-          label="Sf"
-          unit="g/l"
-          value={g18}
-          set={setG18}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="Sd"
-          unit="g/l"
-          value={g19}
-          set={setG19}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="SR" unit="%" value={SR} />
-        <div className="border-t border-dashed border-gray-400 my-4"></div>
-        <Input
-          label="SR"
-          unit="%"
-          value={g21}
-          set={setG21}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="Sf"
-          unit="g/l"
-          value={g22}
-          set={setG22}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="Sd" unit="g/l" value={Sd_from_SR} />
-        <div className="border-t border-dashed border-gray-400 my-4"></div>
-        <Input
-          label="Sd"
-          unit="g/l"
-          value={g24}
-          set={setG24}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="SR"
-          unit="%"
-          value={g25}
-          set={setG25}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="Sf" unit="g/l" value={Sf_from_SR} />
-      </Section>
+      {/* ================= TABLE 2 ================= */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">Water Recovery</h2>
 
-      <Section title="Osmotic pressure of saline water">
-        <Input
-          label="T"
-          unit="°C"
-          value={g28}
-          set={setG28}
-          allow={allow}
-          fmt={fmt}
-        />
-        <Input
-          label="S"
-          unit="g/l"
-          value={g29}
-          set={setG29}
-          allow={allow}
-          fmt={fmt}
-        />
-        <View label="π" unit="bar" value={PI} />
-      </Section>
+        <div className="grid md:grid-cols-2 bg-white border border-gray-300 p-6 rounded-l shadow-lg">
+          {/* Column 1 */}
+          <div className="space-y-3 pl-6 pt-6 pr-1 pb-6">
+            <Input
+              label="WR"
+              unit="%"
+              value={wr1}
+              set={setWr1}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="S0"
+              unit="g/l"
+              value={wr2}
+              set={setWr2}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="Sd"
+              unit="g/l"
+              value={wr3}
+              set={setWr3}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+
+            <View
+              label="Sb"
+              unit="g/l"
+              value={
+                wr1 === "" || wr2 === "" || wr3 === ""
+                  ? "-"
+                  : (100 * Number(wr2) - Number(wr1) * Number(wr3)) /
+                    (100 - Number(wr1) || 1)
+              }
+              formatScientific={formatScientific}
+            />
+          </div>
+
+          {/* Column 2 */}
+          <div className="space-y-3 pr-6 pt-6 pl-1 pb-6">
+            <Input
+              label="S0"
+              unit="g/l"
+              value={wr4}
+              set={setWr4}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="Sb"
+              unit="g/l"
+              value={wr5}
+              set={setWr5}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="Sd"
+              unit="g/l"
+              value={wr6}
+              set={setWr6}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+
+            <View
+              label="WR"
+              unit="%"
+              value={WR}
+              formatScientific={formatScientific}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ================= TABLE 3 ================= */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800">
+          Salt Rejections & Osmotic Pressure
+        </h2>
+
+        <div className="grid md:grid-cols-2 bg-white border border-gray-300 p-6 rounded-l shadow-lg">
+          {/* ================= Column 1 ================= */}
+          <div className="space-y-3 pl-6 pt-6 pr-1 pb-6">
+            {/* ===== Section 1 ===== */}
+            <Input
+              label="SR"
+              unit="%"
+              value={sr1_a}
+              set={setSr1_a}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="Sf"
+              unit="g/l"
+              value={sr1_b}
+              set={setSr1_b}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+
+            <View
+              label="Sd"
+              unit="g/l"
+              value={
+                sr1_a === "" || sr1_b === ""
+                  ? "-"
+                  : ((100 - Number(sr1_a)) * Number(sr1_b)) / 100
+              }
+              formatScientific={formatScientific}
+            />
+
+            <div className="border-t border-dashed border-gray-400 my-3"></div>
+
+            {/* ===== Section 2 ===== */}
+            <Input
+              label="Sd"
+              unit="g/l"
+              value={sr2_a}
+              set={setSr2_a}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="SR"
+              unit="%"
+              value={sr2_b}
+              set={setSr2_b}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+
+            <View
+              label="Sf"
+              unit="g/l"
+              value={
+                sr2_a === "" || sr2_b === ""
+                  ? "-"
+                  : (100 * Number(sr2_a)) / (100 - Number(sr2_b) || 0)
+              }
+              formatScientific={formatScientific}
+            />
+          </div>
+
+          {/* ================= Column 2 ================= */}
+          
+          <div className="space-y-3 pr-6 pt-6 pl-1 pb-6">
+            {/* ===== Section 1 ===== */}
+            <Input
+              label="Sf"
+              unit="g/l"
+              value={sr3_a}
+              set={setSr3_a}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="Sd"
+              unit="g/l"
+              value={sr3_b}
+              set={setSr3_b}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+{/* =100*(F66-F67)/F66 */}
+            <View
+              label="SR"
+              unit="%"
+              value={
+                sr3_b === "" || sr3_a === ""
+                  ? "-"
+                  : (100 * (Number(sr3_a) - Number(sr3_b))) /
+                    (Number(sr3_a) || 0)
+              }
+              formatScientific={formatScientific}
+            />
+
+            <div className="border-t border-dashed border-gray-400 my-3"></div>
+
+            {/* ===== Section 2 (Osmotic Pressure) ===== */}
+            <Input
+              label="T"
+              unit="°C"
+              value={g28}
+              set={setG28}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+            <Input
+              label="S"
+              unit="g/l"
+              value={g29}
+              set={setG29}
+              allow={allow}
+              formatOnBlur={formatOnBlur}
+            />
+
+            <View
+              label="π"
+              unit="bar"
+              value={
+                g28 === "" || g29 === ""
+                  ? "-"
+                  : 0.00255 * (273 + Number(g28)) * Number(g29)
+              }
+              formatScientific={formatScientific}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -265,16 +432,16 @@ export default function Seven() {
 
 function Section({ title, children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0">
+    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
       <h3 className="font-bold text-gray-700">{title}</h3>
       {children}
     </div>
   );
 }
 
-function Input({ label, unit, value, set, allow, fmt, autoFocus }) {
+function Input({ label, unit, value, set, allow, formatOnBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 bg-green-50 rounded-xl">
+    <div className="grid grid-cols-3 items-center p-2 bg-green-50 rounded-l">
       <div className="flex justify-start" dir="ltr">
         <div className="inline-flex">
           <Tooltip text={infoMap_7[label]}>
@@ -285,10 +452,10 @@ function Input({ label, unit, value, set, allow, fmt, autoFocus }) {
       <input
         value={value}
         onChange={(e) => allow(e.target.value, set)}
-        onBlur={() => fmt(value, set)}
+        onBlur={() => formatOnBlur(value, set)}
         onClick={(e) => e.target.select()}
         autoFocus={autoFocus}
-        className="border rounded p-1 text-center"
+        className="w-full max-w-[180px] text-center border border-gray-300 rounded p-1"
       />
       <div className="flex justify-end" dir="ltr">
         <div className="inline-flex">
@@ -301,9 +468,9 @@ function Input({ label, unit, value, set, allow, fmt, autoFocus }) {
   );
 }
 
-function View({ label, unit, value }) {
+function View({ label, unit, value, formatScientific }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 bg-gray-50 rounded-xl">
+    <div className="grid grid-cols-3 items-center p-3 rounded-l bg-gray-50">
       <div className="flex justify-start" dir="ltr">
         <div className="inline-flex">
           <Tooltip text={infoMap_7[label]}>
@@ -311,7 +478,7 @@ function View({ label, unit, value }) {
           </Tooltip>
         </div>
       </div>
-      <span className="font-bold text-center">{value}</span>
+      <span className="font-bold text-center">{formatScientific(value)}</span>
       <div className="flex justify-end" dir="ltr">
         <div className="inline-flex">
           <Tooltip text={infoMap_7[unit]}>

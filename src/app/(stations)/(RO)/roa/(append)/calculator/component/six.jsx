@@ -32,10 +32,31 @@ export default function Six() {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
   };
 
+ /* ===== Normal Format (no decimal limit) ===== */
   const formatOnBlur = (value, setter) => {
     if (value === "" || value === "-") return;
-    const num = Number(value);
-    if (!isNaN(num)) setter(num.toFixed(4));
+
+    const n = Number(value);
+
+    if (!isNaN(n)) {
+      // يحولها رقم نظيف بدون تحديد منازل
+      setter(String(n));
+    }
+  };
+
+
+  /* ===== Smart Scientific Format ===== */
+  const formatScientific = (num, decimals = 2) => {
+    if (num === null || num === "-" || isNaN(num)) return "-";
+
+    const n = Number(num);
+
+    // إذا زاد عن 9999 أو أقل من 0.001
+    if (Math.abs(n) >= 10000 || (Math.abs(n) > 0 && Math.abs(n) < 0.001)) {
+      return n.toExponential(decimals).replace("e", "E");
+    }
+
+    return n.toFixed(4);
   };
 
   const n73 = c73 === "" || c73 === "-" ? null : Number(c73);
@@ -45,107 +66,150 @@ export default function Six() {
   const n83 = c83 === "" || c83 === "-" ? null : Number(c83);
   const n85 = c85 === "" || c85 === "-" ? null : Number(c85);
 
-  return (
-    <div className="max-w-xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">
-        RO water and salt permeation
-      </h2>
+return (
+  <div className="max-w-7xl w-full space-y-10">
 
-      {/* ===== Water Flux (M) ===== */}
-      <Section title="Water flux convertor (M)">
-        <RowInput
-          label="M"
-          unit="gfd"
-          value={c73}
-          onChange={(e) => allowNumber(e.target.value, setC73)}
-          onBlur={() => formatOnBlur(c73, setC73)}
-          autoFocus
-        />
-        <RowView
-          label="M"
-          value={n73 === null ? "-" : ((n73 * 3.785 * 10.76) / 24).toFixed(4)}
-          unit="lmh"
-        />
-        <div className="border-t border-dashed border-gray-400 my-4"></div>
-        <RowInput
-          label="M"
-          unit="lmh"
-          value={c75}
-          onChange={(e) => allowNumber(e.target.value, setC75)}
-          onBlur={() => formatOnBlur(c75, setC75)}
-        />
-        <RowView
-          label="M"
-          value={n75 === null ? "-" : ((n75 * 24) / (3.785 * 10.76)).toFixed(4)}
-          unit="gfd"
-        />
-      </Section>
+    {/* ================= Table 1 : Water Permeability (W) ================= */}
+    <div>
+      <h3 className="font-bold text-gray-700 mb-4">Water Permeability (W)</h3>
 
-      {/* ===== Water Permeability (W) ===== */}
-      <Section title="Water Permeability (W)">
-        <RowInput
-          label="W"
-          unit="l/m².h.bar"
-          value={c78}
-          onChange={(e) => allowNumber(e.target.value, setC78)}
-          onBlur={() => formatOnBlur(c78, setC78)}
-        />
-        <RowView
-          label="W"
-          value={n78 === null ? "-" : (n78 / (3600 * 1000)).toFixed(6)}
-          unit="m/s.bar"
-        />
-        <div className="border-t border-dashed border-gray-400 my-4"></div>
-        <RowInput
-          label="W"
-          unit="m/s.bar"
-          value={c80}
-          onChange={(e) => allowNumber(e.target.value, setC80)}
-          onBlur={() => formatOnBlur(c80, setC80)}
-        />
-        <RowView
-          label="W"
-          value={n80 === null ? "-" : (n80 * (3600 * 1000)).toFixed(4)}
-          unit="l/m².h.bar"
-        />
-      </Section>
+      <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300">
 
-      {/* ===== Salt Permeability (X) ===== */}
-      <Section title="Salt Permeability (X)">
-        <RowInput
-          label="X"
-          unit="g/m².h.(g/l)"
-          value={c83}
-          onChange={(e) => allowNumber(e.target.value, setC83)}
-          onBlur={() => formatOnBlur(c83, setC83)}
-        />
-        <RowView
-          label="X"
-          value={n83 === null ? "-" : (n83 / (3600 * 1000)).toFixed(6)}
-          unit="m/s"
-        />
-        <div className="border-t border-dashed border-gray-400 my-4"></div>
-        <RowInput
-          label="X"
-          unit="m/s"
-          value={c85}
-          onChange={(e) => allowNumber(e.target.value, setC85)}
-          onBlur={() => formatOnBlur(c85, setC85)}
-        />
-        <RowView
-          label="X"
-          value={n85 === null ? "-" : (n85 * (3600 * 1000)).toFixed(4)}
-          unit="g/m².h.(g/l)"
-        />
-      </Section>
+        {/* Left Column */}
+        <div className="space-y-4 pl-6 pt-6 pr-1 pb-6">
+          <RowInput
+            label="W"
+            unit="l/m².h.bar"
+            value={c78}
+            onChange={(e) => allowNumber(e.target.value, setC78)}
+            onBlur={() => formatOnBlur(c78, setC78)}
+          />
+          <RowView
+            label="W"
+            value={n78 === null ? "-" : (n78/(3600*1000))}
+            unit="m/s.bar"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-4 pr-6 pt-6 pl-1 pb-6">
+          <RowInput
+            label="W"
+            unit="m/s.bar"
+            value={c80}
+            onChange={(e) => allowNumber(e.target.value, setC80)}
+            onBlur={() => formatOnBlur(c80, setC80)}
+          />
+          <RowView
+            label="W"
+            value={n80 === null ? "-" : (n80 * (3600 * 1000))}
+            unit="l/m².h.bar"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+      </div>
     </div>
-  );
+
+    {/* ================= Table 2 : Salt Permeability (X) ================= */}
+    <div>
+      <h3 className="font-bold text-gray-700 mb-4">Salt Permeability (X)</h3>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300">
+
+        {/* Left Column */}
+        <div className="space-y-4 pl-6 pt-6 pr-1 pb-6">
+          <RowInput
+            label="X"
+            unit="g/m².h.(g/l)"
+            value={c83}
+            onChange={(e) => allowNumber(e.target.value, setC83)}
+            onBlur={() => formatOnBlur(c83, setC83)}
+          />
+          <RowView
+            label="X"
+            value={n83 === null ? "-" : (n83 / (3600 * 1000))}
+            unit="m/s"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-4 pr-6 pt-6 pl-1 pb-6">
+          <RowInput
+            label="X"
+            unit="m/s"
+            value={c85}
+            onChange={(e) => allowNumber(e.target.value, setC85)}
+            onBlur={() => formatOnBlur(c85, setC85)}
+          />
+          <RowView
+            label="X"
+            value={n85 === null ? "-" : (n85 * (3600 * 1000))}
+            unit="g/m².h.(g/l)"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+      </div>
+    </div>
+
+    {/* ================= Table 3 : Water Flux (M) ================= */}
+    <div>
+      <h3 className="font-bold text-gray-700 mb-4">
+        Water flux convertor (M)
+      </h3>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
+
+        {/* Left Column */}
+        <div className="space-y-4 pl-6 pt-6 pr-1 pb-6">
+          <RowInput
+            label="M"
+            unit="gfd"
+            value={c73}
+            onChange={(e) => allowNumber(e.target.value, setC73)}
+            onBlur={() => formatOnBlur(c73, setC73)}
+            autoFocus
+          />
+          <RowView
+            label="M"
+            value={n73 === null ? "-" : ((n73 * 3.785 * 10.76) / 24)}
+            unit="lmh"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+        {/* Right Column */}
+        <div className="space-y-4 pr-6 pt-6 pl-1 pb-6">
+          <RowInput
+            label="M"
+            unit="lmh"
+            value={c75}
+            onChange={(e) => allowNumber(e.target.value, setC75)}
+            onBlur={() => formatOnBlur(c75, setC75)}
+          />
+          <RowView
+            label="M"
+            value={n75 === null ? "-" : ((n75 * 24) / (3.785 * 10.76))}
+            unit="gfd"
+            formatScientific={formatScientific}
+          />
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+);
+
 }
 
 /* ===== Helpers ===== */
 function Section({ title, children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0">
+    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
       <h3 className="font-bold text-gray-700">{title}</h3>
       {children}
     </div>
@@ -154,7 +218,7 @@ function Section({ title, children }) {
 
 function RowInput({ label, unit, value, onChange,onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 rounded-xl bg-green-50">
+    <div className="grid grid-cols-3 items-center p-2 rounded-l bg-green-50">
       <span className="font-semibold text-gray-700">{label}</span>
       <input
         type="text"
@@ -178,11 +242,14 @@ function RowInput({ label, unit, value, onChange,onBlur, autoFocus }) {
   );
 }
 
-function RowView({ label, value, unit }) {
+function RowView({ label, value, unit,formatScientific }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 rounded-xl bg-gray-50">
+    <div className="grid grid-cols-3 items-center p-3 rounded-l bg-gray-50">
       <span className="font-semibold text-gray-700">{label}</span>
-      <span className="text-l font-bold text-center">{value}</span>
+      <span className="text-l font-bold text-center">
+        {formatScientific(value)}
+        {/* {value} */}
+        </span>
       <div className="flex justify-end" dir="ltr">
         <div className="inline-flex">
           <Tooltip text={infoMap_6[unit]}>

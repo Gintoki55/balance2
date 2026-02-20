@@ -8,7 +8,7 @@ const infoMap_4 = {
   bar: "bar",
   kPa: "KiloPascal",
   MPa: "megaPascal",
-  psi: "inches per square pound",
+  psi: "Pound  per square inch",
 };
 
 export default function Four() {
@@ -32,77 +32,92 @@ export default function Four() {
   const n51 = c51 === "" || c51 === "-" ? null : Number(c51);
   const n55 = c55 === "" || c55 === "-" ? null : Number(c55);
 
-  return (
-    <div className="max-w-xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">
-        Pressure Converter P
-      </h2>
+return (
+  <div className="max-w-7xl w-full space-y-6">
+    <h2 className="text-2xl font-bold text-gray-800">
+      Pressure Converter P
+    </h2>
 
-      {/* ===== bar ===== */}
-      <Section title="bar input">
-        <RowInput
-          label="P"
-          unit="bar"
-          value={c43}
-          onChange={(e) => allowNumber(e.target.value, setC43)}
-          onBlur={() => formatOnBlur(c43, setC43)}
-          autoFocus
-        />
-        <RowView label="P" value={n43 === null ? "-" : (n43 * 100).toFixed(4)} unit="kPa" />
-        <RowView label="P" value={n43 === null ? "-" : (n43 / 10).toFixed(4)} unit="MPa" />
-        <RowView label="P" value={n43 === null ? "-" : (n43 * 14.55).toFixed(4)} unit="psi" />
-      </Section>
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
 
-      {/* ===== kPa ===== */}
-      <Section title="kPa input">
-        <RowInput
-          label="P"
-          unit="kPa"
-          value={c47}
-          onChange={(e) => allowNumber(e.target.value, setC47)}
-          onBlur={() => formatOnBlur(c47, setC47)}
-        />
-        <RowView label="P" value={n47 === null ? "-" : (n47 / 1000).toFixed(4)} unit="MPa" />
-        <RowView label="P" value={n47 === null ? "-" : (n47 * 0.1455).toFixed(4)} unit="psi" />
-        <RowView label="P" value={n47 === null ? "-" : (n47 / 100).toFixed(4)} unit="bar" />
-      </Section>
+      {/* ===== Left Column ===== */}
+      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
 
-      {/* ===== MPa ===== */}
-      <Section title="MPa input">
-        <RowInput
-          label="P"
-          unit="MPa"
-          value={c51}
-          onChange={(e) => allowNumber(e.target.value, setC51)}
-          onBlur={() => formatOnBlur(c51, setC51)}
-        />
-        <RowView label="P" value={n51 === null ? "-" : (n51 * 145.5).toFixed(4)} unit="psi" />
-        <RowView label="P" value={n51 === null ? "-" : (n51 * 10).toFixed(4)} unit="bar" />
-        <RowView label="P" value={n51 === null ? "-" : (n51 * 1000).toFixed(4)} unit="kPa" />
-      </Section>
+        {/* bar */}
+        <Section title="bar input">
+          <RowInput
+            label="P"
+            unit="bar"
+            value={c43}
+            onChange={(e) => allowNumber(e.target.value, setC43)}
+            onBlur={() => formatOnBlur(c43, setC43)}
+            autoFocus
+          />
+          <RowView label="P" value={n43 === null ? "-" : (n43 * 100).toFixed(4)} unit="kPa" />
+          <RowView label="P" value={n43 === null ? "-" : (n43 / 10).toFixed(4)} unit="MPa" />
+          <RowView label="P" value={n43 === null ? "-" : (n43 * 14.55).toFixed(4)} unit="psi" />
+        </Section>
 
-      {/* ===== psi ===== */}
-      <Section title="psi input">
-        <RowInput
-          label="P"
-          unit="psi"
-          value={c55}
-          onChange={(e) => allowNumber(e.target.value, setC55)}
-          onBlur={() => formatOnBlur(c55, setC55)}
-        />
-        <RowView label="P" value={n55 === null ? "-" : (n55 / 14.55).toFixed(4)} unit="bar" />
-        <RowView label="P" value={n55 === null ? "-" : (n55 / 0.1455).toFixed(4)} unit="kPa" />
-        <RowView label="P" value={n55 === null ? "-" : (n55 / 145.5).toFixed(4)} unit="MPa" />
-      </Section>
+        {/* MPa */}
+        <Section title="MPa input">
+          <RowInput
+            label="P"
+            unit="MPa"
+            value={c51}
+            onChange={(e) => allowNumber(e.target.value, setC51)}
+            onBlur={() => formatOnBlur(c51, setC51)}
+          />
+          <RowView label="P" value={n51 === null ? "-" : (n51 * 145.5).toFixed(4)} unit="psi" />
+          <RowView label="P" value={n51 === null ? "-" : (n51 * 10).toFixed(4)} unit="bar" />
+          <RowView label="P" value={n51 === null ? "-" : (n51 * 1000).toFixed(4)} unit="kPa" />
+        </Section>
+
+      </div>
+
+      {/* ===== Right Column ===== */}
+      <div className="space-y-6 pr-6 pt-6 pl-1 pb-6">
+
+        {/* kPa */}
+        <Section title="kPa input">
+          <RowInput
+            label="P"
+            unit="kPa"
+            value={c47}
+            onChange={(e) => allowNumber(e.target.value, setC47)}
+            onBlur={() => formatOnBlur(c47, setC47)}
+          />
+          <RowView label="P" value={n47 === null ? "-" : (n47 / 1000).toFixed(4)} unit="MPa" />
+          <RowView label="P" value={n47 === null ? "-" : (n47 * 0.1455).toFixed(4)} unit="psi" />
+          <RowView label="P" value={n47 === null ? "-" : (n47 / 100).toFixed(4)} unit="bar" />
+        </Section>
+
+        {/* psi */}
+        <Section title="psi input">
+          <RowInput
+            label="P"
+            unit="psi"
+            value={c55}
+            onChange={(e) => allowNumber(e.target.value, setC55)}
+            onBlur={() => formatOnBlur(c55, setC55)}
+          />
+          <RowView label="P" value={n55 === null ? "-" : (n55 / 14.55).toFixed(4)} unit="bar" />
+          <RowView label="P" value={n55 === null ? "-" : (n55 / 0.1455).toFixed(4)} unit="kPa" />
+          <RowView label="P" value={n55 === null ? "-" : (n55 / 145.5).toFixed(4)} unit="MPa" />
+        </Section>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
+
 }
 
 /* ===== Helpers (نفس رقم 5) ===== */
 
 function Section({ title, children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0">
+    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
       <h3 className="font-bold text-gray-700">{title}</h3>
       {children}
     </div>
@@ -111,7 +126,7 @@ function Section({ title, children }) {
 
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-green-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="flex justify-center">
@@ -141,7 +156,7 @@ function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
 
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-gray-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="text-l font-bold text-center">{value}</div>

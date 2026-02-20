@@ -5,10 +5,10 @@ import Tooltip from "@/components/Tooltip";
 import { useState } from "react";
 
 const infoMap_3 = {
-  MIGD: "Liquid water flow [Million Imperial Gallon/day]",
-  "m³/day": "Liquid water flow [m³/day]",
-  "t/h": "Mass flow [metric ton/hour],as same as for liquid water flow m³/h]",
-  "kg/s": "Mass flow [kg/s], as same for liquid water flow [I/s]",
+  MIGD: "Million Imperial Gallon per day (Liquid water flow)",
+  "m³/day": "Cubic meter per day (liquid water flow)",
+  "t/h": "Metric ton per hour (as m³/h for liquid water)",
+  "kg/s": "Kilogram per second (as l/s for liquid water )",
 };
 
 export default function Three() {
@@ -32,125 +32,92 @@ export default function Three() {
   const n33 = c33 === "" || c33 === "-" ? null : Number(c33);
   const n37 = c37 === "" || c37 === "-" ? null : Number(c37);
 
-  return (
-    <div className="max-w-xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">
-        Water flow convertor M
-      </h2>
+return (
+  <div className="max-w-7xl w-full space-y-6">
+    <h2 className="text-2xl font-bold text-gray-800">
+      Water flow convertor M
+    </h2>
 
-      {/* ===== MIGD ===== */}
-      <Section title="MIGD input">
-        <RowInput
-          label="M"
-          unit="MIGD"
-          value={c25}
-          onChange={(e) => allowNumber(e.target.value, setC25)}
-          onBlur={() => formatOnBlur(c25, setC25)}
-          autoFocus
-        />
-        <RowView
-          label="M"
-          value={n25 === null ? "-" : ((n25 * 1_000_000) / 220).toFixed(4)}
-          unit="m³/day"
-        />
-        <RowView
-          label="M"
-          value={n25 === null ? "-" : ((n25 * 1_000_000) / (220 * 24)).toFixed(4)}
-          unit="t/h"
-        />
-        <RowView
-          label="M"
-          value={n25 === null ? "-" : ((n25 * 4_545_454) / 86400).toFixed(4)}
-          unit="kg/s"
-        />
-      </Section>
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
 
-      {/* ===== m³/day ===== */}
-      <Section title="m³/day input">
-        <RowInput
-          label="M"
-          unit="m³/day"
-          value={c29}
-          onChange={(e) => allowNumber(e.target.value, setC29)}
-          onBlur={() => formatOnBlur(c29, setC29)}
-        />
-        <RowView
-          label="M"
-          value={n29 === null ? "-" : (n29 * 24).toFixed(4)}
-          unit="t/h"
-        />
-        <RowView
-          label="M"
-          value={n29 === null ? "-" : ((n29 * 1000) / 86400).toFixed(4)}
-          unit="kg/s"
-        />
-        <RowView
-          label="M"
-          value={n29 === null ? "-" : ((n29 * 220) / 1_000_000).toFixed(4)}
-          unit="MIGD"
-        />
-      </Section>
+      {/* ===== Left Column ===== */}
+      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
 
-      {/* ===== t/h ===== */}
-      <Section title="t/h input">
-        <RowInput
-          label="M"
-          unit="t/h"
-          value={c33}
-          onChange={(e) => allowNumber(e.target.value, setC33)}
-          onBlur={() => formatOnBlur(c33, setC33)}
-        />
-        <RowView
-          label="M"
-          value={n33 === null ? "-" : ((n33 * 1000) / 3600).toFixed(4)}
-          unit="kg/s"
-        />
-        <RowView
-          label="M"
-          value={n33 === null ? "-" : ((n33 * 24 * 220) / 1_000_000).toFixed(4)}
-          unit="MIGD"
-        />
-        <RowView
-          label="M"
-          value={n33 === null ? "-" : (n33 * 24).toFixed(4)}
-          unit="m³/day"
-        />
-      </Section>
+        {/* MIGD */}
+        <Section title="MIGD input">
+          <RowInput
+            label="M"
+            unit="MIGD"
+            value={c25}
+            onChange={(e) => allowNumber(e.target.value, setC25)}
+            onBlur={() => formatOnBlur(c25, setC25)}
+            autoFocus
+          />
+          <RowView label="M" value={n25 === null ? "-" : ((n25 * 1_000_000) / 220).toFixed(4)} unit="m³/day" />
+          <RowView label="M" value={n25 === null ? "-" : ((n25 * 1_000_000) / (220 * 24)).toFixed(4)} unit="t/h" />
+          <RowView label="M" value={n25 === null ? "-" : ((n25 * 4_545_454) / 86400).toFixed(4)} unit="kg/s" />
+        </Section>
 
-      {/* ===== kg/s ===== */}
-      <Section title="kg/s input">
-        <RowInput
-          label="M"
-          unit="kg/s"
-          value={c37}
-          onChange={(e) => allowNumber(e.target.value, setC37)}
-          onBlur={() => formatOnBlur(c37, setC37)}
-        />
-        <RowView
-          label="M"
-          value={n37 === null ? "-" : ((n37 * 86400) / 4_545_454).toFixed(4)}
-          unit="MIGD"
-        />
-        <RowView
-          label="M"
-          value={n37 === null ? "-" : ((n37 * 86400) / 1000).toFixed(4)}
-          unit="m³/day"
-        />
-        <RowView
-          label="M"
-          value={n37 === null ? "-" : ((n37 * 3600) / 1000).toFixed(4)}
-          unit="t/h"
-        />
-      </Section>
+        {/* t/h */}
+        <Section title="t/h input">
+          <RowInput
+            label="M"
+            unit="t/h"
+            value={c33}
+            onChange={(e) => allowNumber(e.target.value, setC33)}
+            onBlur={() => formatOnBlur(c33, setC33)}
+          />
+          <RowView label="M" value={n33 === null ? "-" : ((n33 * 1000) / 3600).toFixed(4)} unit="kg/s" />
+          <RowView label="M" value={n33 === null ? "-" : ((n33 * 24 * 220) / 1_000_000).toFixed(4)} unit="MIGD" />
+          <RowView label="M" value={n33 === null ? "-" : (n33 * 24).toFixed(4)} unit="m³/day" />
+        </Section>
+
+      </div>
+
+      {/* ===== Right Column ===== */}
+      <div className="space-y-6 pr-6 pt-6 pl-1 pb-6">
+
+        {/* m³/day */}
+        <Section title="m³/day input">
+          <RowInput
+            label="M"
+            unit="m³/day"
+            value={c29}
+            onChange={(e) => allowNumber(e.target.value, setC29)}
+            onBlur={() => formatOnBlur(c29, setC29)}
+          />
+          <RowView label="M" value={n29 === null ? "-" : ((n29 + 0.0001) / 24).toFixed(4)} unit="t/h" />
+          <RowView label="M" value={n29 === null ? "-" : ((n29 * 1000) / 86400).toFixed(4)} unit="kg/s" />
+          <RowView label="M" value={n29 === null ? "-" : ((n29 * 220) / 1_000_000).toFixed(4)} unit="MIGD" />
+        </Section>
+
+        {/* kg/s */}
+        <Section title="kg/s input">
+          <RowInput
+            label="M"
+            unit="kg/s"
+            value={c37}
+            onChange={(e) => allowNumber(e.target.value, setC37)}
+            onBlur={() => formatOnBlur(c37, setC37)}
+          />
+          <RowView label="M" value={n37 === null ? "-" : ((n37 * 86400) / 4_545_454).toFixed(4)} unit="MIGD" />
+          <RowView label="M" value={n37 === null ? "-" : ((n37 * 86400) / 1000).toFixed(4)} unit="m³/day" />
+          <RowView label="M" value={n37 === null ? "-" : ((n37 * 3600) / 1000).toFixed(4)} unit="t/h" />
+        </Section>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
+
 }
 
 /* ===== Helpers (نفس رقم 5) ===== */
 
 function Section({ title, children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0">
+    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
       <h3 className="font-bold text-gray-700">{title}</h3>
       {children}
     </div>
@@ -159,7 +126,7 @@ function Section({ title, children }) {
 
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-green-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="flex justify-center">
@@ -189,7 +156,7 @@ function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
 
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-gray-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="text-l font-bold text-center">{value}</div>

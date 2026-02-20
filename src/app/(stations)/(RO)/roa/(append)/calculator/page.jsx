@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import StationHeader from "@/components/stationheader";
+
 import One from "./component/one";
 import Two from "./component/two";
 import Three from "./component/three";
@@ -11,64 +11,76 @@ import Six from "./component/six";
 import Seven from "./component/seven";
 import Eight from "./component/eight";
 import Nine from "./component/nine";
+import ROElementParameters from "./component/ten";
 
 export default function CalculatorPage() {
-  const [selected, setSelected] = useState("one");
-
-  const renderComponent = () => {
-    switch (selected) {
-      case "one":
-        return <One />;
-      case "two":
-        return <Two />;
-      case "three":
-        return <Three />;
-      case "four":
-        return <Four />;
-      case "five":
-        return <Five />;
-      case "six":
-        return <Six />;
-      case "seven":
-        return <Seven />;
-      case "eight":
-        return <Eight />;
-      case "nine":
-        return <Nine />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="bg-[#F9FAFB] min-h-screen flex flex-col">
-      <StationHeader title="Calculator" isPopup />
+    <div className="min-h-screen">
+      <StationHeader title="Engineering Calculators" isPopup />
 
-      <main className="flex-grow flex justify-center m-10">
-        <div className="max-w-md w-full space-y-6">
+      <div className="max-w-7xl mx-auto px-6 py-10 space-y-12">
 
-          {/* ===== Dropdown ===== */}
-          <select
-            value={selected}
-            onChange={(e) => setSelected(e.target.value)}
-            className="w-full p-3 border rounded-xl shadow-sm"
-          >
-            <option value="one">Temperature convertor T</option>
-            <option value="two">Volume convertor V</option>
-            <option value="three">Water flow convertor  M</option>
-            <option value="four">Pressure convertor  P</option>
-            <option value="five">Heat convertor  Q</option>
-            <option value="six">RO water and salt permeation</option>
-            <option value="seven">Salinity Calculations</option>
-            <option value="eight">RO element parameters (pressure drop is given)</option>
-            <option value="nine">RO Parameters (Correlated ΔP)</option>
-          </select>
+        {/* ===== Calculator 1 ===== */}
+        <Section title="Temperature Converter">
+          <One />
+        </Section>
 
-          {/* ===== Selected Table ===== */}
-          <div>{renderComponent()}</div>
+        {/* ===== Calculator 2 ===== */}
+        <Section title="Volume Converter">
+          <Two />
+        </Section>
 
-        </div>
-      </main>
+        {/* ===== Calculator 3 ===== */}
+        <Section title="Water Flow Converter">
+          <Three />
+        </Section>
+
+        {/* ===== Calculator 4 ===== */}
+        <Section title="Pressure Converter">
+          <Four />
+        </Section>
+
+        {/* ===== Calculator 5 ===== */}
+        {/* <Section title="Heat Converter">
+          <Five />
+        </Section> */}
+
+        {/* ===== Calculator 6 ===== */}
+        <Section title="RO Water & Salt Permeation">
+          <Six />
+        </Section>
+
+        {/* ===== Calculator 7 ===== */}
+        <Section title="Salinity Calculations">
+          <Seven />
+        </Section>
+
+        {/* ===== Calculator 8 ===== */}
+        {/* <Section title="RO Element Parameters">
+          <Eight />
+        </Section> */}
+
+        {/* ===== Calculator 9 ===== */}
+        {/* <Section title="RO Parameters (ΔP)">
+          <Nine />
+        </Section> */}
+
+        <Section title="RO element parameters">
+          <ROElementParameters/>
+        </Section>
+
+      </div>
+    </div>
+  );
+}
+
+/* ===== Wrapper Section ===== */
+function Section({ title, children }) {
+  return (
+    <div className="space-y-6">
+      <div className="">
+        {children}
+      </div>
     </div>
   );
 }

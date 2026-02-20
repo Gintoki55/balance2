@@ -8,12 +8,14 @@ const infoMap_2 = {
   "m³": "Meter cube",
   "IG (UK)": "Imperial gallon",
   "gl (US)": "Gallon",
+  "ft³": "Cubic foot",
 };
 
 export default function Two() {
   const [c14, setC14] = useState("");
   const [c17, setC17] = useState("");
   const [c20, setC20] = useState("");
+  const [c24, setC24] = useState("");
 
   const allowNumber = (value, setter) => {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
@@ -28,83 +30,92 @@ export default function Two() {
   const n14 = c14 === "" || c14 === "-" ? null : Number(c14);
   const n17 = c17 === "" || c17 === "-" ? null : Number(c17);
   const n20 = c20 === "" || c20 === "-" ? null : Number(c20);
+  const n24 = c24 === "" || c24 === "-" ? null : Number(c24);
 
-  return (
-    <div className="max-w-xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">Volume Converter V</h2>
+return (
+  <div className="max-w-7xl w-full space-y-6">
+    <h2 className="text-2xl font-bold text-gray-800">Volume Converter V</h2>
 
-      {/* ===== m³ input ===== */}
-      <Section title="m³ input">
-        <RowInput
-          label="V"
-          unit="m³"
-          value={c14}
-          onChange={(e) => allowNumber(e.target.value, setC14)}
-          onBlur={() => formatOnBlur(c14, setC14)}
-          autoFocus
-        />
-        <RowView
-          label="V"
-          value={n14 === null ? "-" : (n14 * 220).toFixed(4)}
-          unit="IG (UK)"
-        />
-        <RowView
-          label="V"
-          value={n14 === null ? "-" : (n14 * 264.2).toFixed(4)}
-          unit="gl (US)"
-        />
-      </Section>
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
 
-      {/* ===== IG (UK) input ===== */}
-      <Section title="IG (UK) input">
-        <RowInput
-          label="V"
-          unit="IG (UK)"
-          value={c17}
-          onChange={(e) => allowNumber(e.target.value, setC17)}
-          onBlur={() => formatOnBlur(c17, setC17)}
-        />
-        <RowView
-          label="V"
-          value={n17 === null ? "-" : ((n17 * 264.2) / 220).toFixed(4)}
-          unit="gl (US)"
-        />
-        <RowView
-          label="V"
-          value={n17 === null ? "-" : (n17 / 220).toFixed(4)}
-          unit="m³"
-        />
-      </Section>
+      {/* ===== Left Column ===== */}
+      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
 
-      {/* ===== gl (US) input ===== */}
-      <Section title="gl (US) input">
-        <RowInput
-          label="V"
-          unit="gl (US)"
-          value={c20}
-          onChange={(e) => allowNumber(e.target.value, setC20)}
-          onBlur={() => formatOnBlur(c20, setC20)}
-        />
-        <RowView
-          label="V"
-          value={n20 === null ? "-" : (n20 / 264.2).toFixed(4)}
-          unit="m³"
-        />
-        <RowView
-          label="V"
-          value={n20 === null ? "-" : ((n20 * 220) / 264.2).toFixed(4)}
-          unit="IG (UK)"
-        />
-      </Section>
+        {/* m³ input */}
+        <Section title="m³ input">
+          <RowInput
+            label="V"
+            unit="m³"
+            value={c14}
+            onChange={(e) => allowNumber(e.target.value, setC14)}
+            onBlur={() => formatOnBlur(c14, setC14)}
+            autoFocus
+          />
+          <RowView label="V" value={n14 === null ? "-" : (n14 * 35.3147).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={n14 === null ? "-" : (n14 * 220).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={n14 === null ? "-" : (n14 * 264.2).toFixed(4)} unit="gl (US)" />
+        </Section>
+
+        {/* IG (UK) input */}
+        <Section title="IG (UK) input">
+          <RowInput
+            label="V"
+            unit="IG (UK)"
+            value={c17}
+            onChange={(e) => allowNumber(e.target.value, setC17)}
+            onBlur={() => formatOnBlur(c17, setC17)}
+          />
+          <RowView label="V" value={n17 === null ? "-" : (n17 * 264.2 / 220).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={n17 === null ? "-" : (n17 / 220).toFixed(4)} unit="m³" />
+          <RowView label="V" value={n17 === null ? "-" : (n17 * 0.1605).toFixed(4)} unit="ft³" />
+        </Section>
+
+      </div>
+
+      {/* ===== Right Column ===== */}
+      <div className="space-y-6 rounded-l pr-6 pt-6 pl-1 pb-6">
+
+        {/* ft³ input */}
+        <Section title="ft³ input">
+          <RowInput
+            label="V"
+            unit="ft³"
+            value={c24}
+            onChange={(e) => allowNumber(e.target.value, setC24)}
+            onBlur={() => formatOnBlur(c24, setC24)}
+          />
+          <RowView label="V" value={n24 === null ? "-" : (n24 * 6.2288).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={n24 === null ? "-" : (n24 * 7.4805).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={n24 === null ? "-" : (n24 * 0.0283).toFixed(4)} unit="m³" />
+        </Section>
+
+        {/* gl (US) input */}
+        <Section title="gl (US) input">
+          <RowInput
+            label="V"
+            unit="gl (US)"
+            value={c20}
+            onChange={(e) => allowNumber(e.target.value, setC20)}
+            onBlur={() => formatOnBlur(c20, setC20)}
+          />
+          <RowView label="V" value={n20 === null ? "-" : (n20 / 264.2).toFixed(4)} unit="m³" />
+          <RowView label="V" value={n20 === null ? "-" : (n20 * 0.13368).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={n20 === null ? "-" : (n20 * 220 / 264.2).toFixed(4)} unit="IG (UK)" />
+        </Section>
+
+      </div>
+
     </div>
-  );
+  </div>
+);
+
 }
 
 /* ===== Helpers (نفس جدول 5) ===== */
 
 function Section({ title, children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0">
+    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
       <h3 className="font-bold text-gray-700">{title}</h3>
       {children}
     </div>
@@ -113,7 +124,7 @@ function Section({ title, children }) {
 
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-green-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="flex justify-center">
@@ -143,7 +154,7 @@ function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
 
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-xl bg-gray-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="text-l font-bold text-center">{value}</div>

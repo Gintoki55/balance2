@@ -32,7 +32,7 @@ export default function Five() {
   const n67 = c67 === "" || c67 === "-" ? null : Number(c67);
 
   return (
-    <div className="max-w-xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
+    <div className="max-w-7xl w-full p-6 bg-white rounded-2xl shadow-lg space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">Heat Converter Q</h2>
 
       {/* ===== kWh ===== */}
