@@ -104,9 +104,9 @@ export default function ROElementParameters() {
         RO element paramteres
       </h2> 
 
-      <div className="grid md:grid-cols-2  bg-white border border-gray-300 rounded-l shadow-lg">
+      <div className="grid md:grid-cols-2  bg-white border border-gray-300 rounded-l shadow-lg gap-4">
         {/* ================= TABLE 1 ================= */}
-        <div className="space-y-3 pl-6 pt-6 pr-1 pb-6">
+        <div className="space-y-3 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
           <h3 className="text-lg font-bold mb-4">
             when pressure drop is given
           </h3>
@@ -137,7 +137,7 @@ export default function ROElementParameters() {
         </div>
 
         {/* ================= TABLE 2 ================= */}
-        <div className="space-y-3 pl-1 pt-6 pr-6 pb-6">
+        <div className="space-y-3 md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
           <h3 className="text-lg font-bold mb-4">
             when pressure is coorelated
           </h3>

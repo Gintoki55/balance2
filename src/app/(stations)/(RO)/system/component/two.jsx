@@ -36,13 +36,13 @@ return (
   <div className="max-w-7xl w-full space-y-6">
     <h2 className="text-2xl font-bold text-gray-800">Volume Converter V</h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
 
       {/* ===== Left Column ===== */}
-      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
+      <div className="space-y-6 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4 ">
 
         {/* m³ input */}
-        <Section title="m³ input">
+        <Section>
           <RowInput
             label="V"
             unit="m³"
@@ -57,7 +57,7 @@ return (
         </Section>
 
         {/* IG (UK) input */}
-        <Section title="IG (UK) input">
+        <Section>
           <RowInput
             label="V"
             unit="IG (UK)"
@@ -67,16 +67,16 @@ return (
           />
           <RowView label="V" value={n17 === null ? "-" : (n17 * 264.2 / 220).toFixed(4)} unit="gl (US)" />
           <RowView label="V" value={n17 === null ? "-" : (n17 / 220).toFixed(4)} unit="m³" />
-          <RowView label="V" value={n17 === null ? "-" : (n17 * 0.1605).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={n17 === null ? "-" : (n17 * 35.3147/220).toFixed(4)} unit="ft³" />
         </Section>
 
       </div>
 
       {/* ===== Right Column ===== */}
-      <div className="space-y-6 rounded-l pr-6 pt-6 pl-1 pb-6">
+      <div className="space-y-6 rounded-l md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
 
         {/* ft³ input */}
-        <Section title="ft³ input">
+        <Section>
           <RowInput
             label="V"
             unit="ft³"
@@ -84,13 +84,13 @@ return (
             onChange={(e) => allowNumber(e.target.value, setC24)}
             onBlur={() => formatOnBlur(c24, setC24)}
           />
-          <RowView label="V" value={n24 === null ? "-" : (n24 * 6.2288).toFixed(4)} unit="IG (UK)" />
-          <RowView label="V" value={n24 === null ? "-" : (n24 * 7.4805).toFixed(4)} unit="gl (US)" />
-          <RowView label="V" value={n24 === null ? "-" : (n24 * 0.0283).toFixed(4)} unit="m³" />
+          <RowView label="V" value={n24 === null ? "-" : (n24 *220/35.3147).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={n24 === null ? "-" : (n24 *264.2/35.3147).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={n24 === null ? "-" : (n24 /35.3147).toFixed(4)} unit="m³" />
         </Section>
 
         {/* gl (US) input */}
-        <Section title="gl (US) input">
+        <Section >
           <RowInput
             label="V"
             unit="gl (US)"
@@ -99,7 +99,7 @@ return (
             onBlur={() => formatOnBlur(c20, setC20)}
           />
           <RowView label="V" value={n20 === null ? "-" : (n20 / 264.2).toFixed(4)} unit="m³" />
-          <RowView label="V" value={n20 === null ? "-" : (n20 * 0.13368).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={n20 === null ? "-" : (n20 * 35.3147/264.2).toFixed(4)} unit="ft³" />
           <RowView label="V" value={n20 === null ? "-" : (n20 * 220 / 264.2).toFixed(4)} unit="IG (UK)" />
         </Section>
 

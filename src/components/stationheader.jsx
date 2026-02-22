@@ -47,7 +47,7 @@ export default function StationHeader({ title, buttons = [], isPopup = false }) 
             <button
               key={idx}
               onClick={() => router.push(btn.href)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md active:scale-95 transition border-2 text-sm sm:text-base ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md active:scale-95 transition border-2 text-sm sm:text-base cursor-pointer ${
                 isActive(btn.href)
                   ? "bg-[#429988] text-white border-[#429988]"
                   : "bg-white text-[#429988] border-[#429988] hover:bg-[#367c6e] hover:text-white"

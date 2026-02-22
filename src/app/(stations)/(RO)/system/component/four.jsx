@@ -38,13 +38,13 @@ return (
       Pressure Converter P
     </h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
 
       {/* ===== Left Column ===== */}
-      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
+      <div className="space-y-6 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
 
         {/* bar */}
-        <Section title="bar input">
+        <Section >
           <RowInput
             label="P"
             unit="bar"
@@ -59,7 +59,7 @@ return (
         </Section>
 
         {/* MPa */}
-        <Section title="MPa input">
+        <Section >
           <RowInput
             label="P"
             unit="MPa"
@@ -75,10 +75,10 @@ return (
       </div>
 
       {/* ===== Right Column ===== */}
-      <div className="space-y-6 pr-6 pt-6 pl-1 pb-6">
+      <div className="space-y-6 md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
 
         {/* kPa */}
-        <Section title="kPa input">
+        <Section >
           <RowInput
             label="P"
             unit="kPa"
@@ -92,7 +92,7 @@ return (
         </Section>
 
         {/* psi */}
-        <Section title="psi input">
+        <Section>
           <RowInput
             label="P"
             unit="psi"

@@ -39,13 +39,13 @@ export default function One() {
     </h2>
 
     {/* تقسيم عمودين */}
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
 
       {/* ===== Left Column ===== */}
-      <div className="space-y-6 rounded-l pl-6 pt-6 pr-1 pb-6">
+      <div className="space-y-6 rounded-l md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
 
         {/* Celsius */}
-        <Section title="°C input">
+        <Section>
           <RowInput
             label="T"
             unit="°C"
@@ -56,11 +56,11 @@ export default function One() {
           />
           <RowView label="T" value={n3 === null ? "-" : (n3 + 273.15).toFixed(4)} unit="K" />
           <RowView label="T" value={n3 === null ? "-" : (32 + 1.8 * n3).toFixed(4)} unit="°F" />
-          <RowView label="T" value={n3 === null ? "-" : (7.5 + n3 * 21 / 40).toFixed(4)} unit="°R" />
+          <RowView label="T" value={n3 === null ? "-" : ((273.15+n3)*9/5).toFixed(4)} unit="°R" />
         </Section>
 
         {/* Fahrenheit */}
-        <Section title="°F input">
+        <Section >
           <RowInput
             label="T"
             unit="°F"
@@ -68,7 +68,7 @@ export default function One() {
             onChange={(e) => allowNumber(e.target.value, setC9)}
             onBlur={() => formatOnBlur(c9, setC9)}
           />
-          <RowView label="T" value={n9 === null ? "-" : (7.5 + (n9 - 32) * 105 / 360).toFixed(4)} unit="°R" />
+          <RowView label="T" value={n9 === null ? "-" : (n9+459.67).toFixed(4)} unit="°R" />
           <RowView label="T" value={n9 === null ? "-" : (((n9 - 32) * 5) / 9).toFixed(4)} unit="°C" />
           <RowView label="T" value={n9 === null ? "-" : (((n9 + 459.67) * 5) / 9).toFixed(4)} unit="K" />
         </Section>
@@ -76,10 +76,10 @@ export default function One() {
       </div>
 
       {/* ===== Right Column ===== */}
-      <div className="space-y-6 rounded-l pr-6 pt-6 pl-1 pb-6">
+      <div className="space-y-6 rounded-l md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4 ">
 
         {/* Kelvin */}
-        <Section title="K input">
+        <Section >
           <RowInput
             label="T"
             unit="K"
@@ -87,13 +87,13 @@ export default function One() {
             onChange={(e) => allowNumber(e.target.value, setC6)}
             onBlur={() => formatOnBlur(c6, setC6)}
           />
-          <RowView label="T" value={n6 === null ? "-" : (1.8 * n6 - 459.67).toFixed(4)} unit="°F" />
-          <RowView label="T" value={n6 === null ? "-" : (7.5 + (n6 - 273.15) * 21 / 40).toFixed(4)} unit="°R" />
-          <RowView label="T" value={n6 === null ? "-" : (n6 - 273.15).toFixed(4)} unit="°C" />
+          <RowView label="T" value={n6 === null ? "-" : (1.8*n6-459.67).toFixed(4)} unit="°F" />
+          <RowView label="T" value={n6 === null ? "-" : (n6 *9/5).toFixed(4)} unit="°R" />
+          <RowView label="T" value={n6 === null ? "-" : (n6 -273.15).toFixed(4)} unit="°C" />
         </Section>
 
         {/* Rankine */}
-        <Section title="°R input">
+        <Section >
           <RowInput
             label="T"
             unit="°R"
@@ -101,9 +101,9 @@ export default function One() {
             onChange={(e) => allowNumber(e.target.value, setC12)}
             onBlur={() => formatOnBlur(c12, setC12)}
           />
-          <RowView label="T" value={n12 === null ? "-" : ((n12 - 7.5) * 40 / 21).toFixed(4)} unit="°C" />
-          <RowView label="T" value={n12 === null ? "-" : (273.15 + (n12 - 7.5) * 40 / 21).toFixed(4)} unit="K" />
-          <RowView label="T" value={n12 === null ? "-" : (32 + (n12 - 7.5) * 360 / 105).toFixed(4)} unit="°F" />
+          <RowView label="T" value={n12 === null ? "-" : (n12 *5/9-273.15).toFixed(4)} unit="°C" />
+          <RowView label="T" value={n12 === null ? "-" : (n12 *5/9).toFixed(4)} unit="K" />
+          <RowView label="T" value={n12 === null ? "-" : (n12 -459.67).toFixed(4)} unit="°F" />
         </Section>
 
       </div>

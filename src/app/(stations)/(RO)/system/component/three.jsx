@@ -38,13 +38,13 @@ return (
       Water flow convertor M
     </h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg">
+    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
 
       {/* ===== Left Column ===== */}
-      <div className="space-y-6 pl-6 pt-6 pr-1 pb-6">
+      <div className="space-y-6 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
 
         {/* MIGD */}
-        <Section title="MIGD input">
+        <Section>
           <RowInput
             label="M"
             unit="MIGD"
@@ -59,7 +59,7 @@ return (
         </Section>
 
         {/* t/h */}
-        <Section title="t/h input">
+        <Section >
           <RowInput
             label="M"
             unit="t/h"
@@ -75,10 +75,10 @@ return (
       </div>
 
       {/* ===== Right Column ===== */}
-      <div className="space-y-6 pr-6 pt-6 pl-1 pb-6">
+      <div className="space-y-6 md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
 
         {/* m³/day */}
-        <Section title="m³/day input">
+        <Section >
           <RowInput
             label="M"
             unit="m³/day"
@@ -92,7 +92,7 @@ return (
         </Section>
 
         {/* kg/s */}
-        <Section title="kg/s input">
+        <Section >
           <RowInput
             label="M"
             unit="kg/s"

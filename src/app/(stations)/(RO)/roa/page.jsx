@@ -22,7 +22,7 @@ export default function RoPage() {
 
   return (
     <div className="bg-white min-h-full">
-      <StationHeader title="RO Simulator"buttons={buttons} />
+      <StationHeader title="RO Simulator" buttons={buttons} />
       <div className="flex justify-center">
         <Lottie animationData={animationData} loop />
       </div>

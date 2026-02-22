@@ -2,21 +2,21 @@
 
 import StationHeader from "@/components/stationheader";
 
-import One from "./component/one";
-import Two from "./component/two";
-import Three from "./component/three";
-import Four from "./component/four";
-import Five from "./component/five";
-import Six from "./component/six";
-import Seven from "./component/seven";
-import Eight from "./component/eight";
-import Nine from "./component/nine";
-import ROElementParameters from "./component/ten";
+import One from "../../../system/component/one";
+import Two from "../../../system/component/two";
+import Three from "../../../system/component/three";
+import Four from "../../../system/component/four";
+// import Five from "./component/five";
+import Six from "../../../system/component/six";
+import Seven from "../../../system/component/seven";
+// import Eight from "./component/eight";
+// import Nine from "./component/nine";
+import ROElementParameters from "../../../system/component/ten";
 
 export default function CalculatorPage() {
   return (
     <div className="min-h-screen">
-      <StationHeader title="Engineering Calculators" isPopup />
+      <StationHeader title="RO Calculator" isPopup />
 
       <div className="max-w-7xl mx-auto px-6 py-10 space-y-12">
 
