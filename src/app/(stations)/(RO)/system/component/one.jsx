@@ -1,4 +1,3 @@
-// Temperature convertor  T
 "use client";
 
 import Tooltip from "@/components/Tooltip";
@@ -12,51 +11,65 @@ const infoMap_1 = {
 };
 
 export default function One() {
-  const [c3, setC3] = useState("");
-  const [c6, setC6] = useState("");
-  const [c9, setC9] = useState("");
-  const [c12, setC12] = useState("");
+  const [celsius, setCelsius] = useState("");
+  const [kelvin, setKelvin] = useState("");
+  const [fahrenheit, setFahrenheit] = useState("");
+  const [rankine, setRankine] = useState("");
 
   const allowNumber = (value, setter) => {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
   };
-
   const formatOnBlur = (value, setter) => {
     if (value === "" || value === "-") return;
-    const num = Number(value);
-    if (!isNaN(num)) setter(num.toFixed(4));
+    const n = Number(value);
+    if (!isNaN(n)) setter(String(n));
   };
 
-  const n3 = c3 === "" || c3 === "-" ? null : Number(c3);
-  const n6 = c6 === "" || c6 === "-" ? null : Number(c6);
-  const n9 = c9 === "" || c9 === "-" ? null : Number(c9);
-  const n12 = c12 === "" || c12 === "-" ? null : Number(c12);
+  const celsiusNumber =
+    celsius === "" || celsius === "-" ? null : Number(celsius);
+  const kelvinNumber =
+    kelvin === "" || kelvin === "-" ? null : Number(kelvin);
+  const fahrenheitNumber =
+    fahrenheit === "" || fahrenheit === "-" ? null : Number(fahrenheit);
+  const rankineNumber =
+    rankine === "" || rankine === "-" ? null : Number(rankine);
 
   return (
-  <div className="max-w-7xl w-full space-y-6">
-    <h2 className="text-2xl font-bold text-gray-800">
-      Temperature Converter T
-    </h2>
+    <div className="max-w-7xl w-full space-y-6">
+      <h2 className="text-2xl font-bold text-gray-800">
+        Temperature Converter T
+      </h2>
 
-    {/* تقسيم عمودين */}
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
-
-      {/* ===== Left Column ===== */}
-      <div className="space-y-6 rounded-l md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
+      {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Celsius */}
         <Section>
           <RowInput
             label="T"
             unit="°C"
-            value={c3}
-            onChange={(e) => allowNumber(e.target.value, setC3)}
-            onBlur={() => formatOnBlur(c3, setC3)}
+            value={celsius}
+            onChange={(e) => allowNumber(e.target.value, setCelsius)}
+            onBlur={() => formatOnBlur(celsius, setCelsius)}
             autoFocus
           />
-          <RowView label="T" value={n3 === null ? "-" : (n3 + 273.15).toFixed(4)} unit="K" />
-          <RowView label="T" value={n3 === null ? "-" : (32 + 1.8 * n3).toFixed(4)} unit="°F" />
-          <RowView label="T" value={n3 === null ? "-" : ((273.15+n3)*9/5).toFixed(4)} unit="°R" />
+          <RowView label="T" value={celsiusNumber === null ? "-" : (celsiusNumber + 273.15).toFixed(4)} unit="K" />
+          <RowView label="T" value={celsiusNumber === null ? "-" : (32 + 1.8 * celsiusNumber).toFixed(4)} unit="°F" />
+          <RowView label="T" value={celsiusNumber === null ? "-" : (7.5 + celsiusNumber * 21 / 40).toFixed(4)} unit="°R" />
+        </Section>
+
+        {/* Kelvin */}
+        <Section>
+          <RowInput
+            label="T"
+            unit="K"
+            value={kelvin}
+            onChange={(e) => allowNumber(e.target.value, setKelvin)}
+            onBlur={() => formatOnBlur(kelvin, setKelvin)}
+          />
+          <RowView label="T" value={kelvinNumber === null ? "-" : (1.8 * kelvinNumber - 459.67).toFixed(4)} unit="°F" />
+          <RowView label="T" value={kelvinNumber === null ? "-" : (7.5 +(kelvinNumber-273.15) * 21/40 ).toFixed(4)} unit="°R" />
+          <RowView label="T" value={kelvinNumber === null ? "-" : (kelvinNumber - 273.15).toFixed(4)} unit="°C" />
         </Section>
 
         {/* Fahrenheit */}
@@ -64,62 +77,39 @@ export default function One() {
           <RowInput
             label="T"
             unit="°F"
-            value={c9}
-            onChange={(e) => allowNumber(e.target.value, setC9)}
-            onBlur={() => formatOnBlur(c9, setC9)}
+            value={fahrenheit}
+            onChange={(e) => allowNumber(e.target.value, setFahrenheit)}
+            onBlur={() => formatOnBlur(fahrenheit, setFahrenheit)}
           />
-          <RowView label="T" value={n9 === null ? "-" : (n9+459.67).toFixed(4)} unit="°R" />
-          <RowView label="T" value={n9 === null ? "-" : (((n9 - 32) * 5) / 9).toFixed(4)} unit="°C" />
-          <RowView label="T" value={n9 === null ? "-" : (((n9 + 459.67) * 5) / 9).toFixed(4)} unit="K" />
-        </Section>
-
-      </div>
-
-      {/* ===== Right Column ===== */}
-      <div className="space-y-6 rounded-l md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4 ">
-
-        {/* Kelvin */}
-        <Section >
-          <RowInput
-            label="T"
-            unit="K"
-            value={c6}
-            onChange={(e) => allowNumber(e.target.value, setC6)}
-            onBlur={() => formatOnBlur(c6, setC6)}
-          />
-          <RowView label="T" value={n6 === null ? "-" : (1.8*n6-459.67).toFixed(4)} unit="°F" />
-          <RowView label="T" value={n6 === null ? "-" : (n6 *9/5).toFixed(4)} unit="°R" />
-          <RowView label="T" value={n6 === null ? "-" : (n6 -273.15).toFixed(4)} unit="°C" />
+          <RowView label="T" value={fahrenheitNumber === null ? "-" : (7.5 + (fahrenheitNumber - 32) * 105/360 ).toFixed(4)} unit="°R" />
+          <RowView label="T" value={fahrenheitNumber === null ? "-" : (((fahrenheitNumber - 32) * 5) / 9).toFixed(4)} unit="°C" />
+          <RowView label="T" value={fahrenheitNumber === null ? "-" : (((fahrenheitNumber + 459.67) * 5) / 9).toFixed(4)} unit="K" />
         </Section>
 
         {/* Rankine */}
-        <Section >
+        <Section>
           <RowInput
             label="T"
             unit="°R"
-            value={c12}
-            onChange={(e) => allowNumber(e.target.value, setC12)}
-            onBlur={() => formatOnBlur(c12, setC12)}
+            value={rankine}
+            onChange={(e) => allowNumber(e.target.value, setRankine)}
+            onBlur={() => formatOnBlur(rankine, setRankine)}
           />
-          <RowView label="T" value={n12 === null ? "-" : (n12 *5/9-273.15).toFixed(4)} unit="°C" />
-          <RowView label="T" value={n12 === null ? "-" : (n12 *5/9).toFixed(4)} unit="K" />
-          <RowView label="T" value={n12 === null ? "-" : (n12 -459.67).toFixed(4)} unit="°F" />
+          <RowView label="T" value={rankineNumber === null ? "-" : ((rankineNumber - 7.5) * 40 / 21 ).toFixed(4)} unit="°C" />
+          <RowView label="T" value={rankineNumber === null ? "-" : (273.15 +(rankineNumber - 7.5 ) * 40 / 21 ).toFixed(4)} unit="K" />
+          <RowView label="T" value={rankineNumber === null ? "-" : (32 + (rankineNumber - 7.5 ) * 360/105).toFixed(4)} unit="°F" />
         </Section>
 
       </div>
-
     </div>
-  </div>
-);
-
+  );
 }
 
-/* ===== Helpers (مثل جدول 5) ===== */
+/* ===== Card Section ===== */
 
-function Section({ title, children }) {
+function Section({ children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
-      <h3 className="font-bold text-gray-700">{title}</h3>
+    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
       {children}
     </div>
   );
@@ -127,7 +117,7 @@ function Section({ title, children }) {
 
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 bg-green-50 rounded">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
 
       <div className="flex justify-center">
@@ -145,11 +135,9 @@ function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
       </div>
 
       <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_1[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
+        <Tooltip text={infoMap_1[unit]}>
+          <span className="cursor-help text-gray-600">{unit}</span>
+        </Tooltip>
       </div>
     </div>
   );
@@ -157,17 +145,13 @@ function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
 
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
+    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 bg-gray-50 rounded">
       <div className="font-semibold text-gray-700 text-left">{label}</div>
-
-      <div className="text-l font-bold text-center">{value}</div>
-
+      <div className="text-lg font-bold text-center">{value}</div>
       <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_1[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
+        <Tooltip text={infoMap_1[unit]}>
+          <span className="cursor-help text-gray-600">{unit}</span>
+        </Tooltip>
       </div>
     </div>
   );

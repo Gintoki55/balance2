@@ -37,19 +37,6 @@ export default function Six() {
     if (!isNaN(n)) setter(String(n));
   };
 
-  /* ===== Smart Scientific (W & X only) ===== */
-// const formatScientific = (num, decimals = 2) => {
-//   if (num === null || num === "-" || isNaN(num)) return "-";
-
-//   const n = Number(num);
-//   const abs = Math.abs(n);
-
-//   if (abs >= 1000000000 || (abs > 0 && abs < 0.000001)) {
-//     return n.toExponential(decimals).replace("e", "E");
-//   }
-
-//   // عرض نظيف بدون ذيول طويلة
-//   return n.toFixed(8).replace(/\.?0+$/, "");
 // };
 const formatScientific = (num, decimals = 2) => {
   if (num === null || num === "-" || isNaN(num)) return "-";

@@ -112,27 +112,27 @@ export default function ROElementParameters() {
           </h3>
 
           <div className="space-y-2">
-            <Input label="A" unit="M²" value={G33} set={setG33} allow={allow} />
-            <Input label="Pf" unit="bar" value={G34} set={setG34} allow={allow} />
-            <Input label="Pb" unit="bar" value={G35} set={setG35} allow={allow} />
-            <Input label="Md" unit="t/h" value={G36} set={setG36} allow={allow} />
-            <Input label="WR" unit="%" value={G37} set={setG37} allow={allow} />
-            <Input label="Sf" unit="g/l" value={G38} set={setG38} allow={allow} />
-            <Input label="Tf" unit="°C" value={G39} set={setG39} allow={allow} />
-            <Input label="SR" unit="%" value={G40} set={setG40} allow={allow} />
+            <RowInput label="A" unit="M²" value={G33} set={setG33} allow={allow} />
+            <RowInput label="Pf" unit="bar" value={G34} set={setG34} allow={allow} />
+            <RowInput label="Pb" unit="bar" value={G35} set={setG35} allow={allow} />
+            <RowInput label="Md" unit="t/h" value={G36} set={setG36} allow={allow} />
+            <RowInput label="WR" unit="%" value={G37} set={setG37} allow={allow} />
+            <RowInput label="Sf" unit="g/l" value={G38} set={setG38} allow={allow} />
+            <RowInput label="Tf" unit="°C" value={G39} set={setG39} allow={allow} />
+            <RowInput label="SR" unit="%" value={G40} set={setG40} allow={allow} />
           </div>
 
           <div className="space-y-1">
-            <Result label="Mf" value={fmt(Mf1, 3)} unit="t/h" />
-            <Result label="Sd" value={fmt(Sd1, 3)} unit="g/l" />
-            <Result label="Sb" value={fmt(Sb1, 3)} unit="g/l" />
-            <Result label="ΔS" value={fmt(dS1, 3)} unit="g/l" />
-            <Result label="Δπ" value={fmt(dPi1, 3)} unit="bar" />
-            <Result label="∆P" value={fmt(dP1, 3)} unit="bar" />
-            <Result label="TCF" value={fmt(TCF1, 2)} unit="#" />
-            <Result label="w" value={fmt(w1, 4)} unit="l/m².h.bar" />
-            <Result label="x" value={fmt(x1, 4)} unit="g/m².h.(g/l)" />
-            <Result label="PCF" value={fmt(PCF1, 4)} unit="#" />
+            <RowView label="Mf" value={fmt(Mf1, 3)} unit="t/h" />
+            <RowView label="Sd" value={fmt(Sd1, 3)} unit="g/l" />
+            <RowView label="Sb" value={fmt(Sb1, 3)} unit="g/l" />
+            <RowView label="ΔS" value={fmt(dS1, 3)} unit="g/l" />
+            <RowView label="Δπ" value={fmt(dPi1, 3)} unit="bar" />
+            <RowView label="∆P" value={fmt(dP1, 3)} unit="bar" />
+            <RowView label="TCF" value={fmt(TCF1, 2)} unit="#" />
+            <RowView label="w" value={fmt(w1, 4)} unit="l/m².h.bar" />
+            <RowView label="x" value={fmt(x1, 4)} unit="g/m².h.(g/l)" />
+            <RowView label="PCF" value={fmt(PCF1, 4)} unit="#" />
           </div>
         </div>
 
@@ -143,27 +143,27 @@ export default function ROElementParameters() {
           </h3>
 
           <div className="space-y-2">
-            <Input label="A" unit="M²" value={G53} set={setG53} allow={allow} />
-            <Input label="Pf" unit="bar" value={G54} set={setG54} allow={allow} />
-            <Result label="Pb" value={fmt(Pb2, 3)} unit="bar" />
-            <Input label="Md" unit="t/h" value={G56} set={setG56} allow={allow} />
-            <Input label="WR" unit="%" value={G57} set={setG57} allow={allow} />
-            <Input label="Sf" unit="g/l" value={G58} set={setG58} allow={allow} />
-            <Input label="Tf" unit="°C" value={G59} set={setG59} allow={allow} />
-            <Input label="SR" unit="%" value={G60} set={setG60} allow={allow} />
+            <RowInput label="A" unit="M²" value={G53} set={setG53} allow={allow} />
+            <RowInput label="Pf" unit="bar" value={G54} set={setG54} allow={allow} />
+            <RowView label="Pb" value={fmt(Pb2, 3)} unit="bar" />
+            <RowInput label="Md" unit="t/h" value={G56} set={setG56} allow={allow} />
+            <RowInput label="WR" unit="%" value={G57} set={setG57} allow={allow} />
+            <RowInput label="Sf" unit="g/l" value={G58} set={setG58} allow={allow} />
+            <RowInput label="Tf" unit="°C" value={G59} set={setG59} allow={allow} />
+            <RowInput label="SR" unit="%" value={G60} set={setG60} allow={allow} />
           </div>
 
           <div className="space-y-1">
-            <Result label="Mf" value={fmt(Mf2, 3)} unit="t/h" />
-            <Result label="Sd" value={fmt(Sd2, 3)} unit="g/l" />
-            <Result label="Sb" value={fmt(Sb2, 3)} unit="g/l" />
-            <Result label="ΔS" value={fmt(dS2, 3)} unit="g/l" />
-            <Result label="Δπ" value={fmt(dPi2, 3)} unit="bar" />
-            <Result label="∆P" value={fmt(dP2, 3)} unit="bar" />
-            <Result label="TCF" value={fmt(TCF2, 2)} unit="#" />
-            <Result label="w" value={fmt(w2, 4)} unit="l/m².h.bar" />
-            <Result label="x" value={fmt(x2, 4)} unit="g/m².h.(g/l)" />
-            <Result label="PCF" value={fmt(PCF2, 4)} unit="#" />
+            <RowView label="Mf" value={fmt(Mf2, 3)} unit="t/h" />
+            <RowView label="Sd" value={fmt(Sd2, 3)} unit="g/l" />
+            <RowView label="Sb" value={fmt(Sb2, 3)} unit="g/l" />
+            <RowView label="ΔS" value={fmt(dS2, 3)} unit="g/l" />
+            <RowView label="Δπ" value={fmt(dPi2, 3)} unit="bar" />
+            <RowView label="∆P" value={fmt(dP2, 3)} unit="bar" />
+            <RowView label="TCF" value={fmt(TCF2, 2)} unit="#" />
+            <RowView label="w" value={fmt(w2, 4)} unit="l/m².h.bar" />
+            <RowView label="x" value={fmt(x2, 4)} unit="g/m².h.(g/l)" />
+            <RowView label="PCF" value={fmt(PCF2, 4)} unit="#" />
           </div>
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function ROElementParameters() {
 
 /* ================= UI ================= */
 
-function Input({ label, unit, value, set, allow }) {
+function RowInput({ label, unit, value, set, allow }) {
   return (
     <div className="grid grid-cols-3 items-center p-2 bg-gray-50 rounded-l">
       <div className="flex justify-start" dir="ltr">
@@ -196,7 +196,7 @@ function Input({ label, unit, value, set, allow }) {
   );
 }
 
-function Result({ label, value, unit }) {
+function RowView({ label, value, unit }) {
   return (
     <div className="grid grid-cols-3 items-center p-3 bg-green-50 rounded-l">
       <div className="flex justify-start" dir="ltr">

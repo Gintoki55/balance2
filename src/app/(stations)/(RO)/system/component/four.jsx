@@ -12,10 +12,10 @@ const infoMap_4 = {
 };
 
 export default function Four() {
-  const [c43, setC43] = useState("");
-  const [c47, setC47] = useState("");
-  const [c51, setC51] = useState("");
-  const [c55, setC55] = useState("");
+const [bar, setBar] = useState("");
+const [kPa, setKPa] = useState("");
+const [megaPascal, setMegaPascal] = useState("");
+const [psi, setPsi] = useState("");
 
   const allowNumber = (value, setter) => {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
@@ -23,14 +23,21 @@ export default function Four() {
 
   const formatOnBlur = (value, setter) => {
     if (value === "" || value === "-") return;
-    const num = Number(value);
-    if (!isNaN(num)) setter(num.toFixed(4));
+    const n = Number(value);
+    if (!isNaN(n)) setter(String(n));
   };
 
-  const n43 = c43 === "" || c43 === "-" ? null : Number(c43);
-  const n47 = c47 === "" || c47 === "-" ? null : Number(c47);
-  const n51 = c51 === "" || c51 === "-" ? null : Number(c51);
-  const n55 = c55 === "" || c55 === "-" ? null : Number(c55);
+const barNumber =
+  bar === "" || bar === "-" ? null : Number(bar);
+
+const kPaNumber =
+  kPa === "" || kPa === "-" ? null : Number(kPa);
+
+const megaPascalNumber =
+  megaPascal === "" || megaPascal === "-" ? null : Number(megaPascal);
+
+const psiNumber =
+  psi === "" || psi === "-" ? null : Number(psi);
 
 return (
   <div className="max-w-7xl w-full space-y-6">
@@ -38,24 +45,36 @@ return (
       Pressure Converter P
     </h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
-
-      {/* ===== Left Column ===== */}
-      <div className="space-y-6 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">
+       {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* bar */}
-        <Section >
+        <Section>
           <RowInput
             label="P"
             unit="bar"
-            value={c43}
-            onChange={(e) => allowNumber(e.target.value, setC43)}
-            onBlur={() => formatOnBlur(c43, setC43)}
+            value={bar}
+            onChange={(e) => allowNumber(e.target.value, setBar)}
+            onBlur={() => formatOnBlur(bar, setBar)}
             autoFocus
           />
-          <RowView label="P" value={n43 === null ? "-" : (n43 * 100).toFixed(4)} unit="kPa" />
-          <RowView label="P" value={n43 === null ? "-" : (n43 / 10).toFixed(4)} unit="MPa" />
-          <RowView label="P" value={n43 === null ? "-" : (n43 * 14.55).toFixed(4)} unit="psi" />
+          <RowView label="P" value={barNumber === null ? "-" : (barNumber * 100).toFixed(4)} unit="kPa" />
+          <RowView label="P" value={barNumber === null ? "-" : (barNumber / 10).toFixed(4)} unit="MPa" />
+          <RowView label="P" value={barNumber === null ? "-" : (barNumber * 14.55).toFixed(4)} unit="psi" />
+        </Section>
+
+        {/* kPa */}
+        <Section >
+          <RowInput
+            label="P"
+            unit="kPa"
+            value={kPa}
+            onChange={(e) => allowNumber(e.target.value, setKPa)}
+            onBlur={() => formatOnBlur(kPa, setKPa)}
+          />
+          <RowView label="P" value={kPaNumber === null ? "-" : (kPaNumber / 1000).toFixed(4)} unit="MPa" />
+          <RowView label="P" value={kPaNumber === null ? "-" : (kPaNumber * 0.1455).toFixed(4)} unit="psi" />
+          <RowView label="P" value={kPaNumber === null ? "-" : (kPaNumber / 100).toFixed(4)} unit="bar" />
         </Section>
 
         {/* MPa */}
@@ -63,32 +82,13 @@ return (
           <RowInput
             label="P"
             unit="MPa"
-            value={c51}
-            onChange={(e) => allowNumber(e.target.value, setC51)}
-            onBlur={() => formatOnBlur(c51, setC51)}
+            value={megaPascal}
+            onChange={(e) => allowNumber(e.target.value, setMegaPascal)}
+            onBlur={() => formatOnBlur(megaPascal, setMegaPascal)}
           />
-          <RowView label="P" value={n51 === null ? "-" : (n51 * 145.5).toFixed(4)} unit="psi" />
-          <RowView label="P" value={n51 === null ? "-" : (n51 * 10).toFixed(4)} unit="bar" />
-          <RowView label="P" value={n51 === null ? "-" : (n51 * 1000).toFixed(4)} unit="kPa" />
-        </Section>
-
-      </div>
-
-      {/* ===== Right Column ===== */}
-      <div className="space-y-6 md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
-
-        {/* kPa */}
-        <Section >
-          <RowInput
-            label="P"
-            unit="kPa"
-            value={c47}
-            onChange={(e) => allowNumber(e.target.value, setC47)}
-            onBlur={() => formatOnBlur(c47, setC47)}
-          />
-          <RowView label="P" value={n47 === null ? "-" : (n47 / 1000).toFixed(4)} unit="MPa" />
-          <RowView label="P" value={n47 === null ? "-" : (n47 * 0.1455).toFixed(4)} unit="psi" />
-          <RowView label="P" value={n47 === null ? "-" : (n47 / 100).toFixed(4)} unit="bar" />
+          <RowView label="P" value={megaPascalNumber === null ? "-" : (megaPascalNumber * 145.5).toFixed(4)} unit="psi" />
+          <RowView label="P" value={megaPascalNumber === null ? "-" : (megaPascalNumber * 10).toFixed(4)} unit="bar" />
+          <RowView label="P" value={megaPascalNumber === null ? "-" : (megaPascalNumber * 1000).toFixed(4)} unit="kPa" />
         </Section>
 
         {/* psi */}
@@ -96,18 +96,17 @@ return (
           <RowInput
             label="P"
             unit="psi"
-            value={c55}
-            onChange={(e) => allowNumber(e.target.value, setC55)}
-            onBlur={() => formatOnBlur(c55, setC55)}
+            value={psi}
+            onChange={(e) => allowNumber(e.target.value, setPsi)}
+            onBlur={() => formatOnBlur(psi, setPsi)}
           />
-          <RowView label="P" value={n55 === null ? "-" : (n55 / 14.55).toFixed(4)} unit="bar" />
-          <RowView label="P" value={n55 === null ? "-" : (n55 / 0.1455).toFixed(4)} unit="kPa" />
-          <RowView label="P" value={n55 === null ? "-" : (n55 / 145.5).toFixed(4)} unit="MPa" />
+          <RowView label="P" value={psiNumber === null ? "-" : (psiNumber / 14.55).toFixed(4)} unit="bar" />
+          <RowView label="P" value={psiNumber === null ? "-" : (psiNumber / 0.1455).toFixed(4)} unit="kPa" />
+          <RowView label="P" value={psiNumber === null ? "-" : (psiNumber / 145.5).toFixed(4)} unit="MPa" />
         </Section>
 
       </div>
 
-    </div>
   </div>
 );
 
@@ -115,10 +114,9 @@ return (
 
 /* ===== Helpers (نفس رقم 5) ===== */
 
-function Section({ title, children }) {
+function Section({ children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
-      <h3 className="font-bold text-gray-700">{title}</h3>
+    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
       {children}
     </div>
   );

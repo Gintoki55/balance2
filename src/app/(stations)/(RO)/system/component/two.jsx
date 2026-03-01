@@ -12,10 +12,10 @@ const infoMap_2 = {
 };
 
 export default function Two() {
-  const [c14, setC14] = useState("");
-  const [c17, setC17] = useState("");
-  const [c20, setC20] = useState("");
-  const [c24, setC24] = useState("");
+const [cubicMeter, setCubicMeter] = useState("");
+const [imperialGallon, setImperialGallon] = useState("");
+const [usGallon, setUsGallon] = useState("");
+const [cubicFoot, setCubicFoot] = useState("");
 
   const allowNumber = (value, setter) => {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
@@ -23,37 +23,58 @@ export default function Two() {
 
   const formatOnBlur = (value, setter) => {
     if (value === "" || value === "-") return;
-    const num = Number(value);
-    if (!isNaN(num)) setter(num.toFixed(4));
+    const n = Number(value);
+    if (!isNaN(n)) setter(String(n));
   };
 
-  const n14 = c14 === "" || c14 === "-" ? null : Number(c14);
-  const n17 = c17 === "" || c17 === "-" ? null : Number(c17);
-  const n20 = c20 === "" || c20 === "-" ? null : Number(c20);
-  const n24 = c24 === "" || c24 === "-" ? null : Number(c24);
+
+
+const cubicMeterNumber =
+  cubicMeter === "" || cubicMeter === "-" ? null : Number(cubicMeter);
+
+const imperialGallonNumber =
+  imperialGallon === "" || imperialGallon === "-" ? null : Number(imperialGallon);
+
+const usGallonNumber =
+  usGallon === "" || usGallon === "-" ? null : Number(usGallon);
+
+const cubicFootNumber =
+  cubicFoot === "" || cubicFoot === "-" ? null : Number(cubicFoot);
 
 return (
   <div className="max-w-7xl w-full space-y-6">
     <h2 className="text-2xl font-bold text-gray-800">Volume Converter V</h2>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
-
-      {/* ===== Left Column ===== */}
-      <div className="space-y-6 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4 ">
+       {/* Grid Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* m³ input */}
         <Section>
           <RowInput
             label="V"
             unit="m³"
-            value={c14}
-            onChange={(e) => allowNumber(e.target.value, setC14)}
-            onBlur={() => formatOnBlur(c14, setC14)}
+            value={cubicMeter}
+            onChange={(e) => allowNumber(e.target.value, setCubicMeter)}
+            onBlur={() => formatOnBlur(cubicMeter, setCubicMeter)}
             autoFocus
           />
-          <RowView label="V" value={n14 === null ? "-" : (n14 * 35.3147).toFixed(4)} unit="ft³" />
-          <RowView label="V" value={n14 === null ? "-" : (n14 * 220).toFixed(4)} unit="IG (UK)" />
-          <RowView label="V" value={n14 === null ? "-" : (n14 * 264.2).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={cubicMeterNumber === null ? "-" : (cubicMeterNumber * 35.3147).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={cubicMeterNumber === null ? "-" : (cubicMeterNumber * 220).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={cubicMeterNumber === null ? "-" : (cubicMeterNumber * 264.2).toFixed(4)} unit="gl (US)" />
+        </Section>
+
+        {/* ft³ input */}
+        <Section>
+          <RowInput
+            label="V"
+            unit="ft³"
+            value={cubicFoot}
+            onChange={(e) => allowNumber(e.target.value, setCubicFoot)}
+            onBlur={() => formatOnBlur(cubicFoot, setCubicFoot)}
+          />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber *6.2288).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 7.4805).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 0.0283).toFixed(4)} unit="m³" />
         </Section>
 
         {/* IG (UK) input */}
@@ -61,32 +82,13 @@ return (
           <RowInput
             label="V"
             unit="IG (UK)"
-            value={c17}
-            onChange={(e) => allowNumber(e.target.value, setC17)}
-            onBlur={() => formatOnBlur(c17, setC17)}
+            value={imperialGallon}
+            onChange={(e) => allowNumber(e.target.value, setImperialGallon)}
+            onBlur={() => formatOnBlur(imperialGallon, setImperialGallon)}
           />
-          <RowView label="V" value={n17 === null ? "-" : (n17 * 264.2 / 220).toFixed(4)} unit="gl (US)" />
-          <RowView label="V" value={n17 === null ? "-" : (n17 / 220).toFixed(4)} unit="m³" />
-          <RowView label="V" value={n17 === null ? "-" : (n17 * 35.3147/220).toFixed(4)} unit="ft³" />
-        </Section>
-
-      </div>
-
-      {/* ===== Right Column ===== */}
-      <div className="space-y-6 rounded-l md:pr-6 md:pt-6 md:pl-1 md:pb-6 max-md:p-4">
-
-        {/* ft³ input */}
-        <Section>
-          <RowInput
-            label="V"
-            unit="ft³"
-            value={c24}
-            onChange={(e) => allowNumber(e.target.value, setC24)}
-            onBlur={() => formatOnBlur(c24, setC24)}
-          />
-          <RowView label="V" value={n24 === null ? "-" : (n24 *220/35.3147).toFixed(4)} unit="IG (UK)" />
-          <RowView label="V" value={n24 === null ? "-" : (n24 *264.2/35.3147).toFixed(4)} unit="gl (US)" />
-          <RowView label="V" value={n24 === null ? "-" : (n24 /35.3147).toFixed(4)} unit="m³" />
+          <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber * 264.2 / 220).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber / 220).toFixed(4)} unit="m³" />
+          <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber * 0.1605).toFixed(4)} unit="ft³" />
         </Section>
 
         {/* gl (US) input */}
@@ -94,18 +96,17 @@ return (
           <RowInput
             label="V"
             unit="gl (US)"
-            value={c20}
-            onChange={(e) => allowNumber(e.target.value, setC20)}
-            onBlur={() => formatOnBlur(c20, setC20)}
+            value={usGallon}
+            onChange={(e) => allowNumber(e.target.value, setUsGallon)}
+            onBlur={() => formatOnBlur(usGallon, setUsGallon)}
           />
-          <RowView label="V" value={n20 === null ? "-" : (n20 / 264.2).toFixed(4)} unit="m³" />
-          <RowView label="V" value={n20 === null ? "-" : (n20 * 35.3147/264.2).toFixed(4)} unit="ft³" />
-          <RowView label="V" value={n20 === null ? "-" : (n20 * 220 / 264.2).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber / 264.2).toFixed(4)} unit="m³" />
+          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber * 0.13368).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber * 220 / 264.2).toFixed(4)} unit="IG (UK)" />
         </Section>
 
       </div>
 
-    </div>
   </div>
 );
 
@@ -113,10 +114,9 @@ return (
 
 /* ===== Helpers (نفس جدول 5) ===== */
 
-function Section({ title, children }) {
+function Section({children }) {
   return (
-    <div className="space-y-3 border-t pt-4 first:border-t-0 first:pt-0 border-gray-300">
-      <h3 className="font-bold text-gray-700">{title}</h3>
+    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
       {children}
     </div>
   );
