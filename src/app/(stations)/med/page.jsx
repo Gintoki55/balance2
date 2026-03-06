@@ -11,9 +11,9 @@ export default function MEDPage() {
   const { selectedFile} = useSelector((state) => state.med);
   const isDisabled = !selectedFile || selectedFile === "select";
   const buttons = [
-    { href: "/med/media", label: "Media", icon: Play },
-    { href: "/med/helper", label: "Helper", icon: Bot },
-    { href: "/med/calculator", label: "Calculator", icon: Calculator },
+    { href: "/med/media", label: "MED Media", icon: Play },
+    { href: "/med/helper", label: "MED Helper", icon: Bot },
+    { href: "/med/calculator", label: "MED Calculator", icon: Calculator },
   ];
 
 

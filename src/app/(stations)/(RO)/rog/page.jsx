@@ -14,9 +14,9 @@ export default function RoPage() {
   const isDisabled = !selectedFile || selectedFile === "select";
 
   const buttons = [
-      { href: "/rog/media", label: "Media", icon: Play },
-      { href: "/rog/helper", label: "Helper", icon: Bot },
-      { href: "/rog/calculator", label: "Calculator", icon: Calculator },
+      { href: "/rog/media", label: "RO Media", icon: Play },
+      { href: "/rog/helper", label: "RO Helper", icon: Bot },
+      { href: "/rog/calculator", label: "RO Calculator", icon: Calculator },
     ];
 
 

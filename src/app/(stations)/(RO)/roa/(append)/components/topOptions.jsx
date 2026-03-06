@@ -12,8 +12,8 @@ import {
   setEditAll,
   setHasUnsavedChanges
 } from "../../../../../store/roaSlice";
-import { setStationData } from "@/app/store/roaSlice";''
-import { runData, projectObject } from "@/data/allData";
+import { setStationData } from "../../../../../store/roaSlice";
+import { runData, projectObject } from "../../../../../../data/allData";
 import { Play, Loader } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";

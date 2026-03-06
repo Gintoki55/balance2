@@ -4,7 +4,7 @@ import Link from "next/link";
 
 // ✅ استيراد البيانات
 import { sections, stationLinksData } from "../data/stationData";
-import Tooltip from "@/components/Tooltip"; // 👈 استدعاء الكمبوننت
+import Tooltip from "../components/Tooltip"; // 👈 استدعاء الكمبوننت
 
 export default function TechnologySections() {
   return (

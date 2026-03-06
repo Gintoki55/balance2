@@ -2,8 +2,8 @@
 
 import Tooltip from "@/components/Tooltip";
 import { useState } from "react";
-
-const infoMap_Salinity = {
+import { FlaskConical } from "lucide-react";
+const INFO = {
   "°C": "Celcius",
   "µs/cm": "microsiemens per centimeter",
   ppm: "part per million",
@@ -19,6 +19,7 @@ export default function SalinityCalculations() {
   const [temperature, setTemperature] = useState("");
   const [conductivity, setConductivity] = useState("");
   const [salinityPPM, setSalinityPPM] = useState("");
+
 
   const allow = (v, s) => /^-?\d*\.?\d*$/.test(v) && s(v);
 
@@ -44,28 +45,31 @@ export default function SalinityCalculations() {
     const EC = Number(conductivity);
     if (isNaN(T) || isNaN(EC)) return "-";
 
-    const A = EC * (1 + 0.022 * (T - 25));
+    const ecAdj = EC * (1 + 0.022 * (25 - T))
 
-    const result =
-      A *
-      (0.5 +
-        0.05 * (0.5 + (0.5 * Math.abs(A - 100)) / (A - 100.0001)) +
-        0.1  * (0.5 + (0.5 * Math.abs(A - 1000)) / (A - 1000.0001)) +
-        0.05 * (0.5 + (0.5 * Math.abs(A - 40000)) / (A - 40000.0001)) +
-        0.05 * (0.5 + (0.5 * Math.abs(A - 60000)) / (A - 60000.0001)));
+    const result = ecAdj * (
+    0.5 + 
+    0.05 * (0.5 + 0.5 * Math.abs(ecAdj - 100) / (ecAdj - 100.0001)) +
+    0.1 * (0.5 + 0.5 * Math.abs(ecAdj - 1000) / (ecAdj - 1000.0001)) +
+    0.05 * (0.5 + 0.5 * Math.abs(ecAdj - 40000) / (ecAdj - 40000.0001)) +
+    0.05 * (0.5 + 0.5 * Math.abs(ecAdj - 60000) / (ecAdj - 60000.0001))
+  )
 
     return formatNumber(result, 4);
   })();
 
-  return (
-    <div className="max-w-7xl w-full space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">
-        Salinity Calculations
-      </h2>
 
+  return (
+    <div className="max-w-4xl mx-auto w-full space-y-3">
+      <div className="flex items-center gap-2">
+         <FlaskConical className="w-5 h-5 text-sky-700" />
+        <span className="text-xl font-semibold text-gray-700 tracking-wide">
+          RO Specific Calculators
+        </span>
+      </div>
       {/* Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Section>
+            <Section title="Electrical Conductivity Converter">
                 <RowInput
                     label="T"
                     unit="°C"
@@ -86,7 +90,9 @@ export default function SalinityCalculations() {
 
                 <RowView label="S" unit="ppm" value={calculatedPPM} />
                 </Section> 
-                <Section>
+
+
+            <Section title="Salinity Convertor">
                 <RowInput
                     label="S"
                     unit="ppm"
@@ -101,7 +107,7 @@ export default function SalinityCalculations() {
                     unit="g/l"
                     value={
                     salinityPPM
-                        ? formatNumber(Number(salinityPPM) / 1000, 6)
+                        ? formatNumber(Number(salinityPPM) / 1000, 4)
                         : "-"
                     }
                 />
@@ -111,65 +117,91 @@ export default function SalinityCalculations() {
                     unit="%"
                     value={
                     salinityPPM
-                        ? formatNumber(Number(salinityPPM) / 10000, 6)
+                        ? formatNumber(Number(salinityPPM) / 10000, 4)
                         : "-"
                     }
                 />
                 </Section> 
-
       </div>
     </div>
   );
 }
 
-function Section({ children }) {
+/* ===== Card Section ===== */
+
+function Section({ children, title }) {
   return (
-    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
-      {children}
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-sky-600 to-teal-500 text-white px-4 py-2 text-sm font-semibold tracking-wide flex items-center gap-2">
+         <FlaskConical className="w-4 h-4" />
+        <span className="text-base">
+          {title}
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="p-2">
+        {children}
+      </div>
+
     </div>
   );
 }
-
-/* ===== UI ===== */
-
 function RowInput({ label, unit, value, set, allow, formatOnBlur }) {
   return (
-    <div className="grid grid-cols-3 items-center p-2 bg-green-50">
-      <Tooltip text={infoMap_Salinity[label]}>
-        <span className="cursor-help text-gray-600">{label}</span>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
+
+      <Tooltip text={INFO[label]}>
+      <div className="font-semibold text-gray-600">{label}</div>
       </Tooltip>
 
       <input
+        type="text"
         value={value}
         onChange={(e) => allow(e.target.value, set)}
         onBlur={() => formatOnBlur(value, set)}
         onClick={(e) => e.target.select()}
-        className="w-full text-center border border-gray-300 rounded p-1"
+        dir="ltr"
+        inputMode="decimal"
+        className="w-full font-mono text-center bg-gray-50 rounded-lg py-2
+                   outline-none border border-gray-200
+                   transition-all duration-300 ease-in-out
+                   focus:ring-2 focus:ring-teal-400
+                   focus:ring-offset-1 focus:ring-offset-gray-100
+                   focus:shadow-[0_0_12px_rgba(52,211,153,0.7)]
+                   placeholder-gray-400"
+        placeholder="Enter value"
       />
 
-      <Tooltip text={infoMap_Salinity[unit]}>
-        <span className="cursor-help text-gray-600 flex justify-end">
-          {unit}
-        </span>
-      </Tooltip>
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }
-
-function RowView({ label, unit, value }) {
+function RowView({label, unit, value }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 bg-gray-50">
-      <Tooltip text={infoMap_Salinity[label]}>
-        <span className="cursor-help text-gray-600">{label}</span>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
+
+      <Tooltip text={INFO[label]}>
+      <div className="font-semibold text-gray-600">{label}</div>
       </Tooltip>
 
-      <span className="font-bold text-center">{value}</span>
+      <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200">
+        {value}
+      </div>
 
-      <Tooltip text={infoMap_Salinity[unit]}>
-        <span className="cursor-help text-gray-600 flex justify-end">
-          {unit}
-        </span>
-      </Tooltip>
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }

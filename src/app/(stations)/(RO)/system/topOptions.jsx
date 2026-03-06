@@ -1,6 +1,6 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { runData, projectObject } from "@/data/allData";
+import { runData, projectObject } from "../../../../data/allData";
 import { Play, Loader } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";

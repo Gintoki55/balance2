@@ -12,9 +12,9 @@ export default function MSFpage() {
   const { selectedFile } = useSelector((state) => state.msf);
   const isDisabled = !selectedFile || selectedFile === "select";
   const msfButtons = [
-    { href: "/msf/media", label: "Media", icon: Play },
-    { href: "/msf/helper", label: "Helper", icon: Bot },
-    { href: "/msf/calculator", label: "Calculator", icon: Calculator },  
+    { href: "/msf/media", label: "MSF Media", icon: Play },
+    { href: "/msf/helper", label: "MSF Helper", icon: Bot },
+    { href: "/msf/calculator", label: "MSF Calculator", icon: Calculator },  
   ];
 
   return (

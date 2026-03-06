@@ -1,7 +1,7 @@
 // Pressure convertor  P
 "use client";
-
 import Tooltip from "@/components/Tooltip";
+import { Gauge } from "lucide-react";
 import { useState } from "react";
 
 const infoMap_4 = {
@@ -40,8 +40,8 @@ const psiNumber =
   psi === "" || psi === "-" ? null : Number(psi);
 
 return (
-  <div className="max-w-7xl w-full space-y-6">
-    <h2 className="text-2xl font-bold text-gray-800">
+  <div className="max-w-4xl mx-auto w-full space-y-3">
+    <h2 className="text-xl font-bold text-gray700">
       Pressure Converter P
     </h2>
 
@@ -49,7 +49,7 @@ return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* bar */}
-        <Section>
+        <Section title="Pressure Converter [bar]">
           <RowInput
             label="P"
             unit="bar"
@@ -64,7 +64,7 @@ return (
         </Section>
 
         {/* kPa */}
-        <Section >
+        <Section title="Pressure Converter [kPa]">
           <RowInput
             label="P"
             unit="kPa"
@@ -78,7 +78,7 @@ return (
         </Section>
 
         {/* MPa */}
-        <Section >
+        <Section title="Pressure Converter [MPa]">
           <RowInput
             label="P"
             unit="MPa"
@@ -92,7 +92,7 @@ return (
         </Section>
 
         {/* psi */}
-        <Section>
+        <Section title="Pressure Converter [psi]">
           <RowInput
             label="P"
             unit="psi"
@@ -112,60 +112,79 @@ return (
 
 }
 
-/* ===== Helpers (نفس رقم 5) ===== */
 
-function Section({ children }) {
+/* ===== Card Section ===== */
+
+function Section({ children, title }) {
   return (
-    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
-      {children}
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-sky-600 to-teal-500 text-white px-4 py-2 text-sm font-semibold tracking-wide flex items-center gap-2">
+         <Gauge className="w-4 h-4" />
+        <span className="text-base">
+          {title}
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="p-2">
+        {children}
+      </div>
+
     </div>
   );
 }
-
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
-      <div className="font-semibold text-gray-700 text-left">{label}</div>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
-      <div className="flex justify-center">
-        <input
-          type="text"
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          onClick={(e) => e.target.select()}
-          dir="ltr"
-          inputMode="decimal"
-          autoFocus={autoFocus}
-          className="w-full max-w-[180px] text-center border border-gray-300 rounded p-1"
-        />
+      <div className="font-semibold text-gray-600">{label}</div>
+
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        onClick={(e) => e.target.select()}
+        dir="ltr"
+        inputMode="decimal"
+        autoFocus={autoFocus}
+        className="w-full font-mono text-center bg-gray-50 rounded-lg py-2
+                   outline-none border border-gray-200
+                   transition-all duration-300 ease-in-out
+                   focus:ring-2 focus:ring-teal-400
+                   focus:ring-offset-1 focus:ring-offset-gray-100
+                   focus:shadow-[0_0_12px_rgba(52,211,153,0.7)]
+                   placeholder-gray-400"
+        placeholder="Enter value"
+      />
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={infoMap_4[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
       </div>
 
-      <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_4[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
-      </div>
     </div>
   );
 }
-
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
-      <div className="font-semibold text-gray-700 text-left">{label}</div>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
 
-      <div className="text-l font-bold text-center">{value}</div>
+      <div className="font-semibold text-gray-600">{label}</div>
 
-      <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_4[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
+       <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200 ">
+        {value}
       </div>
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={infoMap_4[unit]}>
+         <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }

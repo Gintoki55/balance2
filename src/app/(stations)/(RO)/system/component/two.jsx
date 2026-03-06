@@ -2,9 +2,9 @@
 "use client";
 
 import Tooltip from "@/components/Tooltip";
+import { Beaker } from "lucide-react";
 import { useState } from "react";
-
-const infoMap_2 = {
+const INFO = {
   "m³": "Meter cube",
   "IG (UK)": "Imperial gallon",
   "gl (US)": "Gallon",
@@ -42,14 +42,14 @@ const cubicFootNumber =
   cubicFoot === "" || cubicFoot === "-" ? null : Number(cubicFoot);
 
 return (
-  <div className="max-w-7xl w-full space-y-6">
-    <h2 className="text-2xl font-bold text-gray-800">Volume Converter V</h2>
+  <div className="max-w-4xl mx-auto w-full space-y-3">
+    <h2 className="text-xl font-bold text-gray-700">Volume Converter V</h2>
 
        {/* Grid Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* m³ input */}
-        <Section>
+        <Section title="Volume Converter [M³]">
           <RowInput
             label="V"
             unit="m³"
@@ -64,7 +64,7 @@ return (
         </Section>
 
         {/* ft³ input */}
-        <Section>
+        <Section title="Volume Converter [ft³]">
           <RowInput
             label="V"
             unit="ft³"
@@ -72,13 +72,13 @@ return (
             onChange={(e) => allowNumber(e.target.value, setCubicFoot)}
             onBlur={() => formatOnBlur(cubicFoot, setCubicFoot)}
           />
-          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber *6.2288).toFixed(4)} unit="IG (UK)" />
-          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 7.4805).toFixed(4)} unit="gl (US)" />
-          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 0.0283).toFixed(4)} unit="m³" />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 220 / 35.3147).toFixed(4)} unit="IG (UK)" />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber * 264.2 / 35.3147).toFixed(4)} unit="gl (US)" />
+          <RowView label="V" value={cubicFootNumber === null ? "-" : (cubicFootNumber / 35.3147).toFixed(4)} unit="m³" />
         </Section>
 
         {/* IG (UK) input */}
-        <Section>
+        <Section title="Volume Converter [IG]">
           <RowInput
             label="V"
             unit="IG (UK)"
@@ -88,11 +88,11 @@ return (
           />
           <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber * 264.2 / 220).toFixed(4)} unit="gl (US)" />
           <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber / 220).toFixed(4)} unit="m³" />
-          <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber * 0.1605).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={imperialGallonNumber === null ? "-" : (imperialGallonNumber * 35.3147 / 220).toFixed(4)} unit="ft³" />
         </Section>
 
         {/* gl (US) input */}
-        <Section >
+        <Section title="Volume Converter [gl]">
           <RowInput
             label="V"
             unit="gl (US)"
@@ -100,8 +100,8 @@ return (
             onChange={(e) => allowNumber(e.target.value, setUsGallon)}
             onBlur={() => formatOnBlur(usGallon, setUsGallon)}
           />
-          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber / 264.2).toFixed(4)} unit="m³" />
-          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber * 0.13368).toFixed(4)} unit="ft³" />
+          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber  / 264.2).toFixed(4)} unit="m³" />
+          <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber * 35.3147 / 264.2).toFixed(4)} unit="ft³" />
           <RowView label="V" value={usGallonNumber === null ? "-" : (usGallonNumber * 220 / 264.2).toFixed(4)} unit="IG (UK)" />
         </Section>
 
@@ -112,60 +112,78 @@ return (
 
 }
 
-/* ===== Helpers (نفس جدول 5) ===== */
+/* ===== Card Section ===== */
 
-function Section({children }) {
+function Section({ children, title }) {
   return (
-    <div className="bg-white border border-gray-300 rounded-xl shadow-md p-6 space-y-4">
-      {children}
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-sky-600 to-teal-500 text-white px-4 py-2 text-sm font-semibold tracking-wide flex items-center gap-2">
+         <Beaker className="w-4 h-4" />
+        <span className="text-base">
+          {title}
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="p-2">
+        {children}
+      </div>
+
     </div>
   );
 }
-
 function RowInput({ label, unit, value, onChange, onBlur, autoFocus }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-2 rounded-l bg-green-50">
-      <div className="font-semibold text-gray-700 text-left">{label}</div>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
-      <div className="flex justify-center">
-        <input
-          type="text"
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          onClick={(e) => e.target.select()}
-          dir="ltr"
-          inputMode="decimal"
-          autoFocus={autoFocus}
-          className="w-full max-w-[180px] text-center border border-gray-300 rounded p-1"
-        />
+      <div className="font-semibold text-gray-600">{label}</div>
+
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        onClick={(e) => e.target.select()}
+        dir="ltr"
+        inputMode="decimal"
+        autoFocus={autoFocus}
+        className="w-full font-mono text-center bg-gray-50 rounded-lg py-2
+                   outline-none border border-gray-200
+                   transition-all duration-300 ease-in-out
+                   focus:ring-2 focus:ring-teal-400
+                   focus:ring-offset-1 focus:ring-offset-gray-100
+                   focus:shadow-[0_0_12px_rgba(52,211,153,0.7)]
+                   placeholder-gray-400"
+        placeholder="Enter value"
+      />
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
       </div>
 
-      <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_2[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
-      </div>
     </div>
   );
 }
-
 function RowView({ label, value, unit }) {
   return (
-    <div className="grid grid-cols-[1fr_2fr_1fr] items-center p-3 rounded-l bg-gray-50">
-      <div className="font-semibold text-gray-700 text-left">{label}</div>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
 
-      <div className="text-l font-bold text-center">{value}</div>
+      <div className="font-semibold text-gray-600">{label}</div>
 
-      <div className="flex justify-end" dir="ltr">
-        <div className="inline-flex">
-          <Tooltip text={infoMap_2[unit]}>
-            <span className="cursor-help text-gray-600">{unit}</span>
-          </Tooltip>
-        </div>
+      <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200">
+        {value}
       </div>
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }

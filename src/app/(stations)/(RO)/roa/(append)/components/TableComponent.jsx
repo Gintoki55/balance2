@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Tooltip from "@/components/Tooltip";
+import Tooltip from "../../../../../../components/Tooltip";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import {AnimatedNumber } from "../../(data)/tableData";
 import { useSelector } from "react-redux";

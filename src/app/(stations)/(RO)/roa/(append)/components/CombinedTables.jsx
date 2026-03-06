@@ -2,7 +2,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { updateCellValue } from "../../../../../store/roaSlice";
 import TableComponent from "./TableComponent";
 import { useEffect } from "react";
-import { fetchFileData } from "@/app/store/roaSlice";
+import { fetchFileData } from "../../../../../store/roaSlice";
 import ROSecondTable from "../../../system/secondTable";
 export default function CombinedTables() {
    const dispatch = useDispatch();

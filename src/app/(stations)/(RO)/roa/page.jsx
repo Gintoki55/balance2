@@ -1,6 +1,6 @@
 "use client";
 import { useSelector } from "react-redux";
-import StationHeader from "@/components/stationheader";
+import StationHeader from "../../../../components/stationheader";
 import { Play, Bot, Calculator } from "lucide-react";
 import TopOptions from "../system/topOptions";
 import CombinedTables from "./(append)/components/CombinedTables";
@@ -14,9 +14,9 @@ export default function RoPage() {
   const isDisabled = !selectedFile || selectedFile === "select";
 
   const buttons = [
-      { href: "/roa/media", label: "Media", icon: Play },
-      { href: "/roa/helper", label: "Helper", icon: Bot },
-      { href: "/roa/calculator", label: "Calculator", icon: Calculator },
+      { href: "/roa/media", label: "RO Media", icon: Play },
+      { href: "/roa/helper", label: "RO Helper", icon: Bot },
+      { href: "/roa/calculator", label: "RO Calculator", icon: Calculator },
     ];
 
 

@@ -3,7 +3,7 @@
 import Tooltip from "@/components/Tooltip";
 import { useState } from "react";
 
-const infoMap = {
+const INFO = {
   A: "Element active area [m²]",
   Pf: "Feed water pressure [bar]",
   Pb: "Brine pressure [bar]",
@@ -73,15 +73,11 @@ export default function PressureDropGiven() {
     (0.0085 * Math.pow(Mf - 0.5 * num(Md), 1.7));
 
   return (
-    <div className="max-w-7xl w-full space-y-6">
-      <h2 className="text-2xl font-bold">
-        when pressure drop is given
-      </h2>
-
-      <div className="space-y-4">
+    <div className="max-w-4xl w-full mx-auto space-y-3">
+      <div className="">
 
         {/* Inputs */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           <RowInput label="A" unit="M²" value={A} set={setA} allow={allow} />
           <RowInput label="Pf" unit="bar" value={Pf} set={setPf} allow={allow} />
           <RowInput label="Pb" unit="bar" value={Pb} set={setPb} allow={allow} />
@@ -94,13 +90,13 @@ export default function PressureDropGiven() {
 
         {/* Results */}
         <div className="space-y-1">
-          <RowView label="Mf" value={fmt(Mf, 3)} unit="t/h" />
-          <RowView label="Sd" value={fmt(Sd, 3)} unit="g/l" />
-          <RowView label="Sb" value={fmt(Sb, 3)} unit="g/l" />
-          <RowView label="ΔS" value={fmt(dS, 3)} unit="g/l" />
-          <RowView label="Δπ" value={fmt(dPi, 3)} unit="bar" />
-          <RowView label="∆P" value={fmt(dP, 3)} unit="bar" />
-          <RowView label="TCF" value={fmt(TCF, 2)} unit="#" />
+          <RowView label="Mf" value={fmt(Mf, 4)} unit="t/h" />
+          <RowView label="Sd" value={fmt(Sd, 4)} unit="g/l" />
+          <RowView label="Sb" value={fmt(Sb, 4)} unit="g/l" />
+          <RowView label="ΔS" value={fmt(dS, 4)} unit="g/l" />
+          <RowView label="Δπ" value={fmt(dPi, 4)} unit="bar" />
+          <RowView label="∆P" value={fmt(dP, 4)} unit="bar" />
+          <RowView label="TCF" value={fmt(TCF, 4)} unit="#" />
           <RowView label="w" value={fmt(w, 4)} unit="l/m².h.bar" />
           <RowView label="x" value={fmt(x, 4)} unit="g/m².h.(g/l)" />
           <RowView label="PCF" value={fmt(PCF, 4)} unit="#" />
@@ -111,37 +107,58 @@ export default function PressureDropGiven() {
   );
 }
 
-/* ===== UI ===== */
-
-function RowInput({ label, unit, value, set, allow }) {
+function RowInput({label, unit, value, set, allow}) {
   return (
-    <div className="grid grid-cols-3 items-center p-2 bg-green-50 rounded-l">
-      <Tooltip text={infoMap[label]}>
-        <span className="cursor-help text-gray-600">{label}</span>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
+
+      <Tooltip text={INFO[label]}>
+        <div className="font-semibold text-gray-600">{label}</div>
       </Tooltip>
+
       <input
+        type="text"
         value={value}
         onChange={(e) => allow(e.target.value, set)}
         onClick={(e) => e.target.select()}
-        className="w-full text-center border border-gray-300 rounded p-1"
+        dir="ltr"
+        inputMode="decimal"
+        className="w-full font-mono text-center bg-gray-50 rounded-lg py-2
+                   outline-none border border-gray-200
+                   transition-all duration-300 ease-in-out
+                   focus:ring-2 focus:ring-teal-400
+                   focus:ring-offset-1 focus:ring-offset-gray-100
+                   focus:shadow-[0_0_12px_rgba(52,211,153,0.7)]
+                   placeholder-gray-400"
+        placeholder="Enter value"
       />
-      <Tooltip text={infoMap[unit]}>
-        <span className="cursor-help text-gray-600 flex justify-end">{unit}</span>
-      </Tooltip>
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }
 
-function RowView({ label, value, unit }) {
+function RowView({label, unit, value }) {
   return (
-    <div className="grid grid-cols-3 items-center p-3 bg-gray-50 rounded-l">
-      <Tooltip text={infoMap[label]}>
-        <span className="cursor-help text-gray-600">{label}</span>
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
+       <Tooltip text={INFO[unit]}>
+        <div className="font-semibold text-gray-600">{label}</div>
       </Tooltip>
-      <span className="text-center font-bold">{value}</span>
-      <Tooltip text={infoMap[unit]}>
-        <span className="cursor-help text-gray-600 flex justify-end">{unit}</span>
-      </Tooltip>
+
+       <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200 ">
+        {value}
+      </div>
+
+      <div className="text-right" dir="ltr">
+        <Tooltip text={INFO[unit]}>
+         <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{unit}</span>
+        </Tooltip>
+      </div>
+
     </div>
   );
 }
