@@ -63,7 +63,7 @@ export default function SaltPermeability() {
             value={
               nMs === null
                 ? "-"
-                : (nMs * (3600 * 1000)).toExponential(4).replace("e", "E")
+                : (nMs * (3600 * 1000)).toFixed(4)
             }
             unit="g/m².h.(g/l)"
           />
