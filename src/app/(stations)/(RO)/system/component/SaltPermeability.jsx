@@ -7,6 +7,7 @@ import { Droplets } from "lucide-react";
 const INFO = {
   "g/m².h.(g/l)": "Gram per square meter per hour per salinity gradient",
   "m/s": "Meter per second",
+  "x": "Salt Permeability"
 };
 
 export default function SaltPermeability() {
@@ -33,14 +34,14 @@ export default function SaltPermeability() {
 
         <Section title="Salt Permeability [g/m².h.(g/l)]">
           <RowInput
-            label="X"
+            label="x"
             unit="g/m².h.(g/l)"
             value={xGmh}
             onChange={(e) => allowNumber(e.target.value, setXGmh)}
             onBlur={() => formatOnBlur(xGmh, setXGmh)}
           />
           <RowView
-            label="X"
+            label="x"
             value={
               nGmh === null
                 ? "-"
@@ -52,14 +53,14 @@ export default function SaltPermeability() {
 
         <Section title="Salt Permeability [m/s]">
           <RowInput
-            label="X"
+            label="x"
             unit="m/s"
             value={xMs}
             onChange={(e) => allowNumber(e.target.value, setXMs)}
             onBlur={() => formatOnBlur(xMs, setXMs)}
           />
           <RowView
-            label="X"
+            label="x"
             value={
               nMs === null
                 ? "-"
@@ -100,7 +101,7 @@ function RowInput({ label, unit, value, onChange, onBlur  }) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
       <Tooltip text={INFO[label]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <input
@@ -133,8 +134,8 @@ function RowInput({ label, unit, value, onChange, onBlur  }) {
 function RowView({label, unit, value }) {
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
-       <Tooltip text={INFO[unit]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+       <Tooltip text={INFO[label]}>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
        <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200 ">

@@ -6,7 +6,7 @@ import { Gauge } from "lucide-react";
     <div className="max-w-4xl  mx-auto w-full space-y-3">
       <div className="flex items-center gap-2">
         <Gauge className="w-6 h-6 text-sky-700" />
-      <span className="text-xl font-semibold text-gray-700 tracking-wide"> RO element paramteres</span>
+      <span className="text-xl font-semibold text-gray-300 tracking-wide"> RO element paramteres</span>
       </div> 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 

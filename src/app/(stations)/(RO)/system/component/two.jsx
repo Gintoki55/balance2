@@ -43,7 +43,7 @@ const cubicFootNumber =
 
 return (
   <div className="max-w-4xl mx-auto w-full space-y-3">
-    <h2 className="text-xl font-bold text-gray-700">Volume Converter V</h2>
+    <h2 className="text-xl font-bold text-gray-300">Volume Converter V</h2>
 
        {/* Grid Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

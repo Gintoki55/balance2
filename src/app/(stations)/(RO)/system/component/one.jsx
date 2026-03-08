@@ -37,7 +37,7 @@ export default function One() {
 
   return (
     <div className="max-w-4xl mx-auto w-full space-y-3">
-      <h2 className="text-xl font-semibold text-gray-700 tracking-wide">
+      <h2 className="text-xl font-semibold text-gray-300 tracking-wide">
         Temperature Converter T
       </h2>
 

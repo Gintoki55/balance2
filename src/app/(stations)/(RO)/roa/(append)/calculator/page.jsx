@@ -17,7 +17,7 @@ import Ten from "../../../system/component/ten3";
 
 export default function CalculatorPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-900">
       {/* ===== Header ===== */}
       <StationHeader title="RO Calculator" isPopup />
 
@@ -36,9 +36,9 @@ export default function CalculatorPage() {
         </div>
       </div>
       <div className="max-w-4xl mx-auto">
-       <div className="m-3 p-3 bg-gradient-to-r from-sky-50 to-teal-50 border border-sky-200 shadow-sm flex items-start gap-3 rounded-xl">
+       <div className="m-3 p-3 bg-gray-800 border border-gray-500 shadow-sm flex items-start gap-3 rounded-xl">
           <Info className="w-5 h-5 text-sky-600 shrink-0" />
-          <p className="text-base text-gray-600">
+          <p className="text-base text-gray-400">
             <strong>Tip:</strong> Hover over any symbol or unit to see its full description. 
             Yellow/cream colored fields are inputs, blue-tinted fields show calculated outputs.
           </p>
@@ -56,11 +56,7 @@ export default function CalculatorPage() {
         <Section><WaterRecovery /></Section>
         <Section><WaterFlux /></Section>
         <Section><WaterPermeability /></Section>
-        <Section><SaltPermeability /></Section>
-      
-       
-       
-       
+        <Section><SaltPermeability /></Section> 
         <Section><Ten /></Section>
       </div>
     </div>

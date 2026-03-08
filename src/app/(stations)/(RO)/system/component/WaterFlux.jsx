@@ -7,6 +7,7 @@ import { Droplets } from "lucide-react";
 const INFO = {
   gfd: "Gallon per square foot per day",
   lmh: "liter per square meter per hour",
+  m: "Water flux"
 };
 
 export default function WaterFlux() {
@@ -33,7 +34,7 @@ export default function WaterFlux() {
 
         <Section title="Water Flux Converter [gfd]">
           <RowInput
-            label="M"
+            label="m"
             unit="gfd"
             value={mGfd}
             onChange={(e) => allowNumber(e.target.value, setMGfd)}
@@ -41,7 +42,7 @@ export default function WaterFlux() {
           />
 
           <RowView
-            label="M"
+            label="m"
             value={
               nGfd === null
                 ? "-"
@@ -53,7 +54,7 @@ export default function WaterFlux() {
 
         <Section title="Water Flux Converter [lmh]">
           <RowInput
-            label="M"
+            label="m"
             unit="lmh"
             value={mLmh}
             onChange={(e) => allowNumber(e.target.value, setMLmh)}
@@ -61,7 +62,7 @@ export default function WaterFlux() {
           />
 
           <RowView
-            label="M"
+            label="m"
             value={
               nLmh === null
                 ? "-"
@@ -102,7 +103,7 @@ function RowInput({ label, unit, value, onChange, onBlur  }) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
       <Tooltip text={INFO[label]}>
-      <div className="font-semibold text-gray-600">{label}</div>
+      <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <input
@@ -136,7 +137,9 @@ function RowView({label, unit, value }) {
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
 
-        <div className="font-semibold text-gray-600">{label}</div>
+        <Tooltip text={INFO[label]}>
+          <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
+        </Tooltip>
 
       <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200">
         {value}

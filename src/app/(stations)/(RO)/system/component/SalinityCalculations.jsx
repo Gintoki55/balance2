@@ -63,7 +63,7 @@ export default function SalinityCalculations() {
     <div className="max-w-4xl mx-auto w-full space-y-3">
       <div className="flex items-center gap-2">
          <FlaskConical className="w-5 h-5 text-sky-700" />
-        <span className="text-xl font-semibold text-gray-700 tracking-wide">
+        <span className="text-xl font-semibold text-gray-300 tracking-wide">
           RO Specific Calculators
         </span>
       </div>
@@ -154,7 +154,7 @@ function RowInput({ label, unit, value, set, allow, formatOnBlur }) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
       <Tooltip text={INFO[label]}>
-      <div className="font-semibold text-gray-600">{label}</div>
+      <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <input
@@ -189,7 +189,7 @@ function RowView({label, unit, value }) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
 
       <Tooltip text={INFO[label]}>
-      <div className="font-semibold text-gray-600">{label}</div>
+      <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200">

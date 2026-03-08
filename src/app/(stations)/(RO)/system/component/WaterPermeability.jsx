@@ -7,6 +7,7 @@ import { Droplets } from "lucide-react";
 const INFO = {
   "l/m².h.bar": "Liter per square meter per hour per bar",
   "m/s.bar": "Meter per second per bar",
+  "w": "Water Permeability"
 };
 
 export default function WaterPermeability() {
@@ -33,7 +34,7 @@ export default function WaterPermeability() {
 
         <Section title="Water Permeability [l/m².h.bar]">
           <RowInput
-            label="W"
+            label="w"
             unit="l/m².h.bar"
             value={wLmhBar}
             onChange={(e) => allowNumber(e.target.value, setWLmhBar)}
@@ -41,7 +42,7 @@ export default function WaterPermeability() {
           />
 
           <RowView
-            label="W"
+            label="w"
             value={
               nLmhBar === null
                 ? "-"
@@ -53,7 +54,7 @@ export default function WaterPermeability() {
 
         <Section title="Water Permeability [m/s.bar]">
           <RowInput
-            label="W"
+            label="w"
             unit="m/s.bar"
             value={wMsBar}
             onChange={(e) => allowNumber(e.target.value, setWMsBar)}
@@ -61,11 +62,11 @@ export default function WaterPermeability() {
           />
 
           <RowView
-            label="W"
+            label="w"
             value={
               nMsBar === null
                 ? "-"
-                : (nMsBar * (3600 * 1000)).toExponential(4).replace("e","E")
+                : (nMsBar * (3600 * 1000)).toFixed(4)
             }
             unit="l/m².h.bar"
           />
@@ -103,7 +104,7 @@ function RowInput({ label, unit, value, onChange, onBlur  }) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
 
       <Tooltip text={INFO[label]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <input
@@ -136,8 +137,8 @@ function RowInput({ label, unit, value, onChange, onBlur  }) {
 function RowView({label, unit, value }) {
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
-       <Tooltip text={INFO[unit]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+       <Tooltip text={INFO[label]}>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
        <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200 ">

@@ -5,34 +5,33 @@ import { useState } from "react";
 
 /* ================= INFO MAP ================= */
 const INFO = {
-  A: "Element active area [m²]",
-  Pf: "Feed water pressure [bar]",
-  Pb: "Brine pressure [bar]",
-  Md: "Fresh water production [t/h]",
-  WR: "Present water recovery [%]",
-  Sf: "Feed water salinity [g/l]",
-  Tf: "Feed water temperature [°C]",
-  SR: "Present salt rejection [%]",
-  Mf: "Feed water flow [t/h]",
-  Sd: "Product water salinity [g/l]",
-  Sb: "Brine water salinity [g/l]",
-  ΔS: "Salinity difference [g/l]",
-  Δπ: "Osmotic pressure difference [bar]",
-  "∆P": "Net driving pressure [bar]",
+  A: "Membrane element active area",
+  Pf: "Feed water pressure",
+  Pb: "Brine water pressure (correlated)",
+  Md: "Product water flow",
+  WR: "Percent water recovery",
+  Sf: "Feed water salinity",
+  Tf: "Feed water temperature",
+  SR: "Salt rejection",
+  Mf: "Feed flow per element",
+  Sd: "Product water salinity",
+  Sb: "Brine water salinity",
+  ΔS: "Mean membrane wall salinity",
+  Δπ: "Mean osmotic pressure",
+  "∆P": "Net driving pressure",
   TCF: "Temperature correction factor",
-  w: "Water permeability",
-  x: "Salt permeability",
-  PCF: "Pressure drop correction factor",
-
+  w: "Water permeability coefficient",
+  x: "Salt permeability coefficient",
+  PCF: "Pressure correction factor",
   "M²": "square meter",
   bar: "bar",
-  "t/h": "metric ton/hour",
+  "t/h": "metric ton per hour",
   "%": "percent",
   "°C": "celsius",
   "g/l": "gram per liter",
-  "#": "non dimensional",
-  "l/m².h.bar": "Liter per square meter per hour per bar",
-  "g/m².h.(g/l)": "Gram per square meter per hour per salinity gradient",
+  "#": "dimensionless",
+  "l/m².h.bar": "liter per square meter per hour per bar",
+  "g/m².h.(g/l)": "gram per square meter per hour per (gram per liter)",
 };
 
 export default function PressureCorrelated() {
@@ -126,7 +125,7 @@ function RowInput({label, unit, value, set, allow}) {
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
 
       <Tooltip text={INFO[label]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
       <input
@@ -158,7 +157,7 @@ function RowView({label, unit, value }) {
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
        <Tooltip text={INFO[unit]}>
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
        <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200 ">
