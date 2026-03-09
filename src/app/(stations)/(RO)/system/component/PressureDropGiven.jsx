@@ -145,7 +145,7 @@ function RowInput({label, unit, value, set, allow}) {
 function RowView({label, unit, value }) {
   return (
     <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
-       <Tooltip text={INFO[unit]}>
+       <Tooltip text={INFO[label]}>
         <div className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">{label}</div>
       </Tooltip>
 
