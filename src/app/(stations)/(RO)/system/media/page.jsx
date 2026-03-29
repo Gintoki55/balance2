@@ -1,16 +1,15 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Navbar from '../../../system/media/Navbar';
-import Sidebar from '../../../system/media/Sidebar';
-import InfoBox from '../../../system/media/InfoBox';
-import Table from '../../../system/media/Table';
-import FAQ from '../../../system/media/FAQ';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+import InfoBox from './InfoBox';
+import Table from './Table';
+import FAQ from './FAQ';
 import { Droplet, Gauge, TrendingUp } from 'lucide-react';
-import { desalinationData } from '../../../system/media/desalinationData';
-import AIAssistant from '../../../system/media/hfchat';
+import { desalinationData } from '../../(data)/desalinationData';
 
-export default function MediaPage() {
+export default function Home() {
   const contentRef = useRef(null);
 
   const handleExportPDF = async () => {
@@ -32,7 +31,7 @@ export default function MediaPage() {
   const [activeSection, setActiveSection] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('roc');
+  const [activeTab, setActiveTab] = useState('roa');
 
   const sectionRefs = {
     overview: useRef(null),
@@ -250,7 +249,7 @@ export default function MediaPage() {
             ))}
           </section>
         </main>
-          <AIAssistant/>
+
         <InfoBox
           statistics={desalinationData.statistics}
           links={desalinationData.links}

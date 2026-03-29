@@ -1,48 +1,30 @@
-import { m } from "framer-motion";
-import { NextResponse } from "next/server";
-
+// app/api/chat/route.js
 export async function POST(req) {
-  try {
-    const { message } = await req.json();
+  const { message } = await req.json();
 
+  try {
     const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+      'https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct',
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.HF_API_KEY}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          model: "stepfun/step-3.5-flash:free",
-          messages: [
-           {
-            role: "system",
-            content: `
-            أنت مساعد تعليمي متخصص في تحلية المياه.
-            أجب باللغة العربية الفصحى فقط.
-            اكتب إجابات واضحة ومنظمة ومناسبة للطلاب.
-            لا تستخدم أي لغة أخرى.
-            `
-            },
-            {
-              role: "user",
-              content: message
-            }
-          ]
-        }),
+        body: JSON.stringify({ inputs: message }),
       }
     );
-
     const data = await response.json();
+    const text = data?.generated_text || data[0]?.generated_text || "No response";
 
-    const reply =
-      data.choices?.[0]?.message?.content  || "لم يصل رد من النموذج";
-
-    return NextResponse.json({ reply });
-
+    return new Response(JSON.stringify({ reply: text }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error("OpenRouter Error:", error);
-    return NextResponse.json({ reply: "حدث خطأ في النظام" });
+    return new Response(JSON.stringify({ reply: 'Error: Unable to get response from AI.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

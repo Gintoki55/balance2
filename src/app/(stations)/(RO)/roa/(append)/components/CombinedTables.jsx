@@ -37,6 +37,7 @@ const JValues = jCell
               <col key={i} className="w-[8.33%]" />
             ))}
           </colgroup>
+  
           <tbody>
             <TableComponent
               stationData={stationData}
@@ -51,7 +52,6 @@ const JValues = jCell
                 className="border-t border-gray-400 bg-gray-200 py-1"
               ></td>
             </tr>
-
             <ROSecondTable JValues={JValues} />
           </tbody>
         </table>
