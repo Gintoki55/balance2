@@ -1,5 +1,5 @@
 'use client';
-
+// /
 import { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
@@ -8,7 +8,6 @@ import Table from './Table';
 import FAQ from './FAQ';
 import { Droplet, Gauge, TrendingUp } from 'lucide-react';
 import { desalinationData } from '../../(data)/desalinationData';
-import HFChat from './hfchat';
 import AIAssistant from './hfchat';
 
 export default function Home() {
