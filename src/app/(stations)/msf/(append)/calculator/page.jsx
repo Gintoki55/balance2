@@ -33,9 +33,9 @@ export default function CalculatorPage() {
         <div className="max-w-7xl mx-auto px-6 flex items-center gap-4">
           <Droplets className="w-10 h-10" />
           <div>
-            <h2 className="text-2xl font-bold">RO Calculator</h2>
+            <h2 className="text-2xl font-bold">BDS Calculator</h2>
             <p className="text-white/80">
-              Reverse Osmosis Desalination Engineering Calculator
+              Balance Desalination Simulator
             </p>
           </div>
         </div>
