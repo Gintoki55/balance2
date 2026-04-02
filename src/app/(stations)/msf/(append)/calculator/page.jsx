@@ -26,7 +26,7 @@ export default function CalculatorPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <StationHeader title="RO Calculator" isPopup />
+      <StationHeader title="MSF Calculator" isPopup />
 
       {/* Header */}
       <div className="bg-gradient-to-r from-sky-700 to-teal-500 text-white py-8">
