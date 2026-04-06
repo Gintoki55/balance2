@@ -7,10 +7,10 @@ const INFO = {
   "g/l": "gram per liter",
   "%": "percent",
 
-  S0: "Raw water salinity [g/l]",
-  Sb: "Brine water salinity [g/l]",
-  Sd: "Product water salinity [g/l]",
-  WR: "Percent water recovery [%]",
+  "S0": "Feed salinity",
+  "Sb": "Brine salinity",
+  "Sd": "Product salinity",
+  "WR": "Water recovery",
 };
 export default function WaterRecovery() {
 

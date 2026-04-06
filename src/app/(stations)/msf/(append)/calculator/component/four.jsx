@@ -8,10 +8,10 @@ const infoMap_4 = {
   bar: "bar",
   kPa: "KiloPascal",
   MPa: "megaPascal",
-  psi: "Pound  per square inch",
+  psi: "Pounds per square inch",
 };
 
-export default function Four() {
+export function Four() {
 const [bar, setBar] = useState("");
 const [kPa, setKPa] = useState("");
 const [megaPascal, setMegaPascal] = useState("");

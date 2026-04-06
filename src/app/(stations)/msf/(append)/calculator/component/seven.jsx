@@ -106,9 +106,12 @@ const ppm = (() => {
     <div className="max-w-7xl w-full space-y-10">
       {/* ===== TABLE 1 ===== */}
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Salinity Calculations
-        </h2>
+        <div className="bg-gradient-to-r from-sky-600 to-teal-500 text-white px-4 py-2 text-sm font-semibold tracking-wide flex items-center gap-2">
+         <Thermometer className="w-4 h-4" />
+        <span className="text-base">
+         RO Variables
+        </span>
+      </div>
 
         <div className="grid md:grid-cols-2 bg-white border border-gray-300 shadow-lg gap-4">
           <div className="space-y-3 md:pl-6 md:pt-6 md:pr-1 md:pb-6 max-md:p-4">

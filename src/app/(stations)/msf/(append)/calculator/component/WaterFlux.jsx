@@ -7,12 +7,12 @@ import { Droplets } from "lucide-react";
 const INFO = {
   gfd: "Gallon per square foot per day",
   lmh: "liter per square meter per hour",
-  m: "Water flux"
+  mj: "Water flux"
 };
 
 export default function WaterFlux() {
-  const [mGfd, setMGfd] = useState("");
-  const [mLmh, setMLmh] = useState("");
+  const [mGfd, setMGfd] = useState(20);
+  const [mLmh, setMLmh] = useState(33.94);
 
   const allowNumber = (value, setter) => {
     if (/^-?\d*\.?\d*$/.test(value)) setter(value);
@@ -34,7 +34,7 @@ export default function WaterFlux() {
 
         <Section title="Water Flux Converter [gfd]">
           <RowInput
-            label="m"
+            label="mj"
             unit="gfd"
             value={mGfd}
             onChange={(e) => allowNumber(e.target.value, setMGfd)}
@@ -42,7 +42,7 @@ export default function WaterFlux() {
           />
 
           <RowView
-            label="m"
+            label="mj"
             value={
               nGfd === null
                 ? "-"
@@ -54,7 +54,7 @@ export default function WaterFlux() {
 
         <Section title="Water Flux Converter [lmh]">
           <RowInput
-            label="m"
+            label="mj"
             unit="lmh"
             value={mLmh}
             onChange={(e) => allowNumber(e.target.value, setMLmh)}
@@ -62,7 +62,7 @@ export default function WaterFlux() {
           />
 
           <RowView
-            label="m"
+            label="mj"
             value={
               nLmh === null
                 ? "-"

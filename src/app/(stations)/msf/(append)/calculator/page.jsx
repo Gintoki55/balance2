@@ -4,18 +4,18 @@ import { useState } from "react";
 import { Droplets, Info, Calculator, FlaskRound, DollarSign } from "lucide-react";
 import StationHeader from "@/components/stationheader";
 
-import One from "./component/one";
-import Two from "./component/two";
-import Three from "./component/three";
-import Four from "./component/four";
+import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Thirteen, Fourteen} from "./component/one";
+// import {HeatConvertor, SalinityCalculations} from "./component/two";
+// import Three from "./component/three";
+// import Four from "./component/four";
 import WaterPermeability from "./component/WaterPermeability";
 import SaltPermeability from "./component/SaltPermeability";
-import WaterFlux from "./component/WaterFlux";
-import SalinityCalculations from "./component/SalinityCalculations";
+// import WaterFlux from "./component/WaterFlux";
+// import SalinityCalculations from "./component/SalinityCalculations";
 import WaterRecovery from "./component/WaterRecovery";
 import SaltRejectionOsmotic from "./component/SaltRejectionOsmotic";
-import Ten from "./component/ten3";
-import HeatConvertor from "./component/HeatConverter";
+// import Ten from "./component/ten3";
+// import HeatConvertor from "./component/HeatConverter";
 import SpecificEnthalpy from "./component/SpecificEnthalpy";
 import Temperature from "./component/Temperature";
 import Thermal from "./component/Thermal";
@@ -26,7 +26,7 @@ export default function CalculatorPage() {
 
   return (
     <div className="min-h-screen bg-gray-900">
-      <StationHeader title="MSF Calculator" isPopup />
+      <StationHeader title="Calculator" isPopup />
 
       {/* Header */}
       <div className="bg-gradient-to-r from-sky-700 to-teal-500 text-white py-8">
@@ -112,17 +112,23 @@ export default function CalculatorPage() {
           <Section><Two /></Section>
           <Section><Three /></Section>
           <Section><Four /></Section>
-          <Section><HeatConvertor/></Section>
-          <Section><SalinityCalculations /></Section>
-          <Section><WaterRecovery /></Section>
-          <Section><WaterFlux /></Section>
-          <Section><WaterPermeability /></Section>
+          <Section><Five/></Section>
+          <Section><Six /></Section> 
+          <Section><Seven /></Section> 
+          <Section><Eight /></Section>
+          <Section><Nine /></Section>
+          <Section><Ten /></Section>
+          <Section><Elven /></Section>
+          <Section><Twelve /></Section>
+          <Section><Thirteen /></Section>
+          <Section><Fourteen /></Section>
+          {/* <Section><WaterPermeability /></Section>
           <Section><SaltPermeability /></Section>
            <Section><Ten /></Section>
            <Section><SpecificEnthalpy/></Section>
            <Section><Temperature/></Section>
            <Section><Thermal/></Section>
-           <Section><Heat/></Section>
+          <Section><Heat/></Section>  */}
         </div>
 
         {/* ===== Tab 2 ===== */}
