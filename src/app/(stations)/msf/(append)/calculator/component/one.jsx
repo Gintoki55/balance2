@@ -146,6 +146,42 @@ const INFO_13 = {
     "°C":"Celsius",
 };
 
+const INFO_14 = {
+   "Th1":"Hot side inlet temperature",
+   "Tc2":"Cold side inlet temperature",
+   "Ux":"Heat exchanger heat transfer coefficient",
+   "NTU":"Number of Transfer Units",
+   "Cr":"Heat capacity rate ratio (Cmin/Cmax)",
+   "ε":"Heat exchanger effectiveness",
+    "°C": "Celsius",
+    "Tc1":"Cold side inlet temperature",
+    "Q":"Heat duty",
+    "A":"Heat transfer area",
+    "Ucorr":"Correlated overall heat transfer coefficient",
+    "LMTD":"Log mean temperature difference",
+    "U":"Tested overall heat transfer coefficient",
+    "K":"Heat transfer correction factor by testing",
+    "ho":"Outside convective heat transfer coefficient ho, For condensation h≈ 44 MJ/m².h.°C,For pool evaporation h≈ 12 MJ/m².h.°C,For film falling evaporation h≈ 33 MJ/m².h.°C, For water velocity 1m/s h≈ 7 MJ/m².h.°C,For water velocity 2m/s h≈ 12 MJ/m².h.°C, For water velocity 3m/s h≈ 20 MJ/m².h.°C",
+    "FFo":"Outside fouling resistances FFo,about 0.08 ~ 0.2",
+    "δ":"Wall thickness δ,about 0.001 ~ 0.002 m",
+    "σ":"Outer to inner tube radius ratio σ = Do/Di",
+    "FFi":"Inside fouling resistances FFi,about 0.08 ~ 0.2",
+    "hi":"Inside convective heat transfer coefficient hi,For condensation h≈ 44 MJ/m².h.°C,For pool evaporation h≈ 12 MJ/m².h.°C,For film falling evaporation h≈ 33 MJ/m².h.°C,For water velocity 1m/s h≈ 7 MJ/m².h.°C,For water velocity 2m/s h≈ 12 MJ/m².h.°C,For water velocity 3m/s h≈ 20 MJ/m².h.°C",
+    "MJ/m².h.°C":"Megajoule per square meter per hour per degree Celsius",
+    "m².h.°C/MJ":"Square meter hour degree Celsius per megajoule",
+    "m":"Meter",
+    "MJ/m.h.°C":"Megajoule per meter per hour per degree Celsius",
+    "#":"Dimensionless",
+    "Th2":"Hot side outlet temperature",
+    "m²":"Square meters",
+    "MJ/h":"Megajoule per hour",
+    "k":"Wall thermal conductivity k,Aluminum-brass: k≈ 0.432,Cu-Ni 90/10: k≈ 0.18,Cu-Ni 70/30: k≈ 0.108,Stainless steel: k≈ 0.055,Titanium: k≈ 0.055 MJ/m.h.°C"
+
+
+
+};
+
+
 
 
   const allowNumber = (value, setter) => {
@@ -1366,40 +1402,6 @@ return (
 
 
 
-const INFO_14 = {
-   "Th1":"Hot side inlet temperature",
-   "Tc2":"Cold side inlet temperature",
-   "Ux":"Heat exchanger heat transfer coefficient",
-   "NTU":"Number of Transfer Units",
-   "Cr":"Heat capacity rate ratio (Cmin/Cmax)",
-   "ε":"Heat exchanger effectiveness",
-    "°C": "Celsius",
-    "Tc1":"Cold side inlet temperature",
-    "Q":"Heat duty",
-    "A":"Heat transfer area",
-    "Ucorr":"Correlated overall heat transfer coefficient",
-    "LMTD":"Log mean temperature difference",
-    "U":"Tested overall heat transfer coefficient",
-    "K":"Heat transfer correction factor by testing",
-    "ho":"Outside convective heat transfer coefficient ho, For condensation h≈ 44 MJ/m².h.°C,For pool evaporation h≈ 12 MJ/m².h.°C,For film falling evaporation h≈ 33 MJ/m².h.°C, For water velocity 1m/s h≈ 7 MJ/m².h.°C,For water velocity 2m/s h≈ 12 MJ/m².h.°C, For water velocity 3m/s h≈ 20 MJ/m².h.°C",
-    "FFo":"Outside fouling resistances FFo,about 0.08 ~ 0.2",
-    "δ":"Wall thickness δ,about 0.001 ~ 0.002 m",
-    "σ":"Outer to inner tube radius ratio σ = Do/Di",
-    "FFi":"Inside fouling resistances FFi,about 0.08 ~ 0.2",
-    "hi":"Inside convective heat transfer coefficient hi,For condensation h≈ 44 MJ/m².h.°C,For pool evaporation h≈ 12 MJ/m².h.°C,For film falling evaporation h≈ 33 MJ/m².h.°C,For water velocity 1m/s h≈ 7 MJ/m².h.°C,For water velocity 2m/s h≈ 12 MJ/m².h.°C,For water velocity 3m/s h≈ 20 MJ/m².h.°C",
-    "MJ/m².h.°C":"Megajoule per square meter per hour per degree Celsius",
-    "m².h.°C/MJ":"Square meter hour degree Celsius per megajoule",
-    "m":"Meter",
-    "MJ/m.h.°C":"Megajoule per meter per hour per degree Celsius",
-    "#":"Dimensionless",
-    "Th2":"Hot side outlet temperature",
-    "m²":"Square meters",
-    "MJ/h":"Megajoule per hour",
-    "k":"Wall thermal conductivity k,Aluminum-brass: k≈ 0.432,Cu-Ni 90/10: k≈ 0.18,Cu-Ni 70/30: k≈ 0.108,Stainless steel: k≈ 0.055,Titanium: k≈ 0.055 MJ/m.h.°C"
-
-
-
-};
 
 
 export function Fourteen() {

@@ -93,7 +93,7 @@ export function Seven() {
                 <RowView
                     label="SR"
                     unit="%"
-                    value={(SR / 10000).toFixed(4)}
+                    value={(Number(SR) / 10000).toFixed(4)}
                     info={INFO_7}
                 />
                 </Section> 

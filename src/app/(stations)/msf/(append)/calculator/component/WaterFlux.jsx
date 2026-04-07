@@ -4,7 +4,7 @@ import Tooltip from "@/components/Tooltip";
 import { useState } from "react";
 import { Droplets } from "lucide-react";
 
-const INFO = {
+const INFO_9 = {
   gfd: "Gallon per square foot per day",
   lmh: "liter per square meter per hour",
   mj: "Water flux"

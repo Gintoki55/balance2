@@ -15,94 +15,22 @@ const INFO = {
 };
 
 export default function Thermal() {
-// Table 1
-const [t1, setT1] = useState(""); // k
 
-// Table 2
-const [t2, setT2] = useState(""); // k
+// Thermal Conductivity
+const [k_w, setK_w] = useState("");     // W/m.°C
+const [k_mj, setK_mj] = useState("");   // MJ/m.h.°C
 
-// Table 3
-const [t3, setT3] = useState(""); // h
+// Heat Transfer Coefficient
+const [h_w, setH_w] = useState("");     // W/m².°C
+const [h_mj, setH_mj] = useState("");   // MJ/m².h.°C
 
-// Table 4
-const [t4, setT4] = useState(""); // h
+// Fouling Factor
+const [ff_w, setFf_w] = useState("");   // m².°C/W
+const [ff_mj, setFf_mj] = useState(""); // m².h.°C/MJ
 
-// Table 5
-const [t5, setT5] = useState(""); // FF
-
-// Table 6
-const [t6, setT6] = useState(""); // FF
-
-// Table 7
-const [t7, setT7] = useState(""); // Td
-
-// Table 8
-const [t8, setT8] = useState(""); // Tb
-
-
-
-  const allowNumber = (value, setter) => {
-    if (/^-?\d*\.?\d*$/.test(value)) setter(value);
-  };
-
-  const formatOnBlur = (value, setter) => {
-    if (value === "" || value === "-") return;
-    const n = Number(value);
-    if (!isNaN(n)) setter(String(n));
-  };
-
-
-const t1_num =
-  t1 === "" || t1 === "-" ? null : Number(t1);
-
-const t2_num =
-  t2 === "" || t2 === "-" ? null : Number(t2);
-
-const t3_num =
-  t3 === "" || t3 === "-" ? null : Number(t3);
-
-const t4_num =
-  t4 === "" || t4 === "-" ? null : Number(t4);
-
-const t5_num =
-  t5 === "" || t5 === "-" ? null : Number(t5);
-
-const t6_num =
-  t6 === "" || t6 === "-" ? null : Number(t6);
-
-const t7_num =
-  t7 === "" || t7 === "-" ? null : Number(t7);
-
-const t8_num =
-  t8 === "" || t8 === "-" ? null : Number(t8);
-// ─── Correlations ─────────────────────────────────────────────────
-function CondenserCorrelation() {
-  const [Td, setTd] = useState(70);
-  const Uc = 5.76 + 0.00576 * Td + 576e-6 * Math.pow(Td, 2);
-  return (
-    <div className="converter-card">
-      <SectionHeader title="Condenser Correlation" icon={Flame} />
-      <div className="p-4 space-y-1">
-        <InputRow symbol="Td" value={Td} onChange={setTd} unit="°C" symbolTip="Distillate temperature" unitTip="Celsius" />
-        <OutputRow symbol="Uc" value={Uc} unit="MJ/m².h.°C" symbolTip="Condenser heat transfer coefficient" unitTip="Megajoule per square meter per hour per degree Celsius" />
-      </div>
-    </div>
-  );
-}
-
-function EvaporatorCorrelation() {
-  const [Tb, setTb] = useState(70);
-  const Ue = 7.02 + 0.054 * Tb - 828e-6 * Math.pow(Tb, 2) + 864e-8 * Math.pow(Tb, 3);
-  return (
-    <div className="converter-card">
-      <SectionHeader title="Evaporator Correlation" icon={Flame} />
-      <div className="p-4 space-y-1">
-        <InputRow symbol="Tb" value={Tb} onChange={setTb} unit="°C" symbolTip="Brine temperature" unitTip="Celsius" />
-        <OutputRow symbol="Ue" value={Ue} unit="MJ/m².h.°C" symbolTip="Evaporator heat transfer coefficient" unitTip="Megajoule per square meter per hour per degree Celsius" />
-      </div>
-    </div>
-  );
-}
+// Temperatures
+const [td, setTd] = useState(""); // Distillate temperature
+const [tb, setTb] = useState(""); // Brine temperature
 
 
 return (

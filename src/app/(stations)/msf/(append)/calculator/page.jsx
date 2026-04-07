@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Droplets, Info, Calculator, FlaskRound, DollarSign } from "lucide-react";
+import { Droplets, Info, Calculator, FlaskRound, DollarSign ,Thermometer} from "lucide-react";
 import StationHeader from "@/components/stationheader";
 
 import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Thirteen, Fourteen} from "./component/one";
@@ -20,6 +20,9 @@ import SpecificEnthalpy from "./component/SpecificEnthalpy";
 import Temperature from "./component/Temperature";
 import Thermal from "./component/Thermal";
 import Heat from "./component/Heat";
+import ROElementPbGiven from "./component/ROmodules";
+import ROUI from "./component/ROmodules";
+import ROModules from "./component/ROmodules";
 
 export default function CalculatorPage() {
   const [activeTab, setActiveTab] = useState("general");
@@ -62,6 +65,19 @@ export default function CalculatorPage() {
             >
               <Calculator className="w-4 h-4" />
               BDS Convertor
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("ROModules")}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                activeTab === "ROModules"
+                  ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+                  : "text-gray-400 hover:text-white hover:bg-gray-700"
+              }`}
+            >
+              <Droplets className="w-4 h-4" />
+              RO Modules
             </button>
 
             <button
@@ -132,6 +148,11 @@ export default function CalculatorPage() {
         </div>
 
         {/* ===== Tab 2 ===== */}
+        <div className={activeTab === "ROModules" ? "block" : "hidden"}>
+          <ROModules />
+
+        </div>
+        {/* ===== Tab 3 ===== */}
         <div className={activeTab === "chemistry" ? "block" : "hidden"}>
           {/* <Section><SalinityCalculations /></Section>
           <Section><SaltRejectionOsmotic /></Section>
@@ -139,7 +160,7 @@ export default function CalculatorPage() {
           <Section><WaterFlux /></Section> */}
         </div>
 
-        {/* ===== Tab 3 ===== */}
+        {/* ===== Tab 4 ===== */}
         <div className={activeTab === "cost" ? "block" : "hidden"}>
           {/* <Section><WaterPermeability /></Section>
           <Section><SaltPermeability /></Section>
