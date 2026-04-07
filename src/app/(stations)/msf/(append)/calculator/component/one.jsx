@@ -4,6 +4,11 @@ import Tooltip from "@/components/Tooltip";
 import { Beaker, Gauge, FlaskConical, Thermometer } from "lucide-react";
 import { useState } from "react";
 
+
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+
   //one 
 const INFO_1 = {
   "°C": "Celsius",
@@ -1403,7 +1408,7 @@ export function Fourteen() {
 const [Th1, setTh1] = useState(70);
 const [Tc2, setTc2] = useState(25);
 
-const Tmean = 0.5 * (Th1 + Tc2);
+const Tmean = 0.5 * (Number(Th1) + Number(Tc2));
 const Ux = 5.76 + 0.00576 * Tmean + 576e-6 * Math.pow(Tmean, 2);
 
 
@@ -1411,9 +1416,14 @@ const Ux = 5.76 + 0.00576 * Tmean + 576e-6 * Math.pow(Tmean, 2);
 const [NTU, setNTU] = useState(2.0);
 const [Cr, setCr] = useState(0.8);
 
-const effectiveness = Cr === 1 
-  ? NTU / (1 + NTU)
-  : (1 - Math.exp(-NTU * (1 - Cr))) / (1 - Cr * Math.exp(-NTU * (1 - Cr)));
+
+const Cr_num = Number(Cr);
+const NTU_num = Number(NTU);
+
+const effectiveness = Cr_num === 1
+  ? NTU_num / (1 + NTU_num)
+  : (1 - Math.exp(-NTU_num * (1 - Cr_num))) /
+    (1 - Cr_num * Math.exp(-NTU_num * (1 - Cr_num)));
 
 
 // ===== Table 3 =====
@@ -1425,15 +1435,134 @@ const [Q, setQ] = useState(700);
 const [A, setA] = useState(25);
 const [Ur, setUr] = useState(8.9856);
 
-const dT1 = Th1_3 - Tc1;
+ // 🔹 Reset
+  const resetToDefaults = () => {
+    setTh1_3(70);
+    setTh2(35);
+    setTc1(65);
+    setTc2_3(32);
+    setQ(700);
+    setA(25);
+    setUr(8.9856);
+  };
+
+  const dT1 = Th1_3 - Tc1;
 const dT2 = Th2 - Tc2_3;
 
-const lmtd = Math.abs(dT1 - dT2) < 0.001 
-  ? dT1 
-  : (dT1 - dT2) / Math.log(dT1 / dT2);
+
+  const lmtd =
+  dT1 > 0 && dT2 > 0
+    ? Math.abs(dT1 - dT2) < 0.001
+      ? dT1
+      : (dT1 - dT2) / Math.log(dT1 / dT2)
+    : 0;
 
 const Ut = A > 0 && lmtd > 0 ? Q / (A * lmtd) : 0;
 const K = Ur > 0 ? Ut / Ur : 0;
+  
+const inputData = [
+  { symbol: "Inputs", value: "", unit: "" },
+   { symbol: "Th1", value: Th1_3, unit: "°C" },
+  { symbol: "Th2", value: Th2, unit: "°C" },
+  { symbol: "Tc1", value: Tc1, unit: "°C" },
+  { symbol: "Tc2", value: Tc2_3, unit: "°C" },
+  { symbol: "Q", value: Q, unit: "MJ/h" },
+  { symbol: "A", value: A, unit: "m²" },
+  { symbol: "Ucorr", value: Ur, unit: "MJ/m².h.°C" },
+];
+
+const outputData = [
+  { symbol: "Outputs", value: "", unit: "" },
+  { symbol: "LMTD", value: lmtd, unit: "°C" },
+  { symbol: "U", value: Ut, unit: "MJ/m².h.°C" },
+  { symbol: "K", value: K, unit: "#" },
+];
+
+// 🔹 PDF
+const exportPDF = () => {
+  const doc = new jsPDF();
+
+  // 🔹 عنوان
+  doc.setFontSize(16);
+  doc.text("Heat Transfer Correction Factor K (By Testing)", 10, 15);
+
+  // 🔹 دالة تنسيق الأرقام
+  const formatValue = (val) => {
+    if (val === "" || val === null || val === undefined) return "";
+    if (typeof val === "number") return val.toFixed(4);
+    return val;
+  };
+
+  // ===== Inputs =====
+  const inputRows = inputData
+    .filter(row => row.symbol !== "Inputs") // نشيل العنوان
+    .map(row => [
+      row.symbol,
+      formatValue(row.value),
+      row.unit
+    ]);
+
+  doc.setFontSize(12);
+  doc.text("Inputs", 10, 25);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [["Symbol", "Value", "Unit"]],
+    body: inputRows,
+  });
+
+  // ===== Outputs =====
+  const outputRows = outputData
+    .filter(row => row.symbol !== "Outputs")
+    .map(row => [
+      row.symbol,
+      formatValue(row.value),
+      row.unit
+    ]);
+
+  doc.text("Outputs", 10, doc.lastAutoTable.finalY + 10);
+
+  autoTable(doc, {
+    startY: doc.lastAutoTable.finalY + 15,
+    head: [["Symbol", "Value", "Unit"]],
+    body: outputRows,
+  });
+
+  // 🔹 حفظ
+  doc.save("Heat_Transfer_Testing.pdf");
+};
+
+// 🔹 Excel
+const exportExcel = () => {
+  const wb = XLSX.utils.book_new();
+
+  // 🟢 Sheet 1 (Inputs)
+  const wsInputs = XLSX.utils.json_to_sheet(inputData);
+
+  // ✅ هنا تحطها
+  wsInputs["!cols"] = [
+    { wch: 10 }, // symbol
+    { wch: 15 }, // value
+    { wch: 15 }, // unit
+  ];
+
+  XLSX.utils.book_append_sheet(wb, wsInputs, "Inputs");
+
+  // 🔵 Sheet 2 (Outputs)
+  const wsOutputs = XLSX.utils.json_to_sheet(outputData);
+
+  // ✅ وهنا أيضاً
+  wsOutputs["!cols"] = [
+    { wch: 10 },
+    { wch: 15 },
+    { wch: 15 },
+  ];
+
+  XLSX.utils.book_append_sheet(wb, wsOutputs, "Outputs");
+
+  // 💾 حفظ الملف
+  XLSX.writeFile(wb, "Heat_Transfer_Data.xlsx");
+};
 
 
 // ===== Table 4 =====
@@ -1446,6 +1575,21 @@ const [FFo, setFFo] = useState(0.01);
 const [ho, setHo] = useState(12);
 const [Ur2, setUr2] = useState(8.9856);
 
+
+
+
+const resetToDefault_2 = () => {
+    setHi(44);
+    setFFi(0.01);
+    setDelta(0.001);
+    setKval(0.432);
+    setSigma(1.087);
+    setFFo(0.01);
+    setHo(12);
+    setUr2(8.9856);
+};
+
+
 const resistance =
   (hi > 0 ? 1 / hi : 0) +
   FFi +
@@ -1457,16 +1601,110 @@ const Uth = resistance > 0 ? 1 / resistance : 0;
 const K2 = Ur2 > 0 ? Uth / Ur2 : 0;
 
 
-// ===== Helpers =====
-const allowNumber = (value, setter) => {
-  if (/^-?\d*\.?\d*$/.test(value)) setter(value);
+
+const inputData_2 = [
+  { symbol: "Inputs", value: "", unit: "" },
+{ symbol: "ho", value: ho, unit: "MJ/m².h.°C" },
+{ symbol: "FFo", value: FFo, unit: "m².h.°C/MJ" },
+{ symbol: "δ", value: delta, unit: "m" },
+{ symbol: "k", value: k, unit: "MJ/m.h.°C" },
+{ symbol: "σ", value: sigma, unit: "#" },
+{ symbol: "FFi", value: FFi, unit: "m².h.°C/MJ" },
+{ symbol: "hi", value: hi, unit: "MJ/m².h.°C" },
+{ symbol: "Ucorr", value: Ur2, unit: "MJ/m².h.°C" },
+];
+
+const outputData_2 = [
+  { symbol: "Outputs", value: "", unit: "" },
+  { symbol: "U", value: Uth, unit: "MJ/m².h.°C" },
+  { symbol: "K", value: K2, unit: "#" },
+];
+
+const exportPDF_2 = () => {
+  const doc = new jsPDF();
+
+  // 🔹 عنوان
+  doc.setFontSize(16);
+  doc.text("Heat Transfer Correction Factor K (By Theory)", 10, 15);
+
+  // 🔹 دالة تنسيق الأرقام
+  const formatValue = (val) => {
+    if (val === "" || val === null || val === undefined) return "";
+    if (typeof val === "number") return val.toFixed(4);
+    return val;
+  };
+
+  // ===== Inputs =====
+  const inputRows = inputData_2
+    .filter(row => row.symbol !== "Inputs") // نشيل العنوان
+    .map(row => [
+      row.symbol,
+      formatValue(row.value),
+      row.unit
+    ]);
+
+  doc.setFontSize(12);
+  doc.text("Inputs", 10, 25);
+
+  autoTable(doc, {
+    startY: 30,
+    head: [["Symbol", "Value", "Unit"]],
+    body: inputRows,
+  });
+
+  // ===== Outputs =====
+  const outputRows = outputData_2
+    .filter(row => row.symbol !== "Outputs")
+    .map(row => [
+      row.symbol,
+      formatValue(row.value),
+      row.unit
+    ]);
+
+  doc.text("Outputs", 10, doc.lastAutoTable.finalY + 10);
+
+  autoTable(doc, {
+    startY: doc.lastAutoTable.finalY + 15,
+    head: [["Symbol", "Value", "Unit"]],
+    body: outputRows,
+  });
+
+  // 🔹 حفظ
+  doc.save("Heat_Transfer_Theory.pdf");
 };
 
-const formatOnBlur = (value, setter) => {
-  if (value === "" || value === "-") return;
-  const n = Number(value);
-  if (!isNaN(n)) setter(n);
-};
+// 🔹 Excel
+  const exportExcel_2 = () => {
+   const wb = XLSX.utils.book_new();
+
+  // 🟢 Sheet 1 (Inputs)
+  const wsInputs = XLSX.utils.json_to_sheet(inputData_2);
+
+  // ✅ هنا تحطها
+  wsInputs["!cols"] = [
+    { wch: 10 }, // symbol
+    { wch: 15 }, // value
+    { wch: 15 }, // unit
+  ];
+
+  XLSX.utils.book_append_sheet(wb, wsInputs, "Inputs");
+
+  // 🔵 Sheet 2 (Outputs)
+  const wsOutputs = XLSX.utils.json_to_sheet(outputData_2);
+
+  // ✅ وهنا أيضاً
+  wsOutputs["!cols"] = [
+    { wch: 10 },
+    { wch: 15 },
+    { wch: 15 },
+  ];
+
+  XLSX.utils.book_append_sheet(wb, wsOutputs, "Outputs");
+
+  // 💾 حفظ الملف
+  XLSX.writeFile(wb, "Heat_Transfer_Data.xlsx");
+  };
+
 
 
 return (
@@ -1536,6 +1774,29 @@ return (
   <RowView label="LMTD" value={(lmtd).toFixed(4)} unit="°C" info={INFO_14}/>
   <RowView label="U" value={(Ut).toFixed(4)} unit="MJ/m².h.°C" info={INFO_14}/>
   <RowView label="K" value={(K).toFixed(4)} unit="#" info={INFO_14}/>
+
+    <div className="flex gap-2 mt-3">
+        <button
+          onClick={exportPDF}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
+        >
+          PDF
+        </button>
+
+        <button
+          onClick={exportExcel}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
+        >
+          Excel
+        </button>
+
+        <button
+          onClick={resetToDefaults}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded ml-auto cursor-pointer"
+        >
+          ↺ Reset
+        </button>
+      </div>
 </Section>
 
 
@@ -1575,6 +1836,30 @@ return (
 
   <RowView label="U" value={(Uth).toFixed(4)} unit="MJ/m².h.°C" info={INFO_14}/>
   <RowView label="K" value={(K2).toFixed(4)} unit="#" info={INFO_14}/>
+
+  <div className="flex gap-2 mt-3">
+        <button
+          onClick={exportPDF_2}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
+        >
+          PDF
+        </button>
+
+        <button
+          onClick={exportExcel_2}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
+        >
+          Excel
+        </button>
+
+        <button
+          onClick={resetToDefault_2}
+          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded ml-auto cursor-pointer"
+        >
+          ↺ Reset
+        </button>
+      </div>
+
 </Section>
 
 </div>
