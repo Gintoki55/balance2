@@ -24,6 +24,7 @@ import ROElementPbGiven from "./component/ROmodules";
 import ROUI from "./component/ROmodules";
 import ROModules from "./component/ROmodules";
 import ROWaterCost from "./component/rowatercost";
+import MSFWaterCost from "./component/MSFWaterCost";
 
 export default function CalculatorPage() {
   const [activeTab, setActiveTab] = useState("general");
@@ -164,6 +165,7 @@ export default function CalculatorPage() {
         {/* ===== Tab 4 ===== */}
         <div className={activeTab === "cost" ? "block" : "hidden"}>
             <ROWaterCost/>
+            <MSFWaterCost/>
 
         </div>
 

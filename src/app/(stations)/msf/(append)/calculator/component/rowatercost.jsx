@@ -203,12 +203,6 @@ function usePersistentState(key, defaultValue) {
   return [state, setPersistentState, isMounted];
 }
 
-// const formatOnBlur = (value, setter) => {
-//   if (value === "") return;
-//   const num = Number(value);
-//   if (!isNaN(num)) setter(Number(num.toFixed(2)));
-// };
-// section 1
 export default function ROWaterCost() {
   const [Md, setMd] = usePersistentState("ro.Md", 1000);
   const [M0, setM0] = usePersistentState("ro.M0", 2000);
