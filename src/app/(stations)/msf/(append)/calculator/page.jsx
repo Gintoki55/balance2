@@ -23,8 +23,11 @@ import Heat from "./component/Heat";
 import ROElementPbGiven from "./component/ROmodules";
 import ROUI from "./component/ROmodules";
 import ROModules from "./component/ROmodules";
-import ROWaterCost from "./component/rowatercost";
+import ROWaterCost from "./component/RoWaterCost";
 import MSFWaterCost from "./component/MSFWaterCost";
+import MEDWaterCost from "./component/MEDWaterCost";
+import MSHWaterCost from "./component/MSHWaterCost";
+import MVCWaterCost from "./component/MVCWaterCost";
 
 export default function CalculatorPage() {
   const [activeTab, setActiveTab] = useState("general");
@@ -166,6 +169,9 @@ export default function CalculatorPage() {
         <div className={activeTab === "cost" ? "block" : "hidden"}>
             <ROWaterCost/>
             <MSFWaterCost/>
+            <MEDWaterCost/>
+            <MSHWaterCost/>
+            <MVCWaterCost/>
 
         </div>
 
