@@ -28,6 +28,7 @@ import MSFWaterCost from "./component/MSFWaterCost";
 import MEDWaterCost from "./component/MEDWaterCost";
 import MSHWaterCost from "./component/MSHWaterCost";
 import MVCWaterCost from "./component/MVCWaterCost";
+import WaterAnalysis from "./component/WaterAnalysis";
 
 export default function CalculatorPage() {
   const [activeTab, setActiveTab] = useState("general");
@@ -159,10 +160,7 @@ export default function CalculatorPage() {
         </div>
         {/* ===== Tab 3 ===== */}
         <div className={activeTab === "chemistry" ? "block" : "hidden"}>
-          {/* <Section><SalinityCalculations /></Section>
-          <Section><SaltRejectionOsmotic /></Section>
-          <Section><WaterRecovery /></Section>
-          <Section><WaterFlux /></Section> */}
+          <WaterAnalysis/>
         </div>
 
         {/* ===== Tab 4 ===== */}
@@ -172,6 +170,7 @@ export default function CalculatorPage() {
             <MEDWaterCost/>
             <MSHWaterCost/>
             <MVCWaterCost/>
+
 
         </div>
 
