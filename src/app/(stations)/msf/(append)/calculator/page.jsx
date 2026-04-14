@@ -5,25 +5,8 @@ import { Droplets, Info, Calculator, FlaskRound, DollarSign ,Thermometer} from "
 import StationHeader from "@/components/stationheader";
 
 import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Thirteen, Fourteen} from "./component/one";
-// import {HeatConvertor, SalinityCalculations} from "./component/two";
-// import Three from "./component/three";
-// import Four from "./component/four";
-import WaterPermeability from "./component/WaterPermeability";
-import SaltPermeability from "./component/SaltPermeability";
-// import WaterFlux from "./component/WaterFlux";
-// import SalinityCalculations from "./component/SalinityCalculations";
-import WaterRecovery from "./component/WaterRecovery";
-import SaltRejectionOsmotic from "./component/SaltRejectionOsmotic";
-// import Ten from "./component/ten3";
-// import HeatConvertor from "./component/HeatConverter";
-import SpecificEnthalpy from "./component/SpecificEnthalpy";
-import Temperature from "./component/Temperature";
-import Thermal from "./component/Thermal";
-import Heat from "./component/Heat";
-import ROElementPbGiven from "./component/ROmodules";
-import ROUI from "./component/ROmodules";
 import ROModules from "./component/ROmodules";
-import ROWaterCost from "./component/RoWaterCost";
+import ROWaterCost from "./component/ROWaterCost";
 import MSFWaterCost from "./component/MSFWaterCost";
 import MEDWaterCost from "./component/MEDWaterCost";
 import MSHWaterCost from "./component/MSHWaterCost";
