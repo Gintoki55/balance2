@@ -6,7 +6,7 @@ import StationHeader from "@/components/stationheader";
 
 import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Thirteen, Fourteen} from "./component/one";
 import ROModules from "./component/ROmodules";
-import ROWaterCost from "./component/ROWaterCost";
+import ROWaterCost from "./component/rowatercost";
 import MSFWaterCost from "./component/MSFWaterCost";
 import MEDWaterCost from "./component/MEDWaterCost";
 import MSHWaterCost from "./component/MSHWaterCost";
