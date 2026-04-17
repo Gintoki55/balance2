@@ -62,8 +62,8 @@ export default function ROModules() {
     const [editMode, setEditMode] = useState(false);
 
     useEffect(() => {
-  localStorage.setItem("modules", JSON.stringify(customModules));
-}, [customModules]);
+      localStorage.setItem("modules", JSON.stringify(customModules));
+    }, [customModules]);
 
     const allModules = customModules || {};
 

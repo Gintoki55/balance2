@@ -38,7 +38,7 @@ export default function CalculatorPage() {
         
 
         {/* ===== Tabs Navigation ===== */}
-        <div className="mb-6 sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm py-2">
+        <div className="mb-6 sticky top-10 z-10 bg-gray-900/95 backdrop-blur-sm py-2">
           <div className="flex gap-2 p-1.5 bg-gray-800/60 rounded-xl border border-gray-700">
 
           
@@ -127,13 +127,7 @@ export default function CalculatorPage() {
           <Section><Twelve /></Section>
           <Section><Thirteen /></Section>
           <Section><Fourteen /></Section>
-          {/* <Section><WaterPermeability /></Section>
-          <Section><SaltPermeability /></Section>
-           <Section><Ten /></Section>
-           <Section><SpecificEnthalpy/></Section>
-           <Section><Temperature/></Section>
-           <Section><Thermal/></Section>
-          <Section><Heat/></Section>  */}
+
         </div>
 
         {/* ===== Tab 2 ===== */}

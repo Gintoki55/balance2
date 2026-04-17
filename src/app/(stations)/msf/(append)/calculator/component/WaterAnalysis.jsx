@@ -407,145 +407,329 @@ return (
         </div>
       </div>
 
-      {/* Tables */}
-      <div className="grid grid-cols-2 gap-6">
+{/* Tables */}
+<div className="grid grid-cols-2 gap-8">
 
-        {/* Cations */}
-        <div>
-          <h3 className="text-xs font-bold uppercase mb-2">Cations</h3>
-          <table className="w-full text-xs border">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-1 text-left">ion</th>
-                <th className="p-1">mg/l</th>
-                <th className="p-1">meq/l</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cationKeys.map(k => renderIonRow(k, cationSymbols[k]))}
-              <tr className="font-bold border-t">
-                <td>Total</td>
-                <td></td>
-                <td className="text-center">{fmt(totalCat)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  {/* Cations */}
+  <div>
+    <h3 className="text-xs font-semibold tracking-wider text-gray-700 mb-2 uppercase">
+      CATIONS
+    </h3>
 
-        {/* Anions + Neutral */}
-        <div>
-          <h3 className="text-xs font-bold uppercase mb-2">Anions</h3>
-          <table className="w-full text-xs border">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="p-1 text-left">ion</th>
-                <th className="p-1">mg/l</th>
-                <th className="p-1">meq/l</th>
-              </tr>
-            </thead>
-            <tbody>
-              {anionKeys.map(k => renderIonRow(k, anionSymbols[k]))}
-              <tr className="font-bold border-t">
-                <td>Total</td>
-                <td></td>
-                <td className="text-center">{fmt(totalAn)}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h3 className="text-xs font-bold uppercase mt-4 mb-2">Neutral</h3>
-          <table className="w-full text-xs border">
-            <tbody>
-              {neutralKeys.map(k => renderNeutralRow(k, neutralSymbols[k]))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Summary */}
-      <div className="border-t pt-3">
-        <h3 className="text-xs font-bold uppercase mb-2">Summary</h3>
-        <div className="grid grid-cols-2 gap-4 text-xs">
-          <RowView label="TDS" value={fmt(tds)} unit="mg/l" info={INFO} />
-          <RowView label="Total Hardness (CaCO₃)" value={fmt(hardnessCaCO3)} unit="mg/l" info={INFO} />
-          <RowView label="Ion Balance Error" value={fmt(balanceErr)} unit="%" info={INFO} />
-          <RowView label="Total Alkalinity (CaCO₃)" value={fmt(alkCaCO3)} unit="mg/l" info={INFO} />
-          <RowView label="Ionic Strength" value={fmt(ionicStr)} unit="mol/L" info={INFO} />
-        </div>
-      </div>
-
-      {/* LSI */}
-      <div className="border-t pt-3">
-        <h3 className="text-xs font-bold uppercase mb-2">LSI</h3>
-        <div className="grid grid-cols-2 gap-4 text-xs">
-          <RowView label="A" value={fmt(lsiA)} unit="-" info={INFO} />
-          <RowView label="B" value={fmt(lsiB)} unit="-" info={INFO} />
-          <RowView label="C" value={fmt(lsiC)} unit="-" info={INFO} />
-          <RowView label="D" value={fmt(lsiD)} unit="-" info={INFO} />
-          <RowView label="pHs" value={fmt(pHs)} unit="-" info={INFO} />
-          <RowView label="LSI" value={fmt(lsi)} unit="-" info={INFO} />
-        </div>
-      </div>
-
-      {/* Raw Water */}
-      <div className="border-t pt-3">
-        <h3 className="text-xs font-bold uppercase mb-2">Raw Water Test</h3>
-        <div className="grid grid-cols-2 gap-4 text-xs">
-          <RowInput label="Turbidity" unit="NTU" value={turbidity} onChange={setTurbidity} info={INFO} />
-          <RowInput label="SDI" unit="-" value={sdi} onChange={setSdi} info={INFO} />
-          <RowInput label="TSS" unit="mg/l" value={tss} onChange={setTss} info={INFO} />
-          <RowInput label="COD" unit="mg/l" value={cod} onChange={setCod} info={INFO} />
-          <RowInput label="BOD" unit="mg/l" value={bod} onChange={setBod} info={INFO} />
-          <RowInput label="Total Bacteria" unit="CFU/ml" value={totalBacteria} onChange={setTotalBacteria} info={INFO} />
-          <RowInput label="Coliform" unit="MPN/100ml" value={coliform} onChange={setColiform} info={INFO} />
-        </div>
-      </div>
-
-      {/* Pretreatment Selection */}
-    <div className="border-t pt-3">
-    <h3 className="text-xs font-bold uppercase mb-2">Pretreatment Selection</h3>
-
-    <div className="grid grid-cols-2 gap-4 text-xs">
-
-        <RowView
-        label="Recommended PT"
-        value={
-            sdi > 5 || turbidity > 10 || tss > 50 ? 'MF/UF' :
-            sdi > 3 || turbidity > 5 || tss > 20 || cod > 30 || bod > 15 || totalBacteria > 10000 ? 'NF' :
-            'Media'
-        }
-        unit="-"
-        info={INFO}
-        />
-
-        <RowView
-        label="Disinfection Required"
-        value={totalBacteria > 1000 || coliform > 10 ? 'Yes' : 'No'}
-        unit="-"
-        info={INFO}
-        />
-
-        <RowView
-        label="Biological Treatment"
-        value={
-            cod > 50 || bod > 25 ? 'Required' :
-            bod > 10 ? 'Recommended' :
-            'Not Required'
-        }
-        unit="-"
-        info={INFO}
-        />
-
-        <RowView
-        label="Coagulation Required"
-        value={turbidity > 5 || tss > 10 ? 'Yes' : 'No'}
-        unit="-"
-        info={INFO}
-        />
-
-    </div>
+    <div className="grid grid-cols-[80px_1fr_100px] text-[11px] text-gray-500 pb-1 border-b">
+      <div>ion</div>
+      <div className="text-center">mg/l</div>
+      <div className="text-right">meq/l</div>
     </div>
 
+    <div className="divide-y divide-gray-100">
+      {cationKeys.map(k => (
+        <div key={k} className="grid grid-cols-[80px_1fr_100px] items-center py-1.5 text-xs">
+
+          {/* ion */}
+          <div className="text-gray-700 font-medium">{cationSymbols[k]}</div>
+
+          {/* mg/l */}
+          <div className="px-2">
+            <div className="bg-gray-100 rounded-md px-2 py-1 text-center font-mono text-gray-800">
+              {fmt(getMg(k))}
+            </div>
+          </div>
+
+          {/* meq/l */}
+          <div className="flex justify-end">
+            <div className="bg-gray-200 rounded-md px-2 py-1 font-mono text-gray-800 min-w-[80px] text-right">
+              {fmt(getMeq(k))}
+            </div>
+          </div>
+
+        </div>
+      ))}
+
+      {/* Total */}
+      <div className="grid grid-cols-[80px_1fr_100px] items-center pt-2 text-xs font-semibold">
+        <div className="text-gray-700">Total</div>
+        <div></div>
+        <div className="text-right bg-gray-200 px-2 py-1 rounded-md font-mono">
+          {fmt(totalCat)}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Anions + Neutral */}
+  <div>
+    <h3 className="text-xs font-semibold tracking-wider text-gray-700 mb-2 uppercase">
+      ANIONS
+    </h3>
+
+    <div className="grid grid-cols-[80px_1fr_100px] text-[11px] text-gray-500 pb-1 border-b">
+      <div>ion</div>
+      <div className="text-center">mg/l</div>
+      <div className="text-right">meq/l</div>
+    </div>
+
+    <div className="divide-y divide-gray-100">
+      {anionKeys.map(k => (
+        <div key={k} className="grid grid-cols-[80px_1fr_100px] items-center py-1.5 text-xs">
+
+          <div className="text-gray-700 font-medium">{anionSymbols[k]}</div>
+
+          <div className="px-2">
+            <div className="bg-gray-100 rounded-md px-2 py-1 text-center font-mono text-gray-800">
+              {fmt(getMg(k))}
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="bg-gray-200 rounded-md px-2 py-1 font-mono text-gray-800 min-w-[80px] text-right">
+              {fmt(getMeq(k))}
+            </div>
+          </div>
+
+        </div>
+      ))}
+
+      {/* Total */}
+      <div className="grid grid-cols-[80px_1fr_100px] items-center pt-2 text-xs font-semibold">
+        <div className="text-gray-700">Total</div>
+        <div></div>
+        <div className="text-right bg-gray-200 px-2 py-1 rounded-md font-mono">
+          {fmt(totalAn)}
+        </div>
+      </div>
+    </div>
+
+    {/* Neutral */}
+    <h3 className="text-xs font-semibold tracking-wider text-gray-700 mt-5 mb-2 uppercase">
+      NEUTRAL SPECIES
+    </h3>
+
+    <div className="grid grid-cols-[80px_1fr_100px] text-[11px] text-gray-500 pb-1 border-b">
+      <div>species</div>
+      <div className="text-center">mg/l</div>
+      <div className="text-right">meq/l</div>
+    </div>
+
+    <div className="divide-y divide-gray-100">
+      {neutralKeys.map(k => (
+        <div key={k} className="grid grid-cols-[80px_1fr_100px] items-center py-1.5 text-xs">
+
+          <div className="text-gray-700 font-medium">{neutralSymbols[k]}</div>
+
+          <div className="px-2">
+            <div className="bg-gray-100 rounded-md px-2 py-1 text-center font-mono text-gray-800">
+              {fmt(ions[k])}
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="bg-gray-200 rounded-md px-2 py-1 font-mono text-gray-400 min-w-[80px] text-right">
+              —
+            </div>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</div>
+
+{/* Summary */}
+<div className="border-t border-gray-200 pt-3 mt-2">
+  <h3 className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+    Summary
+  </h3>
+
+  <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs">
+
+    <div className="flex justify-between">
+      <span>TDS</span>
+      <span className="font-mono font-semibold">{fmt(tds)} mg/L</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Total Hardness (CaCO₃)</span>
+      <span className="font-mono font-semibold">{fmt(hardnessCaCO3)} mg/L</span>
+    </div>
+
+    <div className="flex justify-between items-center">
+      <span>Ion Balance Error</span>
+      <div className="flex items-center gap-2">
+        <span className="font-mono font-semibold">{fmt(balanceErr)}%</span>
+
+        <span
+          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold
+          ${absErr < 2
+            ? "bg-green-100 text-green-700"
+            : absErr < 5
+            ? "bg-yellow-100 text-yellow-700"
+            : "bg-red-100 text-red-700"}`}
+        >
+          {absErr < 2 ? "Excellent" : absErr < 5 ? "Acceptable" : "Poor"}
+        </span>
+      </div>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Total Alkalinity (CaCO₃)</span>
+      <span className="font-mono font-semibold">{fmt(alkCaCO3)} mg/L</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Ionic Strength</span>
+      <span className="font-mono font-semibold">{fmt(ionicStr)} mol/L</span>
+    </div>
+
+  </div>
+</div>
+
+
+{/* LSI */}
+<div className="border-t border-gray-200 pt-3 mt-2">
+  <h3 className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+    Langelier Saturation Index (LSI)
+  </h3>
+
+  <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs">
+
+    <div className="flex justify-between">
+      <span>A (TDS factor)</span>
+      <span className="font-mono">{fmt(lsiA)}</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>B (Temperature factor)</span>
+      <span className="font-mono">{fmt(lsiB)}</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>C (Calcium factor)</span>
+      <span className="font-mono">{fmt(lsiC)}</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>D (Alkalinity factor)</span>
+      <span className="font-mono">{fmt(lsiD)}</span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>pHs (Saturation pH)</span>
+      <span className="font-mono font-semibold">{fmt(pHs)}</span>
+    </div>
+
+    <div className="flex justify-between items-center">
+      <span>LSI</span>
+
+      <div className="flex items-center gap-2">
+        <span className="font-mono font-bold">{fmt(lsi)}</span>
+
+        <span
+          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold
+          ${
+            lsi > 0.5
+              ? "bg-red-100 text-red-700"
+              : lsi > -0.5
+              ? "bg-green-100 text-green-700"
+              : "bg-blue-100 text-blue-700"
+          }`}
+        >
+          {lsi > 0.5
+            ? "Scale-forming"
+            : lsi > -0.5
+            ? "Balanced"
+            : "Corrosive"}
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{/* Raw Water Test */}
+<div className="border-t border-gray-200 pt-3 mt-2">
+  <h3 className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+    Raw Water Test
+  </h3>
+
+  <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
+
+    {[
+      ["Turbidity", turbidity, setTurbidity, "NTU"],
+      ["SDI", sdi, setSdi, "-"],
+      ["TSS", tss, setTss, "mg/L"],
+      ["COD", cod, setCod, "mg/L"],
+      ["BOD", bod, setBod, "mg/L"],
+      ["Total Bacteria", totalBacteria, setTotalBacteria, "CFU/ml"],
+      ["Coliform", coliform, setColiform, "MPN/100ml"],
+    ].map(([label, val, setter, unit]) => (
+      <div key={label} className="flex justify-between items-center">
+        <span>{label}</span>
+
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            value={val}
+            onChange={(e) => setter(parseFloat(e.target.value) || 0)}
+            className="w-16 text-center bg-gray-50 border border-gray-200 rounded px-1 py-0.5 font-mono text-xs focus:ring-1 focus:ring-teal-400"
+          />
+          <span className="text-gray-500 text-[10px]">{unit}</span>
+        </div>
+      </div>
+    ))}
+
+  </div>
+</div>
+
+
+{/* Pretreatment */}
+<div className="border-t border-gray-200 pt-3 mt-2">
+  <h3 className="text-xs font-bold text-gray-700 mb-2 uppercase tracking-wider">
+    Pretreatment Selection
+  </h3>
+
+  <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-xs">
+
+    <div className="flex justify-between">
+      <span>Recommended PT</span>
+      <span className="font-mono font-semibold">
+        {sdi > 5 || turbidity > 10 || tss > 50
+          ? "MF/UF"
+          : sdi > 3 || turbidity > 5 || tss > 20 || cod > 30 || bod > 15 || totalBacteria > 10000
+          ? "NF"
+          : "Media"}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Disinfection Required</span>
+      <span className="font-mono font-semibold">
+        {totalBacteria > 1000 || coliform > 10 ? "Yes" : "No"}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Biological Treatment</span>
+      <span className="font-mono font-semibold">
+        {cod > 50 || bod > 25
+          ? "Required"
+          : bod > 10
+          ? "Recommended"
+          : "Not Required"}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Coagulation Required</span>
+      <span className="font-mono font-semibold">
+        {turbidity > 5 || tss > 10 ? "Yes" : "No"}
+      </span>
+    </div>
+
+  </div>
+</div>
     </div>
   </div>
 );
@@ -567,19 +751,22 @@ function Section({ children, title }) {
     </div>
   );
 }
-function RowInput({ label, unit, value, onChange, autoFocus, info }) {
+function RowInput({ label, unit, value, onChange, autoFocus, info, compact }) {
   return (
-    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 text-l">
+    <div className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 ${compact ? "px-2 py-1 text-xs" : "px-3 py-2 text-sm"}`}>
+      
+      {/* Label */}
       {info[label] ? (
         <Tooltip text={info[label]}>
-          <div className="font-semibold text-gray-600 underline decoration-dashed underline-offset-5 cursor-help">
+          <div className="font-semibold text-gray-600 underline decoration-dashed underline-offset-4 cursor-help whitespace-nowrap">
             {label}
           </div>
         </Tooltip>
       ) : (
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="font-semibold text-gray-600 whitespace-nowrap">{label}</div>
       )}
 
+      {/* Input */}
       <input
         type="text"
         value={value}
@@ -588,19 +775,25 @@ function RowInput({ label, unit, value, onChange, autoFocus, info }) {
         dir="ltr"
         inputMode="decimal"
         autoFocus={autoFocus}
-        className="w-full font-mono text-center bg-gray-50 rounded-lg py-2
-                   outline-none border border-gray-200
-                   transition-all duration-300 ease-in-out
-                   focus:ring-2 focus:ring-teal-400
-                   focus:ring-offset-1 focus:ring-offset-gray-100
-                   focus:shadow-[0_0_12px_rgba(52,211,153,0.7)]
-                   placeholder-gray-400"
-        placeholder="Enter value"
+        className={`
+          w-full font-mono text-center
+          ${compact ? "py-1 text-xs rounded-md" : "py-2 text-sm rounded-lg"}
+          bg-gradient-to-b from-gray-50 to-gray-100
+          border border-gray-200
+          outline-none
+          transition-all duration-200
+          focus:ring-1 focus:ring-teal-400
+          focus:border-teal-400
+          focus:bg-white
+          hover:border-gray-300
+        `}
+        placeholder="0"
       />
 
-      <div className="text-right" dir="ltr">
+      {/* Unit */}
+      <div className="text-right whitespace-nowrap" dir="ltr">
         <Tooltip text={info[unit]}>
-          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-4">
+          <span className="cursor-help text-gray-500 font-medium underline decoration-dashed underline-offset-3">
             {unit}
           </span>
         </Tooltip>
@@ -608,26 +801,39 @@ function RowInput({ label, unit, value, onChange, autoFocus, info }) {
     </div>
   );
 }
-function RowView({ label, value, unit, info }) {
+
+function RowView({ label, value, unit, info, highlight }) {
   return (
-    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-l">
+    <div className="grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-1 text-xs">
+      
+      {/* Label */}
       {info[label] ? (
         <Tooltip text={info[label]}>
-          <div className="font-semibold text-gray-600 underline decoration-dashed underline-offset-5 cursor-help">
+          <div className="font-semibold text-gray-600 underline decoration-dashed underline-offset-4 cursor-help whitespace-nowrap">
             {label}
           </div>
         </Tooltip>
       ) : (
-        <div className="font-semibold text-gray-600">{label}</div>
+        <div className="font-semibold text-gray-600 whitespace-nowrap">{label}</div>
       )}
 
-      <div className="text-center font-mono text-black bg-blue-50 rounded-xl p-2 border border-gray-200">
+      {/* Value */}
+      <div
+        className={`
+          text-center font-mono
+          px-2 py-1 rounded-lg border
+          ${highlight 
+            ? "bg-teal-50 border-teal-200 text-teal-700 font-semibold"
+            : "bg-gray-50 border-gray-200 text-gray-800"}
+        `}
+      >
         {value}
       </div>
 
-      <div className="text-right" dir="ltr">
+      {/* Unit */}
+      <div className="text-right whitespace-nowrap" dir="ltr">
         <Tooltip text={info[unit]}>
-          <span className="cursor-help text-gray-600 font-semibold underline decoration-dashed underline-offset-5">
+          <span className="cursor-help text-gray-500 font-medium underline decoration-dashed underline-offset-3">
             {unit}
           </span>
         </Tooltip>
