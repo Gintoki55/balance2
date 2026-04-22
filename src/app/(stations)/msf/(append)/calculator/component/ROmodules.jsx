@@ -2,11 +2,10 @@
 
 import Tooltip from "@/components/Tooltip";
 import { Beaker, Gauge, FlaskConical, Thermometer } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef ,useCallback} from "react";
 
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import * as XLSX from "xlsx";
+import { toPng } from "html-to-image";
 
 const INFO = {
   A: "Membrane area",
@@ -37,248 +36,358 @@ const INFO = {
   "l/m².h.bar": "liter per square meter per hour per bar",
   "g/m².h.(g/l)": "Grams per square meter per hour per g/l",
 };
-export default function ROModules() {
+export default function ROModules({ count }) {
+  const targetRef = useRef(null);
 
-  const [A, setA] = useState(40.9);
-  const [Pf, setPf] = useState(55);
-  const [Pb, setPb] = useState(54.192);
-  const [Md, setMd] = useState(1.2146);
-  const [WR, setWR] = useState(8);
-  const [Sf, setSf] = useState(32);
-  const [Tf, setTf] = useState(25);
-  const [SR, setSR] = useState(99.7);
-
-
-
-    const [customModules, setCustomModules] = useState(() => {
-    if (typeof window !== "undefined") {
-        return JSON.parse(localStorage.getItem("modules") || "{}");
-    }
-    return {};
-    });
-    const [Module, setModule] = useState("");
-    const [newModuleName, setNewModuleName] = useState("");
-    const [editingModule, setEditingModule] = useState("");
-    const [editMode, setEditMode] = useState(false);
-
-    useEffect(() => {
-      localStorage.setItem("modules", JSON.stringify(customModules));
-    }, [customModules]);
-
-    const allModules = customModules || {};
-
-    const handleAddModule = () => {
-        if (newModuleName.trim() && !allModules[newModuleName.trim()]) {
-            const newData = { A, Pf, Pb, Md, WR, Sf, Tf, SR };
-            setCustomModules({ ...customModules, [newModuleName.trim()]: newData });
-            setModule(newModuleName.trim());
-            setNewModuleName("");
-        }
-    };
-
-    const startEditModule = (mod) => {
-        setEditingModule(mod);
-        setEditMode(true);
-
-        const preset = allModules[mod];
-        if (preset) {
-            setA(preset.A);
-            setPf(preset.Pf);
-            setPb(preset.Pb);
-            setMd(preset.Md);
-            setWR(preset.WR);
-            setSf(preset.Sf);
-            setTf(preset.Tf);
-            setSR(preset.SR);
-        }
-    };
-
-const saveEditedModule = () => {
-  if (editingModule) {
-    const updated = { A, Pf, Pb, Md, WR, Sf, Tf, SR };
-    setCustomModules({ ...customModules, [editingModule]: updated });
+  const storageKey = `modules_${count}`;
+const [customModules, setCustomModules] = useState(() => {
+  if (typeof window !== "undefined") {
+    return JSON.parse(localStorage.getItem(storageKey) || "{}");
   }
+  return {};
+});
+
+
+
+
+function usePersistentState(key, defaultValue) {
+  // 1. Lazy init (SSR safe)
+  const [state, setState] = useState(() => {
+    if (typeof window === "undefined") return defaultValue;
+
+    try {
+      const saved = localStorage.getItem(key);
+      if (!saved) return defaultValue;
+
+      const parsed = JSON.parse(saved);
+
+      if (parsed && typeof parsed === "object" && "last" in parsed) {
+        return parsed.last;
+      }
+
+      return parsed ?? defaultValue;
+    } catch (e) {
+      return defaultValue;
+    }
+  });
+
+  // 2. Safe setter
+  const setPersistentState = useCallback((value) => {
+    setState((prev) => {
+      const newValue =
+        typeof value === "function" ? value(prev) : value;
+
+      // 🔥 حماية من circular / DOM objects
+      let safeValue = newValue;
+
+      if (typeof newValue === "object" && newValue !== null) {
+        try {
+          safeValue = JSON.parse(JSON.stringify(newValue));
+        } catch (e) {
+          console.error("Invalid object for storage:", e);
+          return prev;
+        }
+      }
+
+      try {
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            key,
+            JSON.stringify({
+              last: safeValue,
+              updatedAt: Date.now(),
+            })
+          );
+        }
+      } catch (e) {
+        console.error("localStorage write error:", e);
+      }
+
+      return safeValue;
+    });
+  }, [key]);
+
+  // 3. Sync tabs (bonus)
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === key && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          setState(parsed?.last ?? defaultValue);
+        } catch {}
+      }
+    };
+
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, [key, defaultValue]);
+
+  return [state, setPersistentState];
+}
+
+  const [Module, setModule] = usePersistentState(`${storageKey}.Module`, "SWRO Module");
+  const [A, setA] = usePersistentState(`${storageKey}.A`, 40.9);
+  const [Pf, setPf] = usePersistentState(`${storageKey}.Pf`, 55);
+  const [Pb, setPb] = usePersistentState(`${storageKey}.Pb`, 0);
+  const [Md, setMd] = usePersistentState(`${storageKey}.Md`, 1.2146);
+  const [WR, setWR] = usePersistentState(`${storageKey}.WR`, 8);
+  const [Sf, setSf] = usePersistentState(`${storageKey}.Sf`, 32);
+  const [Tf, setTf] = usePersistentState(`${storageKey}.Tf`, 25);
+  const [SR, setSR] = usePersistentState(`${storageKey}.SR`, 99.7);
+
+
+
+
+
+useEffect(() => {
+  localStorage.setItem(storageKey, JSON.stringify(customModules));
+}, [customModules, storageKey]);
+
+// ===== Modules =====
+const allModules = {
+  "SWRO Module": {
+    A: 40.9,
+    Pf: 55,
+    Pb: 0,
+    Md: 1.2146,
+    WR: 8,
+    Sf: 32,
+    Tf: 25,
+    SR: 99.7,
+  },
+  ...customModules,
+};
+
+// ===== Edit States =====
+const [editMode, setEditMode] = useState(false);
+const [editingModule, setEditingModule] = useState("");
+const [newModuleName, setNewModuleName] = useState("");
+const [isNewModule, setIsNewModule] = useState(false);
+const [newModuleType, setNewModuleType] = useState(null);
+
+// ===== Load Module عند الاختيار =====
+useEffect(() => {
+  const preset = allModules[Module];
+  if (preset) {
+    setA(preset.A);
+    setPf(preset.Pf);
+    setPb(preset.Pb);
+    setMd(preset.Md);
+    setWR(preset.WR);
+    setSf(preset.Sf);
+    setTf(preset.Tf);
+    setSR(preset.SR);
+  }
+}, [Module]);
+
+// ===== Start Edit =====
+const startEditModule = (mod) => {
+  setEditingModule(mod);
+  setEditMode(true);
+
+  const preset = allModules[mod];
+  if (preset) {
+    setA(preset.A);
+    setPf(preset.Pf);
+    setPb(preset.Pb);
+    setMd(preset.Md);
+    setWR(preset.WR);
+    setSf(preset.Sf);
+    setTf(preset.Tf);
+    setSR(preset.SR);
+  }
+};
+
+// ===== Save Edit =====
+const saveEditedModule = () => {
+  const updatedData = { A, Pf, Pb, Md, WR, Sf, Tf, SR };
+
+  if (editingModule === "SWRO Module") {
+    // تحديث default module (اختياري)
+    setCustomModules({
+      ...customModules,
+      ["SWRO Module"]: updatedData,
+    });
+  } else if (editingModule) {
+    setCustomModules({
+      ...customModules,
+      [editingModule]: updatedData,
+    });
+  }
+
   setEditMode(false);
   setEditingModule("");
 };
 
+// ===== Cancel =====
 const cancelEdit = () => {
   setEditMode(false);
   setEditingModule("");
+  setIsNewModule(false);
+  setNewModuleType(null);
+  setNewModuleName("");
+
+  // رجّع القيم للوحدة الحالية
+  const preset = allModules[Module];
+  if (preset) {
+    setA(preset.A);
+    setPf(preset.Pf);
+    setPb(preset.Pb);
+    setMd(preset.Md);
+    setWR(preset.WR);
+    setSf(preset.Sf);
+    setTf(preset.Tf);
+    setSR(preset.SR);
+  }
 };
 
+// ===== Add New Module =====
+const handleAcceptNewModule = () => {
+  if (newModuleName.trim() && !allModules[newModuleName.trim()]) {
+    const newModuleData = { A, Pf, Pb, Md, WR, Sf, Tf, SR };
+
+    setCustomModules({
+      ...customModules,
+      [newModuleName.trim()]: newModuleData,
+    });
+
+    setModule(newModuleName.trim());
+    setNewModuleName("");
+    setEditMode(false);
+    setIsNewModule(false);
+    setNewModuleType(null);
+  }
+};
+
+// ===== Delete =====
 const deleteModule = (mod) => {
   const updated = { ...customModules };
   delete updated[mod];
+
   setCustomModules(updated);
+
+  if (Module === mod) {
+    setModule("SWRO Module");
+  }
+
+  setEditMode(false);
+  setEditingModule("");
+};
+
+// ===== Reset =====
+const resetToDefaults = () => {
+  setModule("SWRO Module");
+  setA(40.9);
+  setPf(55);
+  setPb(0);
+  setMd(1.2146);
+  setWR(8);
+  setSf(32);
+  setTf(25);
+  setSR(99.7);
+
   setEditMode(false);
   setEditingModule("");
 };
 
 
-  const allowNumber = (value, setter) => {
-    if (/^-?\d*\.?\d*$/.test(value)) setter(value);
-  };
-  
-  const formatOnBlur = (value, setter) => {
-    if (value === "" || value === "-") return;
-    const n = Number(value);
-    if (!isNaN(n)) setter(String(n));
-  };
+const allowNumber = (value, setter) => {
+  // يسمح فقط بالأرقام + نقطة + سالب
+  if (/^-?\d*\.?\d*$/.test(value)) {
+    // يمنع الحالات الخربانة مثل "." أو "-"
+    if (value === "" || value === "-" || value === ".") {
+      setter(value);
+    } else {
+      setter(parseFloat(value)); // ✅ نحول لرقم هنا
+    }
+  }
+};;
 
 
-  /* ===== Calculations ===== */
+  // Calculations
+// تحويل كل القيم إلى أرقام
+const nA = Number(A);
+const nPf = Number(Pf);
+const nPb = Number(Pb);
+const nMd = Number(Md);
+const nWR = Number(WR);
+const nSf = Number(Sf);
+const nTf = Number(Tf);
+const nSR = Number(SR);
 
-  const Mf = (100 * Number(Md)) / Number(WR);
-  const Sd = Number(Sf) * (1 - Number(SR) / 100);
-  const Sb = (Mf * Number(Sf) - Number(Md) * Sd) / (Mf - Number(Md));
+// Calculations
+const Mf = (100 * nMd) / nWR;
 
-  const dS =
-    (0.5 * (Number(Sf) + Sb) - Sd) *
-    Math.exp(0.7 * (Number(Md) / Mf));
+const Sd = nSf * (1 - nSR / 100);
 
-  const dPi = 0.00255 * 298 * dS;
-  const dP = 0.5 * (Number(Pf) + Number(Pb)) - dPi;
+const Sb = (Mf * nSf - nMd * Sd) / (Mf - nMd);
 
-  const TCF =
-    0.33 + 0.0247 * Number(Tf) + 0.00000336 * Math.pow(Number(Tf), 3);
+// ✅ بدون exponent (أدق)
+const dS = 0.5 * (nSf + Sb) - Sd;
 
-  const w = (Number(Md) * 1000) / (Number(A) * dP * TCF);
-  const x = (Number(Md) * Sd * 1000) / (Number(A) * dS * TCF);
+// ✅ نفس معادلتك (تمام)
+const dPi = 0.00255 * (273 + nTf) * dS;
 
-  const PCF =
-    (Number(Pf) - Number(Pb)) /
-    (0.0085 * Math.pow(Mf - 0.5 * Number(Md), 1.7));
-    const Pb_corr = Pf - 0.0085 * Math.pow(Mf - 0.5 * Md, 1.7); // Correlated brine pressure
+// ✅ ΔP مصححة (بدون قسمة خطرة)
+const dP =
+  nPf -
+  0.5 * (nPf - nPb) -
+  0.5 * (0.0085 * Math.pow(Mf - 0.5 * nMd, 1.7)) -
+  dPi;
 
+// ✅ TCF القياسية (تعطي 1 عند 25°C)
+const TCF = Math.exp(2640 * (1 / 298 - 1 / (273 + nTf)));
 
+const w = (1e3 * nMd) / (nA * dP * TCF);
 
-   // 🔹 Reset
-  const resetToDefaults = () => {
-    setA(40.9);
-    setPf(55);
-    setPb(54.192);
-    setMd(1.2146);
-    setWR(8);
-    setSf(32);
-    setTf(25);
-    setSR(99.7);
-  };
+const x = (nMd * Sd * 1e3) / (nA * dS * TCF);
 
-
-  const inputData = [
-  { symbol: "Inputs", value: "", unit: "" },
-   { symbol: "A", value: A, unit: "M²" },
-  { symbol: "Pf", value: Pf, unit: "bar" },
-  { symbol: "Pb", value: Pb, unit: "bar" },
-  { symbol: "Md", value: Md, unit: "t/h" },
-  { symbol: "WR", value: WR, unit: "%" },
-  { symbol: "Sf", value: Sf, unit: "g/l" },
-  { symbol: "Tf", value: Tf, unit: "°C" },
-  { symbol: "SR", value: SR, unit: "%" },
-];
+// ✅ PCF بدون hack
+const PCF =
+  1 +
+  (
+    (nPf - nPb) /
+    (0.0085 * Math.pow(Mf - 0.5 * nMd, 1.7)) - 1
+  ) *
+  (nPb / (nPf || 1)); // حماية بسيطة
 
 
 
-const outputData = [
-  { symbol: "Outputs", value: "", unit: "" },
-  { symbol: "Mf", value: Mf, unit: "t/h" },
-  { symbol: "Pb", value: Pb_corr, unit: "bar" },
-  { symbol: "Sd", value: Sd, unit: "g/l" },
-  { symbol: "Sb", value: Sb, unit: "g/l" },
-  { symbol: "ΔS", value: dS, unit: "g/l" },
-  { symbol: "Δπ", value: dPi, unit: "bar" },
-  { symbol: "ΔP", value: dP, unit: "bar" },
-  { symbol: "TCF", value: TCF, unit: "#" },
-  { symbol: "w", value: w, unit: "l/m².h.bar" },
-  { symbol: "x", value: x, unit: "g/m².h.(g/l)" },
-  { symbol: "PCF", value: PCF, unit: "#" },
-];
+const exportPDF = async () => {
+  if (!targetRef?.current) return;
 
-// 🔹 PDF
-const exportPDF = () => {
   const doc = new jsPDF();
 
-  // 🔹 عنوان
-  doc.setFontSize(16);
-  doc.text("RO Module Parameters", 10, 15);
-
-  // 🔹 دالة تنسيق الأرقام
-  const formatValue = (val) => {
-    if (val === "" || val === null || val === undefined) return "";
-    if (typeof val === "number") return val.toFixed(4);
-    return val;
-  };
-
-  // ===== Inputs =====
-  const inputRows = inputData
-    .filter(row => row.symbol !== "Inputs") // نشيل العنوان
-    .map(row => [
-      row.symbol,
-      formatValue(row.value),
-      row.unit
-    ]);
-
-  doc.setFontSize(12);
-  doc.text("Inputs", 10, 25);
-
-  autoTable(doc, {
-    startY: 30,
-    head: [["Symbol", "Value", "Unit"]],
-    body: inputRows,
+  // 🔹 تحويل العنصر إلى صورة
+  const dataUrl = await toPng(targetRef.current, {
+    cacheBust: true,
+    backgroundColor: "#ffffff",
   });
 
-  // ===== Outputs =====
-  const outputRows = outputData
-    .filter(row => row.symbol !== "Outputs")
-    .map(row => [
-      row.symbol,
-      formatValue(row.value),
-      row.unit
-    ]);
+  const img = new Image();
+  img.src = dataUrl;
 
-  doc.text("Outputs", 10, doc.lastAutoTable.finalY + 10);
+  await new Promise((res) => (img.onload = res));
 
-  autoTable(doc, {
-    startY: doc.lastAutoTable.finalY + 15,
-    head: [["Symbol", "Value", "Unit"]],
-    body: outputRows,
-  });
+  const pdfWidth = doc.internal.pageSize.getWidth();
+  const pdfHeight = doc.internal.pageSize.getHeight();
+
+  const imgWidth = img.width;
+  const imgHeight = img.height;
+
+  // 🔹 حساب المقاس المناسب
+  const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+  const finalWidth = imgWidth * ratio;
+  const finalHeight = imgHeight * ratio;
+
+  // 🔹 توسيط الصورة
+  const x = (pdfWidth - finalWidth) / 2;
+  const y = (pdfHeight - finalHeight) / 2;
+
+  doc.addImage(img, "PNG", x, y, finalWidth, finalHeight);
 
   // 🔹 حفظ
   doc.save("RO_Module_Parameters.pdf");
-};
-
-// 🔹 Excel
-const exportExcel = () => {
-  const wb = XLSX.utils.book_new();
-
-  // 🟢 Sheet 1 (Inputs)
-  const wsInputs = XLSX.utils.json_to_sheet(inputData);
-
-  // ✅ هنا تحطها
-  wsInputs["!cols"] = [
-    { wch: 10 }, // symbol
-    { wch: 15 }, // value
-    { wch: 15 }, // unit
-  ];
-
-  XLSX.utils.book_append_sheet(wb, wsInputs, "Inputs");
-
-  // 🔵 Sheet 2 (Outputs)
-  const wsOutputs = XLSX.utils.json_to_sheet(outputData);
-
-  // ✅ وهنا أيضاً
-  wsOutputs["!cols"] = [
-    { wch: 10 },
-    { wch: 15 },
-    { wch: 15 },
-  ];
-
-  XLSX.utils.book_append_sheet(wb, wsOutputs, "Outputs");
-
-  // 💾 حفظ الملف
-  XLSX.writeFile(wb, "RO_Module_Parameters.xlsx");
 };
 
 
@@ -287,7 +396,7 @@ return (
     
     {/* Header */}
     <div className="bg-gradient-to-r from-teal-600 to-cyan-500 text-white px-4 py-3 rounded-t-xl font-semibold">
-      RO Module Parameters
+      RO Module Parameters ({count})
     </div>
 
     <div className="bg-gray-50 p-4 rounded-b-xl shadow">
@@ -296,129 +405,223 @@ return (
 
 {/* Main Grid */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
 
   {/* LEFT (Inputs + Controls) */}
   <div className="space-y-4">
 
-    {/* Controls (stacked) */}
+   <div className="space-y-2 pb-2 border-b border-gray-200">
+
+  {/* ===== Module Select ===== */}
+  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+    <span className="text-sm sm:w-28">Module</span>
+
+    <select
+      value={Module === "SWRO Module" ? "__SWRO_DEFAULT__" : Module}
+      onChange={(e) => {
+        const value = e.target.value;
+
+        if (value === "__SWRO_DEFAULT__") {
+          setModule("SWRO Module");
+
+          // default values
+          setA(40.9);
+          setPf(55);
+          setPb(0);
+          setMd(1.2146);
+          setWR(8);
+          setSf(32);
+          setTf(25);
+          setSR(99.7);
+
+        } else if (value) {
+          const preset = customModules[value];
+          if (preset) {
+            setModule(value);
+            setA(preset.A);
+            setPf(preset.Pf);
+            setPb(preset.Pb);
+            setMd(preset.Md);
+            setWR(preset.WR);
+            setSf(preset.Sf);
+            setTf(preset.Tf);
+            setSR(preset.SR);
+          }
+        }
+      }}
+      className="flex-1 bg-gray-100 rounded px-2 py-1"
+    >
+      <option value="__SWRO_DEFAULT__">SWRO Module</option>
+      {Object.keys(customModules).map((mod) => (
+        <option key={mod} value={mod}>{mod}</option>
+      ))}
+    </select>
+  </div>
+
+  {/* ===== Edit Select ===== */}
+  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+    <span className="text-sm sm:w-28">Edit</span>
+
+    <select
+      value={editingModule}
+      onChange={(e) => {
+        const value = e.target.value;
+
+        if (value === "__NEW__") {
+          setIsNewModule(true);
+          setEditMode(true);
+          setEditingModule("");
+          setNewModuleName("");
+
+        } else if (value === "__SWRO_DEFAULT__") {
+          setIsNewModule(false);
+          setEditingModule("SWRO Module");
+          setEditMode(true);
+
+        } else if (value) {
+          setIsNewModule(false);
+          startEditModule(value);
+        }
+      }}
+      className="flex-1 bg-gray-100 rounded px-2 py-1"
+    >
+      <option value="">-- select --</option>
+      <option value="__NEW__">New Module</option>
+      <option value="__SWRO_DEFAULT__">SWRO Module</option>
+      {Object.keys(customModules).map((mod) => (
+        <option key={mod} value={mod}>{mod}</option>
+      ))}
+    </select>
+  </div>
+
+  {/* ===== Edit Mode ===== */}
+  {editMode && (
     <div className="space-y-2">
 
-      {/* Open */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <span className="text-sm sm:w-28">Open Module</span>
-        <select
-          value={Module}
-          onChange={(e) => {
-            const mod = e.target.value;
-            setModule(mod);
-
-            const preset = allModules[mod];
-            if (preset) {
-              setA(preset.A);
-              setPf(preset.Pf);
-              setPb(preset.Pb);
-              setMd(preset.Md);
-              setWR(preset.WR);
-              setSf(preset.Sf);
-              setTf(preset.Tf);
-              setSR(preset.SR);
-            }
-          }}
-          className="flex-1 bg-gray-100 rounded px-2 py-1"
-        >
-          <option value="">-- select --</option>
-          {Object.keys(allModules || {}).map((mod) => (
-            <option key={mod}>{mod}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* Add */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <span className="text-sm sm:w-28">Add Module</span>
+      {/* New module input OR editing label */}
+      {isNewModule ? (
         <input
           value={newModuleName}
           onChange={(e) => setNewModuleName(e.target.value)}
           placeholder="New module name..."
-          className="flex-1 bg-yellow-50 rounded px-2 py-1"
+          className="w-full bg-yellow-50 rounded px-2 py-1"
+          autoFocus
         />
-        <button onClick={handleAddModule} disabled={!newModuleName.trim()} className="bg-blue-400 text-white px-3 py-1 rounded w-full sm:w-auto disabled:opacity-50">
-          Save
-        </button>
-      </div>
+      ) : (
+        <div className="text-sm bg-yellow-50 border border-yellow-200 text-yellow-700 px-3 py-2 rounded">
+          Editing "<span className="font-semibold">{editingModule}</span>"
+        </div>
+      )}
 
-      {/* Edit */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <span className="text-sm sm:w-28">Edit Module</span>
-        <select
-          value={editingModule}
-          onChange={(e) => startEditModule(e.target.value)}
-          className="flex-1 bg-gray-100 rounded px-2 py-1"
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-2" ref={targetRef}>
+
+        <button
+          onClick={cancelEdit}
+          className="bg-gray-400 text-white px-3 py-1 rounded w-full sm:w-auto"
         >
-          <option value="">-- select --</option>
-          {Object.keys(customModules || {}).map((mod) => (
-            <option key={mod}>{mod}</option>
-          ))}
-        </select>
+          Cancel
+        </button>
+
+        <button
+          onClick={isNewModule ? handleAcceptNewModule : saveEditedModule}
+          disabled={
+            isNewModule &&
+            (!newModuleName.trim() || customModules[newModuleName.trim()])
+          }
+          className="bg-green-500 text-white px-3 py-1 rounded w-full sm:w-auto disabled:opacity-40"
+        >
+          Accept
+        </button>
+
+        {!isNewModule && editingModule !== "SWRO Module" && (
+          <button
+            onClick={() => deleteModule(editingModule)}
+            className="bg-red-500 text-white px-3 py-1 rounded w-full sm:w-auto"
+          >
+            Delete
+          </button>
+        )}
+
       </div>
-
-      {/* Edit Mode */}
-           {editMode && (
-  <div className="space-y-2">
-
-    {/* Message */}
-    <div className="text-sm bg-yellow-50 border border-yellow-200 text-yellow-700 px-3 py-2 rounded">
-      Editing "<span className="font-semibold">{editingModule}</span>" — change values below, then Accept or Cancel
     </div>
+  )}
 
-    {/* Buttons */}
-    <div className="flex flex-col sm:flex-row gap-2">
-      
-      <button
-        onClick={saveEditedModule}
-        className="bg-green-500 text-white px-3 py-1 rounded w-full sm:w-auto"
-      >
-        Accept
-      </button>
-
-      <button
-        onClick={cancelEdit}
-        className="bg-gray-400 text-white px-3 py-1 rounded w-full sm:w-auto"
-      >
-        Cancel
-      </button>
-
-      <button
-        onClick={() => deleteModule(editingModule)}
-        className="bg-red-500 text-white px-3 py-1 rounded w-full sm:w-auto"
-      >
-        Delete
-      </button>
-
-    </div>
-
-  </div>
-)}
-    </div>
+</div>
 
     {/* Inputs */}
 <div className="space-y-2">
-  <RowInput label="A" unit="M²" value={A} onChange={(e)=>allowNumber(e.target.value,setA)} info={INFO} />
-  <RowInput label="Pf" unit="bar" value={Pf} onChange={(e)=>allowNumber(e.target.value,setPf)} info={INFO} />
-  <RowInput label="Pb" unit="bar" value={Pb} onChange={(e)=>allowNumber(e.target.value,setPb)} info={INFO} />
-  <RowInput label="Md" unit="t/h" value={Md} onChange={(e)=>allowNumber(e.target.value,setMd)} info={INFO} />
-  <RowInput label="WR" unit="%" value={WR} onChange={(e)=>allowNumber(e.target.value,setWR)} info={INFO} />
-  <RowInput label="Sf" unit="g/l" value={Sf} onChange={(e)=>allowNumber(e.target.value,setSf)} info={INFO} />
-  <RowInput label="Tf" unit="°C" value={Tf} onChange={(e)=>allowNumber(e.target.value,setTf)} info={INFO} />
-  <RowInput label="SR" unit="%" value={SR} onChange={(e)=>allowNumber(e.target.value,setSR)} info={INFO} />
+<RowInput
+  label="A"
+  unit="l/m².h.bar"
+  value={A}
+  onChange={(e) => allowNumber(e.target.value, setA)}
+  
+  info={INFO}
+/>
+
+<RowInput
+  label="Pf"
+  unit="bar"
+  value={Pf}
+  onChange={(e) => allowNumber(e.target.value, setPf)}
+  info={INFO}
+/>
+
+<RowInput
+  label="Pb"
+  unit="bar"
+  value={Pb}
+  onChange={(e) => allowNumber(e.target.value, setPb)}
+  info={INFO}
+/>
+
+<RowInput
+  label="Md"
+  unit="l/m².h"
+  value={Md}
+  onChange={(e) => allowNumber(e.target.value, setMd)}
+  info={INFO}
+/>
+
+<RowInput
+  label="WR"
+  unit="%"
+  value={WR}
+  onChange={(e) => allowNumber(e.target.value, setWR)}
+  info={INFO}
+/>
+
+<RowInput
+  label="Sf"
+  unit="g/l"
+  value={Sf}
+  onChange={(e) => allowNumber(e.target.value, setSf)}
+  info={INFO}
+/>
+
+<RowInput
+  label="Tf"
+  unit="°C"
+  value={Tf}
+  onChange={(e) => allowNumber(e.target.value, setTf)}
+  info={INFO}
+/>
+
+<RowInput
+  label="SR"
+  unit="%"
+  value={SR}
+  onChange={(e) => allowNumber(e.target.value, setSR)}
+  info={INFO}
+/>
 </div>
 
   </div>
 
   {/* RIGHT (Outputs) */}
 <div className="space-y-2">
-  <RowView label="Mf" value={Mf.toFixed(4)} unit="t/h" info={INFO} />
-  <RowView label="Pb" value={Pb_corr.toFixed(4)} unit="bar" info={INFO} />
+  <RowView label="Mf" value={Mf.toFixed(4)} unit="l/m².h" info={INFO} />
   <RowView label="Sd" value={Sd.toFixed(4)} unit="g/l" info={INFO} />
   <RowView label="Sb" value={Sb.toFixed(4)} unit="g/l" info={INFO} />
   <RowView label="ΔS" value={dS.toFixed(4)} unit="g/l" info={INFO} />
@@ -433,28 +636,24 @@ return (
 </div>
 
       {/* Footer Buttons */}
-      <div className="flex gap-2 mt-3">
-        <button
+<div className="flex justify-end gap-2 pt-2 no-print mt-5">
+          <button
           onClick={exportPDF}
           className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
         >
           PDF
         </button>
-
-        <button
-          onClick={exportExcel}
-          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded cursor-pointer"
-        >
-          Excel
-        </button>
-
-        <button
-          onClick={resetToDefaults}
-          className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded ml-auto cursor-pointer"
-        >
-          ↺ Reset
-        </button>
-      </div>
+          <button
+            onClick={resetToDefaults}
+            className="px-3 py-1 text-[#6ea8cc] bg-gray-100 rounded ml-auto cursor-pointer font-semibold flex items-center gap-2"
+            title="Reset to defaults"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Reset</span>
+          </button>
+  </div>
 
     </div>
   </div>

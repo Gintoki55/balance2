@@ -1,0 +1,63 @@
+// import autoTable from "jspdf-autotable";
+// import * as XLSX from "xlsx";
+// // 🔹 Excel
+// const exportExcel = () => {
+//   const wb = XLSX.utils.book_new();
+
+//   // 🟢 Sheet 1 (Inputs)
+//   const wsInputs = XLSX.utils.json_to_sheet(inputData);
+
+//   // ✅ هنا تحطها
+//   wsInputs["!cols"] = [
+//     { wch: 10 }, // symbol
+//     { wch: 15 }, // value
+//     { wch: 15 }, // unit
+//   ];
+
+//   XLSX.utils.book_append_sheet(wb, wsInputs, "Inputs");
+
+//   // 🔵 Sheet 2 (Outputs)
+//   const wsOutputs = XLSX.utils.json_to_sheet(outputData);
+
+//   // ✅ وهنا أيضاً
+//   wsOutputs["!cols"] = [
+//     { wch: 10 },
+//     { wch: 15 },
+//     { wch: 15 },
+//   ];
+
+//   XLSX.utils.book_append_sheet(wb, wsOutputs, "Outputs");
+
+//   // 💾 حفظ الملف
+//   XLSX.writeFile(wb, "RO_Module_Parameters.xlsx");
+// };
+
+
+//   const inputData = [
+//   { symbol: "Inputs", value: "", unit: "" },
+//    { symbol: "A", value: A, unit: "M²" },
+//   { symbol: "Pf", value: Pf, unit: "bar" },
+//   { symbol: "Pb", value: Pb, unit: "bar" },
+//   { symbol: "Md", value: Md, unit: "t/h" },
+//   { symbol: "WR", value: WR, unit: "%" },
+//   { symbol: "Sf", value: Sf, unit: "g/l" },
+//   { symbol: "Tf", value: Tf, unit: "°C" },
+//   { symbol: "SR", value: SR, unit: "%" },
+// ];
+
+
+
+// const outputData = [
+//   { symbol: "Outputs", value: "", unit: "" },
+//   { symbol: "Mf", value: Mf, unit: "t/h" },
+//   { symbol: "Pb", value: Pb_corr, unit: "bar" },
+//   { symbol: "Sd", value: Sd, unit: "g/l" },
+//   { symbol: "Sb", value: Sb, unit: "g/l" },
+//   { symbol: "ΔS", value: dS, unit: "g/l" },
+//   { symbol: "Δπ", value: dPi, unit: "bar" },
+//   { symbol: "ΔP", value: dP, unit: "bar" },
+//   { symbol: "TCF", value: TCF, unit: "#" },
+//   { symbol: "w", value: w, unit: "l/m².h.bar" },
+//   { symbol: "x", value: x, unit: "g/m².h.(g/l)" },
+//   { symbol: "PCF", value: PCF, unit: "#" },
+// ];

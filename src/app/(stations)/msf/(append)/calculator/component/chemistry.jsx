@@ -15,7 +15,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 
-const INFO= {
+const INFO = {
     Na: "Sodium ion, major cation in seawater and brackish water",
     K: "Potassium ion, essential nutrient found in most water sources",
     Ca: "Calcium ion, primary contributor to water hardness",

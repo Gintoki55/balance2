@@ -1,17 +1,15 @@
 "use client";
 /// update and check 11
 import { useState } from "react";
-import { Droplets, Info, Calculator, FlaskRound, DollarSign ,Thermometer} from "lucide-react";
+import { Droplets, Info, Calculator, FlaskRound, DollarSign ,Thermometer, AirVent} from "lucide-react";
 import StationHeader from "@/components/stationheader";
 
-import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Thirteen, Fourteen} from "./component/one";
-import ROModules from "./component/ROmodules";
-import ROWaterCost from "./component/rowatercost";
-import MSFWaterCost from "./component/MSFWaterCost";
-import MEDWaterCost from "./component/MEDWaterCost";
-import MSHWaterCost from "./component/MSHWaterCost";
-import MVCWaterCost from "./component/MVCWaterCost";
-import WaterAnalysis from "./component/WaterAnalysis";
+import {One, Two, Three, Four, Five, Six, Seven,Eight , Nine, Ten, Elven, Twelve, Ten_s} from "./component/converter";
+import { Thirteen, Fourteen } from "./component/Exchanger";
+
+import ROModulesContainer from "./component/ROComponent";
+import WaterAnalysis from "./component/chemistry";
+import { MEDWaterCost, MSFWaterCost, MSHWaterCost, MVCWaterCost, ROWaterCost } from "./component/cost";
 
 export default function CalculatorPage() {
   const [activeTab, setActiveTab] = useState("general");
@@ -32,131 +30,180 @@ export default function CalculatorPage() {
           </div>
         </div>
       </div>
+<main className="container max-w-7xl mx-auto py-4 px-6">
 
-      {/* Tabs */}
-      <main className="container max-w-7xl mx-auto py-4 px-3">
-        
+  {/* ===== Tabs Navigation ===== */}
+  <div className="sticky top-12 z-50 bg-gray-900/95 backdrop-blur-sm py-2">
+    <div className="flex gap-1 p-1 bg-gray-800/60 rounded-xl border border-gray-700">
 
-        {/* ===== Tabs Navigation ===== */}
-        <div className="mb-6 sticky top-10 z-10 bg-gray-900/95 backdrop-blur-sm py-2">
-          <div className="flex gap-2 p-1.5 bg-gray-800/60 rounded-xl border border-gray-700">
+      {/* General */}
+      <button
+      type="button"
+        onClick={() => setActiveTab("general")}
+        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
+          activeTab === "general"
+            ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+            : "text-gray-400 hover:text-white hover:bg-gray-700"
+        }`}
+      >
+        <Calculator className="w-4 h-4" />
+        Converter
+      </button>
 
-          
+      {/* Exchanger (NEW) */}
+      <button
+      type="button"
+        onClick={() => setActiveTab("exchanger")}
+        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
+          activeTab === "exchanger"
+            ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+            : "text-gray-400 hover:text-white hover:bg-gray-700"
+        }`}
+      >
+        <AirVent className="w-4 h-4" />
+        Exchanger
+      </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("general")}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                activeTab === "general"
-                  ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
-                  : "text-gray-400 hover:text-white hover:bg-gray-700"
-              }`}
-            >
-              <Calculator className="w-4 h-4" />
-              BDS Convertor
-            </button>
+      {/* RO Modules */}
+      <button
+      type="button"
+        onClick={() => setActiveTab("ROModules")}
+        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
+          activeTab === "ROModules"
+            ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+            : "text-gray-400 hover:text-white hover:bg-gray-700"
+        }`}
+      >
+        <Droplets className="w-4 h-4" />
+        RO Modules
+      </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("ROModules")}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                activeTab === "ROModules"
-                  ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
-                  : "text-gray-400 hover:text-white hover:bg-gray-700"
-              }`}
-            >
-              <Droplets className="w-4 h-4" />
-              RO Modules
-            </button>
+      {/* Chemistry */}
+      <button
+      type="button"
+        onClick={() => setActiveTab("chemistry")}
+        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
+          activeTab === "chemistry"
+            ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+            : "text-gray-400 hover:text-white hover:bg-gray-700"
+        }`}
+      >
+        <FlaskRound className="w-4 h-4" />
+        Analysis
+      </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("chemistry")}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                activeTab === "chemistry"
-                  ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
-                  : "text-gray-400 hover:text-white hover:bg-gray-700"
-              }`}
-            >
-              <FlaskRound className="w-4 h-4" />
-              Water Analysis
-            </button>
+      {/* Cost */}
+      <button
+      type="button"
+        onClick={() => setActiveTab("cost")}
+        className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
+          activeTab === "cost"
+            ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
+            : "text-gray-400 hover:text-white hover:bg-gray-700"
+        }`}
+      >
+        <DollarSign className="w-4 h-4" />
+        Cost
+      </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("cost")}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                activeTab === "cost"
-                  ? "bg-sky-600 text-white shadow-lg scale-[1.02]"
-                  : "text-gray-400 hover:text-white hover:bg-gray-700"
-              }`}
-            >
-              <DollarSign className="w-4 h-4" />
-              Water Cost
-            </button>
+    </div>
+  </div>
 
-          </div>
-        </div>
+  <div className="space-y-10 font-mono">
 
-         {/* ===== Tip ===== */}
-      <div className="max-w-4xl mx-auto">
-        <div className="m-3 p-3 bg-gray-800 border border-gray-500 shadow-sm flex items-start gap-3 rounded-xl">
-          <Info className="w-5 h-5 text-sky-600 shrink-0" />
-          <p className="text-base text-gray-400">
-            <strong>Tip:</strong> Hover over any symbol or unit to see its full description.
-            Yellow fields are inputs, blue fields are outputs.
+    {/* ===== GENERAL ===== */}
+    {activeTab === "general" && (
+      <>
+        <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg flex gap-2">
+          <Info className="w-4 h-4 text-sky-500" />
+          <p className="text-xs text-gray-400">
+           <strong>Tip:</strong> Hover over any symbol or unit to see its full description. Yellow/cream colored fields are inputs, blue-tinted fields show calculated outputs.
           </p>
         </div>
-      </div>
 
-       <div className="space-y-12 font-mono">
+        <Section><One /></Section>
+        <Section><Two /></Section>
+        <Section><Three /></Section>
+        <Section><Four /></Section>
+        <Section><Five /></Section>
+        <Section><Six /></Section>
+        <Section><Seven /></Section>
+        <Section><Eight /></Section>
+        <Section><Nine /></Section>
+        <Section><Ten /></Section>
+        <Section><Ten_s /></Section>
+        <Section><Elven /></Section>
+        <Section><Twelve /></Section>
+      </>
+    )}
 
-        {/* ===== Tab 1 ===== */}
-        <div className={activeTab === "general" ? "block" : "hidden"}>
-          <Section><One /></Section>
-          <Section><Two /></Section>
-          <Section><Three /></Section>
-          <Section><Four /></Section>
-          <Section><Five/></Section>
-          <Section><Six /></Section> 
-          <Section><Seven /></Section> 
-          <Section><Eight /></Section>
-          <Section><Nine /></Section>
-          <Section><Ten /></Section>
-          <Section><Elven /></Section>
-          <Section><Twelve /></Section>
-          <Section><Thirteen /></Section>
-          <Section><Fourteen /></Section>
-
+    {/* ===== EXCHANGER (NEW - EMPTY) ===== */}
+    {activeTab === "exchanger" && (
+      <>
+        <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg flex gap-2">
+          <Info className="w-4 h-4 text-sky-500" />
+          <p className="text-xs text-gray-400">
+            <strong>Tip:</strong> Heat exchanger calculations and thermal property conversions.
+          </p>
         </div>
 
-        {/* ===== Tab 2 ===== */}
-        <div className={activeTab === "ROModules" ? "block" : "hidden"}>
-          <ROModules />
+        <Section><Thirteen /></Section>
+        <Section><Fourteen /></Section>
+      </>
+    )}
 
-        </div>
-        {/* ===== Tab 3 ===== */}
-        <div className={activeTab === "chemistry" ? "block" : "hidden"}>
-          <WaterAnalysis/>
-        </div>
-
-        {/* ===== Tab 4 ===== */}
-        <div className={activeTab === "cost" ? "block" : "hidden"}>
-            <ROWaterCost/>
-            <MSFWaterCost/>
-            <MEDWaterCost/>
-            <MSHWaterCost/>
-            <MVCWaterCost/>
-
-
+    {/* ===== RO MODULES ===== */}
+    {activeTab === "ROModules" && (
+      <>
+        <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg flex gap-2">
+          <Info className="w-4 h-4 text-sky-500" />
+          <p className="text-xs text-gray-400">
+           <strong>Tip:</strong> RO Module Parameters - 12 independent module calculators.
+          </p>
         </div>
 
-      </div>
-      </main>
+        {/* <ROModules /> */}
+        <ROModulesContainer />
+      </>
+    )}
+
+    {/* ===== CHEMISTRY ===== */}
+    {activeTab === "chemistry" && (
+      <>
+        <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg flex gap-2">
+          <Info className="w-4 h-4 text-sky-500" />
+          <p className="text-xs text-gray-400">
+            Water analysis tools.
+          </p>
+        </div>
+
+        <WaterAnalysis />
+      </>
+    )}
+
+    {/* ===== COST ===== */}
+    {activeTab === "cost" && (
+      <>
+        <div className="p-3 bg-gray-800 border border-gray-600 rounded-lg flex gap-2">
+          <Info className="w-4 h-4 text-sky-500" />
+          <p className="text-xs text-gray-400">
+            Water cost calculations.
+          </p>
+        </div>
+
+        <ROWaterCost/>
+        <MEDWaterCost/>
+        <MSFWaterCost/>
+        <MVCWaterCost/>
+        <MSHWaterCost/>
+      </>
+    )}
+
+  </div>
+</main>
     </div>
   );
 }
-
 
 function Section({ children }) {
   return <div className="space-y-6">{children}</div>;
